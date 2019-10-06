@@ -1,0 +1,45 @@
+.topnav {
+    background-color: #333;
+    z-index: 10000;
+    height: 6.5%;
+    top: 0;
+    width: 100%;
+  }
+  
+  .topnav a.menu-item {
+    height: 3%;
+
+    min-width: 120px;
+    left: 30%;
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 1% 1%;
+    padding-bottom: 2%;
+    text-decoration: none;
+    font-size: 17px;
+    margin-top: 0.1%;
+  }
+  
+  .topnav a.menu-item:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .sticky {
+    position: fixed;
+  }
+
+  .sign-in-container {
+    left: 50%;
+    height: 2%;
+    width: 10%;
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    margin-left: 2%;
+    padding: 1% 2%;
+    text-decoration: none;
+    font-size: 17px;
+  }
+

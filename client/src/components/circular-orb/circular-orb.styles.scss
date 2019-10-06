@@ -1,0 +1,79 @@
+@keyframes rotateCircle {
+    2.5%{transform: translate(95.5px, -8px);}
+    5.2%{transform: translate(188.1px, 16.2px);}
+    7%{transform: translate(275px, 56.7px);}
+    10%{transform: translate(353.5px, 121.7px);}
+    13%{transform: translate(421.3px, 190.5px);}
+    16%{transform: translate(476.3px,275px);}
+    19.5%{transform: translate(516.8px,361.9px);}
+    22.3%{transform: translate(541.6px,454.5px);}
+    25%{transform: translate(550px,550px);}
+    27%{transform: translate(541.6px,645.5px);}
+    29.5%{transform: translate(516.8px,738.1px);}
+    32%{transform: translate(476.3px,825px);}
+    35.8%{transform: translate(421.3px, 903.5px);}
+    38.6%{transform: translate(353.5px, 975.3px);}
+    41.4%{transform: translate(275px, 1033.3px);}
+    44%{transform: translate(188.1px, 1073.8px);}
+    47.5%{transform: translate(95.5px, 1091.6px);}
+    50%{transform: translate(0px, 1100px);}
+    53.5%{transform: translate(-95.5px, 1091.6px);}
+    56.3%{transform: translate(-188.1px, 1072.8px);}
+    59%{transform: translate(-275px, 1030.3px);}
+    61.5%{transform: translate(-357.5px, 981.3px);}
+    64%{transform: translate(-428.3px, 903.5px);}
+    67%{transform: translate(-483.3px,825px);}
+    70%{transform: translate(-519.8px,738.1px);}
+    72.1%{transform: translate(-544.6px,645.5px);}
+    75.3%{transform: translate(-550px,550px);}
+    79%{transform: translate(-544.6px,450.5px);}
+    81.5%{transform: translate(-519.8px,363.9px);}
+    84%{transform: translate(-478.3px,270px);}
+    86.5%{transform: translate(-434.3px, 184.5px);}
+    89%{transform: translate(-354.5px, 106.7px);}
+    91.5%{transform: translate(-275px, 48.7px);}
+    95%{transform: translate(-195.9px, 22.2px);}
+    98%{transform: translate(-95.9px, 1.4px);}
+    100%{transform: translate(0, -15px);}
+  }
+
+  /* @keyframes rotateHexa {
+    16.67%{transform: translate(128px, -73px);}
+    33.33%{transform: translate(128px, -218px);}
+    50%{transform: translate(0px, -295px);}
+    66.67%{transform: translate(-130px, -223px);}
+    83.33%{transform: translate(-130px, -71px);}
+    100%{transform: translate(0, 5px);}
+  } */
+
+  .board-edge-orb {
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    border-radius: 100%;
+    background-color: white;
+    box-shadow: 0px 0px 8px 8px #0ff;
+    opacity: 0.95;
+    top: 0%; 
+    left: 50%;
+    z-index: 50;
+    animation: 
+    rotateCircle 7s linear infinite;
+}
+
+/* .hexagon-orb {
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
+    box-shadow: 0px 0px 4px 2px #0ff; */
+    /* in order: x offset, y offset, blur size, spread size, color */
+    /* blur size and spread size are optional (they default to 0) */
+    /* position: absolute;
+    border-radius: 100%;
+    opacity: 0.85;
+    top: 63%; 
+    left: 50%;
+    z-index: 501;
+    animation: 
+    rotateHexa 7s linear infinite;
+} */

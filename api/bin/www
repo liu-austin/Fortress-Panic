@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+// jshint esversion:6
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var http = require('http');
+const configDB = require('../config/properties');
+const socketIO = require('socket.io');
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = process.env.PORT || configDB.PORT;
+// app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+const io = socketIO(server);
+
+let players = {};
+
+io.on("connection", (socket) => {
+  console.log("New client connected at id: " + socket.id);
+  players[socket.id] = {
+    playerId: socket.id,
+    displayName: 'Player ' + (Object.keys(players).length + 1),
+    playerHand: [],
+    points: 0
+  };
+  // send the players object to the new player
+  socket.emit('currentPlayers', players);
+
+  // update all other players of the new player
+  socket.broadcast.emit('newPlayer', players[socket.id]);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    console.log(players);
+    delete players[socket.id];
+    io.emit('disconnect', socket.id);
+  });
+});
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, () => {console.log(`Listening on port ${port}`)});
+
+// GAME LOOP
+let winCondition = false;
+let loseCondition = false;
+let started = false;
+let turnIndex = 0;
+let player;
+while (!winCondition || !loseCondition) {
+// START GAME
+  if (started) {
+    turnIndex += 1;
+    let numPlayers = Object.keys(players).length;
+    player = Object.keys(players)[turnIndex % numPlayers];
+      // DRAW PHASE
+    
+  }
+}

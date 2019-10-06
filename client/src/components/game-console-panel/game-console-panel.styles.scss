@@ -1,0 +1,51 @@
+.game-console-panel-container {
+    position: absolute;
+    background-color: #333;
+    z-index: 1000;
+    height: 10%;
+    top: 8%;
+    width: 34%;
+    left: 62%;
+    border-radius: 10px;
+}
+
+.game-turn-phase-container {
+    position: absolute;
+    top: 5%;
+    left: 2.5%;
+    margin: 0 auto;
+}
+
+.game-turn-phase-table {
+    font-size: 17px;
+}
+
+.game-turn-phase-table th {
+    text-align: left;
+}
+
+.game-turn-phase-table td {
+    text-align: left;
+    width: 28%;
+}
+
+.console-message-container {
+    position: absolute;
+    top: 65%;
+    left: 2.5%;
+}
+
+.console-message {
+    color: red;
+}
+
+.sticky {
+    position: fixed;
+}
+
+.end-phase-button {
+    cursor: pointer;
+    width: 75%;
+    background-color: goldenrod;
+    border-radius: 7.5px;
+}

@@ -1,0 +1,38 @@
+.monster-container {
+    margin-top: -5px;
+    display: inline-block;
+    margin-left: -12.5px;
+    margin-right: -12.5px;
+}
+
+.monster {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.monster:hover {
+    border: 1px red solid;
+}
+
+.forest .monster-container {
+    transform: scale(0.4);
+}
+
+.archer .monster-container {
+    transform: scale(0.5);
+}
+
+.knight .monster-container {
+    transform: scale(0.65);
+}
+
+.swordsman .monster-container {
+    transform: scale(0.95);
+}
+
+.hit-points {
+    margin-top: 0px;
+    display: inline-block;
+    font-size: 35px;
+    color: white;
+}

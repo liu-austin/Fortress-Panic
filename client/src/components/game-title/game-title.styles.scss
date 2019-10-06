@@ -1,0 +1,24 @@
+.overhead-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 30px;
+    color: gainsboro;
+    padding: 5px 5px 0px;
+    background-color: #444444;
+    border: 7.5px solid #20655f;
+    border-radius: 30px;
+}
+
+.title-container {
+    position: absolute;
+    top:  0%;
+    left: 0%;
+    transform: translate(-50%,7.5%);
+}
+
+.go-to-main {
+    text-decoration: none;
+}
+
+.home-title-container {
+    left: 20%;
+}

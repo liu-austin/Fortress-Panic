@@ -1,0 +1,44 @@
+.monster-display-container {
+    width: 150%;
+    border-radius: 7.5px;
+    background-color: #333;
+    padding-bottom: 5px;
+
+    .monster-display-title {
+        text-align: center;
+        font-size: 19px;
+        line-height: 30px;
+    }
+
+    .card-footer {
+        left: 5%;
+        width: 90%;
+        height: 80px;
+        display: block;
+        font-size: 18px;
+        margin-bottom: 10px;
+        .text {
+          left: 5%;
+          width: 90%;
+        }
+      }
+
+    .monster-card {
+        border-radius: 7.5px;
+        left: 5%;
+        padding-bottom: 5px;
+        display: block;
+        width: 90%;
+        background-color: grey;
+        margin-bottom: 5px;
+        height: 65px;
+
+        .monster-name,
+        .monster-type,
+        .monster-effect {
+            font-size: 12px;
+            left: 5%;
+            width: 90%;
+        }
+    }
+  }

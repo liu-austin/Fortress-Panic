@@ -1,0 +1,41 @@
+* {
+	position: relative;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+body .game-container {
+    background-image: url("../../assets/images/backgrounds/gameboard-background1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #badfdb;
+    color: #fff;
+}
+
+.gameboard-container {
+    width: 60%;
+    margin-top: -3%;
+    margin-bottom: 0%;
+    left: -5%;
+    border: 10px rgba(255,255,255,.15) solid;
+    border-radius: 550px;
+}
+
+.shrink {
+    transform: scale(0.66);
+}
+
+.selected-card-container {
+    position: absolute;
+    top: 11.5%;
+    left: 47.5%;
+}
+
+.monster-info-container {
+    position: absolute;
+    top: 43%;
+    left: 47.5%;
+}

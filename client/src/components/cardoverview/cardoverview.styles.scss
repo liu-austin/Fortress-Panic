@@ -1,0 +1,17 @@
+.card-overview {
+    background-color: goldenrod;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    width: 15%;
+    cursor: pointer;
+    margin-right: 1.5%;
+    margin-top: 0;
+    height: 100%;
+
+    & p {
+        padding: 14px 0;
+        font-size: 20px;
+    }
+}
+

@@ -1,0 +1,15 @@
+.gameboard {
+    height: 1100px;
+    background-image: url("../../assets/images/backgrounds/castle-panic-board.jpg");
+    background-color: grey;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 550px;
+}
+
+.region-container {
+    position: absolute;
+    top: 50.5%;
+    left: 50.2%;
+}

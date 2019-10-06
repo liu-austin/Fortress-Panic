@@ -1,0 +1,46 @@
+.chatbox-container {
+    position: absolute;
+    background-color: #333;
+    z-index: 1000;
+    height: 20%;
+    top: 78%;
+    width: 34%;
+    left: 62%;
+    border-radius: 10px;
+}
+
+.chatlog-container {
+    position: absolute;
+    top: 5%;
+    left: 2.5%;
+    background-color: grey;
+    height: 75%;
+    width: 95%;
+    border-radius: 10px;
+}
+
+.chat-message-container {
+    position: absolute;
+    top: 85%;
+    left: 2.5%;
+    width: 100%;
+}
+
+.sticky {
+    position: fixed;
+}
+
+.input-line {
+    margin-left: 2%;
+    width: 75%;
+    display: inline;
+    background-color: grey;
+}
+
+.submit {
+    margin-left: 2%;
+    width: 12%;
+    display: inline;
+    background-color: goldenrod;
+    border-radius: 7.5px;
+}

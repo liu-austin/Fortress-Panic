@@ -1,0 +1,124 @@
+.hexagon-xl {
+    color: #fff;
+    margin: 73.2px 0;
+    width: 253.76px;
+    height: 146.4px;
+    background-color: #ebebeb;
+    position: relative;
+    display: block
+}
+
+.hexagon-xl:before,
+.hexagon-xl:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 126.88px solid transparent;
+    border-right: 126.88px solid transparent;
+    left: 0
+}
+
+.hexagon-xl:before {
+    border-bottom: 73.2px solid #ebebeb;
+    top: -73.2px
+}
+
+.hexagon-xl:after {
+    border-top: 73.2px solid #ebebeb;
+    bottom: -73.2px;
+}
+
+.hexagon-default {
+    background-color: transparent;
+    cursor: default;
+}
+
+.hexagon-default:before {
+    border-bottom-color: transparent;
+}
+
+.hexagon-default:after {
+    border-top-color: transparent;
+}
+
+.hexagon-default.hexagon-hover:hover {
+    background-color: rgba(128,128,128,0.5);
+}
+
+.hexagon-default.hexagon-hover:hover:before {
+    border-bottom-color: rgba(128,128,128,0.5);
+
+}
+
+.hexagon-default.hexagon-hover:hover:after {
+    border-top-color: rgba(128,128,128,0.5);
+}
+
+.hexagon-inline {
+    display: inline-block;
+}
+
+.hexagon-start {
+    background-color: goldenrod;
+}
+
+.hexagon-start:before {
+    border-bottom-color: goldenrod;
+}
+
+.hexagon-start:after {
+    border-top-color: goldenrod;
+}
+
+.hex-container {
+    cursor: pointer;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 500;
+}
+
+.floating {  
+    animation-name: floating;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes floating {
+    from { transform: translate(0,  -2.5px); }
+    16%  { transform: translate(0, -5px); }
+    28%  { transform: translate(0, -2.5px); }
+    40%  { transform: translate(0, 0px); }
+    52%   { transform: translate(0, 2.5px); }
+    64%  { transform: translate(0, 5px); }
+    76%  { transform: translate(0, 2.5px); }
+    88%  { transform: translate(0, 0px); }   
+    to  { transform: translate(0, -2.5px); }  
+}
+
+.text-container {
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.glow {
+    color: #fff;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  }
