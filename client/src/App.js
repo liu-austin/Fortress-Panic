@@ -12,11 +12,9 @@ import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
-import { socket } from '../src/assets/socketIO/socketIO.utils';
 
 class App extends React.Component {
   constructor(props) {
-    
     super(props);
     this.state = { apiResponse: [] };
   }
@@ -62,10 +60,6 @@ class App extends React.Component {
     // if (this.state.apiResponse.length !== 0) {
     //   console.log(this.state.apiResponse);
     // }
-    const socketIO = socket;
-    socketIO.on('newPlayer', function(newPlayerData) {
-      console.log(newPlayerData);
-    });
     return (
       <div>
         <NavHeader />

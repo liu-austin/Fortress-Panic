@@ -23,20 +23,33 @@ var server = http.createServer(app);
 const io = socketIO(server);
 
 let players = {};
+let started = [false];
 
 io.on("connection", (socket) => {
   console.log("New client connected at id: " + socket.id);
   players[socket.id] = {
     playerId: socket.id,
     displayName: 'Player ' + (Object.keys(players).length + 1),
-    playerHand: [],
+    playerCards: [],
     points: 0
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
 
+  socket.emit('hasGameStarted', started[0]);
+
   // update all other players of the new player
   socket.broadcast.emit('newPlayer', players[socket.id]);
+
+  socket.on('firstStartButtonPress', function(){
+    started[0] = true;
+    socket.broadcast.emit('otherPlayerStartedGame', 'THE GAME HAS STARTED.');
+  });
+
+  socket.on('playerLogin', function(obj) {
+    players[obj[0]].displayName = obj[1];
+    io.emit('updateDisplayName', [obj[0], obj[1]]);
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
@@ -54,16 +67,16 @@ server.listen(port, () => {console.log(`Listening on port ${port}`)});
 // GAME LOOP
 let winCondition = false;
 let loseCondition = false;
-let started = false;
+
 let turnIndex = 0;
 let player;
-while (!winCondition || !loseCondition) {
-// START GAME
-  if (started) {
-    turnIndex += 1;
-    let numPlayers = Object.keys(players).length;
-    player = Object.keys(players)[turnIndex % numPlayers];
-      // DRAW PHASE
+// while (!winCondition || !loseCondition) {
+// // START GAME
+//   if (started) {
+//     turnIndex += 1;
+//     let numPlayers = Object.keys(players).length;
+//     player = Object.keys(players)[turnIndex % numPlayers];
+//       // DRAW PHASE
     
-  }
-}
+//   }
+// }

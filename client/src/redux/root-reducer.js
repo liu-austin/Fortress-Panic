@@ -11,6 +11,7 @@ import startButtonReducer from './startbutton/startbutton.reducer';
 import rotationReducer from './rotation/rotation.reducer';
 import gamePhaseReducer from './gamephase/gamephase.reducer';
 import consoleReducer from './console/console.reducer';
+import playerReducer from './players/player.reducer';
 
 // key is the entry point fives therom where we start persisting state, root is the 
 // bottom level. storage is object that gives method of 
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     startbutton: startButtonReducer,
     rotation: rotationReducer,
     gamephase: gamePhaseReducer,
-    console: consoleReducer
+    console: consoleReducer,
+    players: playerReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

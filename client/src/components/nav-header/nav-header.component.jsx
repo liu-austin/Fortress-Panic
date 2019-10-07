@@ -5,8 +5,14 @@ import GameTitle from '../game-title/game-title.component';
 import TopNavButton from '../top-nav-button/top-nav-button.component';
 import { connect } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { socket } from '../../assets/socketIO/socketIO.utils';
+import { selectPlayers } from '../../redux/players/player.selector';
 
 const NavHeader = ({currentUser}) => {
+    if (currentUser) {
+        socket.emit('playerLogin', [socket.id, currentUser.displayName.toUpperCase().slice(0, 10)]);
+    } 
+    //     socket.emit('playerLogin', [socket.id, 'Player ' + Object.keys(players).indexOf(socket.id)]);
     return (
         <div className="topnav sticky">
             <GameTitle/>
@@ -30,6 +36,7 @@ const NavHeader = ({currentUser}) => {
 const mapStateToProps = (state) => {
     return ({
         currentUser: selectCurrentUser(state)
+        // players: selectPlayers(state)
     });
 };
 
