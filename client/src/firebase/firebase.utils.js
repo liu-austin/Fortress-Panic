@@ -2,6 +2,8 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { socket } from '../assets/socketIO/socketIO.utils';
+import { updatePlayerName } from '../redux/players/player.action';
 
 const config = {
     apiKey: "AIzaSyCeYvh5XuIvP4OScCZCrNDl_412lNtMO7s",
@@ -71,6 +73,26 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
 
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const signInWithGoogle = () => {
+    socket.emit('playerLogin', socket.id);
+    // socket.on('successfulLogin', function(id) {
+    //     console.log('hi');
+    //     // if (socket.id === id) {
+    //     //    auth.onAuthStateChanged(async userAuth => {
+    //     //       if (userAuth) {
+    //     //         // userAuth represents a signed-in user so set that to current user
+    //     //         const userRef = await createUserProfileDocument(userAuth);
+        
+    //     //         userRef.onSnapshot(snapShot => {
+    //     //           updatePlayerName(socket.id, snapShot.displayName.slice(0,10));
+    //     //           socket.broadcast.emit('updateDisplayName', [socket.id, snapShot.displayName.slice(0,10)]);
+    //     //         });
+    //     //       } 
+    //     //     });
+    //     // }
+    // });
+    auth.signInWithPopup(provider);
+    // socket.emit('successfulLogin', socket.id);
+};
 
 export default firebase;

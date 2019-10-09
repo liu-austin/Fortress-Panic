@@ -18,7 +18,7 @@ const playerDeckState = {
     removePlayerCardIndices: function() {
         playerDeckModel.deleteMany({}, function (err) {
             if (err) return handleError(err);
-          });
+          }).exec();
     }
 };
 

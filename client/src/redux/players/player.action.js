@@ -36,6 +36,13 @@ export const updatePlayerScore = (id, points) => {
     });
 };
 
+export const logOutPlayer = (id) => {
+    return ({
+        type: playerActionTypes.LOG_OUT_PLAYER,
+        payload: id
+    });
+}
+
 export const removePlayer = (id) => {
     return ({
         type: playerActionTypes.REMOVE_PLAYER,
@@ -46,5 +53,19 @@ export const removePlayer = (id) => {
 export const clearPlayerData = () => {
     return ({
         type: playerActionTypes.CLEAR_PLAYER_DATA
+    });
+};
+
+export const setPlayerTurnActive = (id) => {
+    return ({
+        type: playerActionTypes.SET_PLAYER_TURN_ACTIVE,
+        payload: id
+    });
+};
+
+export const setPlayerTurnInactive = (id) => {
+    return ({
+        type: playerActionTypes.SET_PLAYER_TURN_INACTIVE,
+        payload: id
     });
 };

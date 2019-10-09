@@ -18,7 +18,7 @@ const monsterDeckState = {
     removeMonsterIndices: function() {
         monsterDeckModel.deleteMany({}, function (err) {
             if (err) return handleError(err);
-          });
+          }).exec();
     }
 };
 

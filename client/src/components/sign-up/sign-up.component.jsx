@@ -4,7 +4,7 @@ import './sign-up.styles.scss';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
-
+import { socket } from '../../assets/socketIO/socketIO.utils';
 
 class SignUp extends React.Component {
     constructor() {
@@ -34,6 +34,7 @@ class SignUp extends React.Component {
                 password: password,
                 confirmPassword: password
             })
+            socket.emit('playerLogin', socket.id);
         } catch (error) {
             alert(error);
             console.log(error);

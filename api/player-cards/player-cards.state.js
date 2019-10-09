@@ -14,7 +14,7 @@ const playerCardsState = {
         playerDeckState.initializePlayerDeck();
         await playerCardsModel.deleteMany({}, function (err) {
             if (err) return handleError(err);
-          });
+          }).exec();
     },
     addPlayerCard: async function(id, amount) {
         for (let i = 0; i < amount; i++) {
@@ -45,10 +45,14 @@ const playerCardsState = {
             });
             await cardIndex.save();
         }
-        await playerCardsModel.deleteMany({position: 'discard'});
+        await playerCardsModel.deleteMany({position: 'discard'}).exec();
     },
     discardCard: async function(key) {
-        monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
+        await playersCardModel.updateOne({key: key}, {position: 'discard'}).exec();
+    },
+    tradeCards: async function(id1, id2, key1, key2) {
+        await playersCardModel.updateOne({key: key1}, {position: id2}).exec();
+        await playersCardModel.updateOne({key: key2}, {position: id1}).exec();
     },
     playerCardsEffects: {'Goblin King': {method: 'addMonster', input: 3}, 
     'Ogre Mage': {method: 'discard', input: null}, 

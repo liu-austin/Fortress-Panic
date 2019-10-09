@@ -4,6 +4,7 @@ import './sign-in.styles.scss';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+import { socket } from '../../assets/socketIO/socketIO.utils';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class SignIn extends React.Component {
             alert(error);
             console.log(error);
         }
+        socket.emit('playerLogin', socket.id);
     }
 
     handleChange = (event) => {

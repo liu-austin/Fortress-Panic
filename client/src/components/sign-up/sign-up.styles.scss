@@ -1,9 +1,15 @@
 .sign-up {
+    margin-top: 25.7%;
     display: flex;
     flex-direction: column;
     width: 380px;
-  
+    color: goldenrod;
+
+  & form {
+    color: goldenrod;
+  }
+
     .title {
-      margin: 10px 0;
+      margin: 10px 0 0 0;
     }
   }
