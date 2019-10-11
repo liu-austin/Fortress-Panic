@@ -36,19 +36,19 @@ const blueSwordsmanCard = {name: 'BLUE SWORDSMAN',
                     src: '../../assets/images/card-art/blue-swordsman.jpg',
                     description: 'HIT ONE MONSTER IN A BLUE SWORDSMAN RING.',
                     };
-const anyColorArcherCard = {name: 'ANY COLOR ARCHER', 
+const anyColorArcherCard = {name: 'ANY ARCHER', 
                     src: '../../assets/images/card-art/any-color-archer.jpg',
                     description: 'HIT ONE MONSTER IN AN ANY ARCHER RING.',
                     };
-const anyColorKnightCard = {name: 'ANY COLOR KNIGHT', 
+const anyColorKnightCard = {name: 'ANY KNIGHT', 
                     src: '../../assets/images/card-art/any-color-knight.jpg',
                     description: 'HIT ONE MONSTER IN AN ANY KNIGHT RING.',
                     };
-const anyColorSwordsmanCard = {name: 'ANY COLOR SWORDSMAN', 
+const anyColorSwordsmanCard = {name: 'ANY SWORDSMAN', 
                     src: '../../assets/images/card-art/any-color-swordsman.jpg',
                     description: 'HIT ONE MONSTER IN AN ANY SWORDSMAN RING.',
                     };
-const anyColorHeroCard = {name: 'ANY COLOR HERO', 
+const anyColorHeroCard = {name: 'ANY HERO', 
                     src: '../../assets/images/card-art/any-color-hero.jpg',
                     description: 'HIT ONE MONSTER IN ANY RING.',
                     };
@@ -64,8 +64,8 @@ const blueHeroCard = {name: 'BLUE HERO',
                     src: '../../assets/images/card-art/blue-hero.jpg',
                     description: 'HIT ONE MONSTER IN A BLUE HERO RING.'
                     };
-const barbarianCard = {name: 'BARBARIAN', 
-                    src: '../../assets/images/card-art/barbarian.jpg',
+const barbarianCard = {name: 'SLAYER', 
+                    src: '../../assets/images/card-art/slayer.jpg',
                     description: 'DESTROY ONE MONSTER IN ANY RING.',
                     };
 const castleGuardCard = {name: 'CASTLE GUARD', 

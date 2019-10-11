@@ -17,7 +17,11 @@ const db = require('./config/database');
 const app = express();
 const MonstersState = require('./monsters/monsters.states');
 const defensesState = require('./defenses/defenses.states');
-// const playerCardsState = require('./player-cards/player-cards.state');
+const playerCardsState = require('./player-cards/player-cards.state');
+const playerCardsModel = require('./player-cards/player-cards.dao');
+const playerDeckState = require('./player-deck/player-deck.state');
+const playerDeckModel = require('./player-deck/player-deck.dao');
+const properties = require('./config/properties');
 
 //configure bodyparser
 const bodyParserJSON = bodyParser.json();
@@ -69,6 +73,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// playerDeckState.removePlayerCardIndices();
+// playerDeckState.initializePlayerDeck();
 // use express router
 // app.use('/api', router);
 // call monsters routing

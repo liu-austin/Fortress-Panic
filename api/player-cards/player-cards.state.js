@@ -1,6 +1,6 @@
 // jshint esversion:8
 const playerCardsList = require('./player-cards.types');
-const monstersModel = require('./monsters.dao');
+const monstersModel = require('../monsters/monsters.dao');
 const defensesModel = require('../defenses/defenses.dao');
 const defensesState = require('../defenses/defenses.states');
 const playerCardsModel = require('../player-cards/player-cards.dao');

@@ -31,7 +31,7 @@ const playerReducer = (state=INITIAL_STATE, action) => {
         case playerActionTypes.LOG_OUT_PLAYER:
             return ({
                 ...state,
-                [action.payload]: {...state[action.payload], displayName: 'Player ' + (Object.keys(state).indexOf(action.payload) + 1), logged: false}
+                [action.payload]: {...state[action.payload], displayName: 'Player ' + action.payload.slice(0,4), logged: false}
             });
         case playerActionTypes.REMOVE_PLAYER:
             delete state[action.payload];

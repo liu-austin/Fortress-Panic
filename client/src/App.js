@@ -17,6 +17,7 @@ import { createStructuredSelector } from 'reselect';
 import { updatePlayerName } from './redux/players/player.action';
 import { setSelectedPlayer } from './redux/selectedplayer/selectedplayer.action';
 import { selectSelectedPlayer } from './redux/selectedplayer/selectedplayer.selectors';
+import { selectStartButtonPressed } from './redux/startbutton/startbutton.selectors';
 
 class App extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class App extends React.Component {
 
   componentDidMount() {
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-         if (userAuth && this.props.currentUser != 'reset') {
+         if (userAuth && this.props.currentUser !== 'reset') {
            // userAuth represents a signed-in user so set that to current user
            const userRef = await createUserProfileDocument(userAuth);
    
@@ -48,11 +49,24 @@ class App extends React.Component {
            if (this.props.selectedplayer) {
             await new Promise((resolve, reject) => setTimeout(resolve, 1000));
             if (this.props.currentUser) {
-              this.props.updatePlayerName(this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName);
+              if (this.props.selectedplayer.selectedplayer !== null) {
+                this.props.updatePlayerName(this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName);
+                socket.emit('nameChange', [this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName]);
+              }
             }
            }
          } 
        });
+
+       if (!this.props.startButtonPressed) {
+        socket.emit('isStarted?');
+       }
+
+       if (this.props.players[socket.id]) {
+         if (!this.props.players[socket.id].logged) {
+          this.props.selectCurrentUser(null);
+         }
+       }
   }
 
   componentWillUnmount() {
@@ -85,7 +99,8 @@ class App extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
   players: selectPlayers,
-  selectedplayer: selectSelectedPlayer
+  selectedplayer: selectSelectedPlayer,
+  startButtonPressed: selectStartButtonPressed
 });
 
 const mapDispatchToProps = dispatch => {

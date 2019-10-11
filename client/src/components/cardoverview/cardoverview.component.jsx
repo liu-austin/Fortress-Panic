@@ -2,13 +2,12 @@
 import React from 'react';
 import './cardoverview.styles.scss';
 import { connect } from 'react-redux';
-import { addItem } from '../../redux/cart/cart.action.js';
 
-const CardOverview = ({ cardInfo, addItem }) => {
+const CardOverview = ({ cardInfo }) => {
     // const { id, name, text, imageUrl } = cardInfo;
     return (
         <div className="card-overview" key="1">
-        <p className='name'>GREEN KNIGHT</p>
+            <span className='name'>{cardInfo ? cardInfo.name : null}</span>
         </div>
     );
 };

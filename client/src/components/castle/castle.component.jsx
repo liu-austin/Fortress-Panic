@@ -8,6 +8,8 @@ import { socket } from '../../assets/socketIO/socketIO.utils';
 import { displayNewMessage } from '../../redux/console/console.action';
 
 const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage }) => {
+    socket.removeAllListeners('firstStartButtonPress');
+    socket.removeAllListeners('otherPlayerStartedGame');
     socket.on('hasGameStarted', function(started) {
         if (started) {
             pressStartButton();

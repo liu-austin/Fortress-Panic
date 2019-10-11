@@ -12,7 +12,7 @@ class Chatbox extends React.Component {
             msg: '',
             msgs: []
         };
-
+        socket.removeAllListeners('receiveMessage');
         socket.on('receiveMessage', function(data) {
             addMessage(data);
         });

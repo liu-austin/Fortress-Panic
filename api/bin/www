@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// jshint esversion:6
+// jshint esversion:8
 /**
  * Module dependencies.
  */
@@ -7,7 +7,18 @@ var app = require('../app');
 var http = require('http');
 const configDB = require('../config/properties');
 const socketIO = require('socket.io');
+const fetch = require('node-fetch');
 const playerCardsState = require('../player-cards/player-cards.state');
+const playerCardsModel = require('../player-cards/player-cards.dao');
+const playerDeckState = require('../player-deck/player-deck.state');
+const playerDeckModel = require('../player-deck/player-deck.dao');
+const monsterDeckState = require('../monster-deck/monster-deck.states');
+const monsterDeckModel = require('../monster-deck/monster-deck.dao');
+const MonstersState = require('../monsters/monsters.states');
+const monstersModel = require('../monsters/monsters.dao');
+const defensesState = require('../defenses/defenses.states');
+const defensesModel = require('../defenses/defenses.dao');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -24,13 +35,12 @@ const io = socketIO(server);
 
 let players = {};
 let started = [false];
-let nextPhase = [false];
 
 io.on("connection", (socket) => {
   console.log("New client connected at id: " + socket.id);
   players[socket.id] = {
     playerId: socket.id,
-    displayName: 'Player ' + (Object.keys(players).length + 1),
+    displayName: 'Player ' + socket.id.slice(0,4),
     playerCards: [],
     points: 0,
     logged: false,
@@ -47,68 +57,120 @@ io.on("connection", (socket) => {
   socket.on('firstStartButtonPress', function() {
     started[0] = true;
     socket.broadcast.emit('otherPlayerStartedGame', 'THE GAME HAS STARTED.');
+    let currentPlayer = main();
+    socket.emit('startClientDrawPhase', currentPlayer);
   });
 
   socket.on('playerLogin', function(id) {
-    io.emit('updateLoginName', id);
     players[socket.id].logged = true; 
+    io.emit('updateLoginName', id);
   });
 
   socket.on('logOutPlayer', function(id) {
-    socket.broadcast.emit('logOutPlayer', id);
+    players[id].displayName = 'Player ' + id.slice(0,4);
     players[socket.id].logged = false;
+    socket.broadcast.emit('logOutPlayer', id);
+    socket.broadcast.emit('changeName', [id, 'Player ' + id.slice(0,4)]);
   });
 
   socket.on('sendMessage', function(data){
     io.emit('receiveMessage', data);
   });
 
-  socket.on('nextPhase', function() {
-    nextPhase[0] = true;
+  socket.on('goToNextPhase', function() {
+    socket.broadcast.emit('nextPhase');
+  });
+
+  socket.on('isStarted?', function() {
+    socket.emit('isStartedResponse', started[0]);
+  });
+
+  socket.on('nameChange', function(obj) {
+    players[obj[0]].displayName = obj[1];
+    socket.broadcast.emit('changeName', obj);
+  });
+
+  socket.on('setCurrentPlayer', function(id) {
+    socket.broadcast.emit('setCurrentPlayer', id);
+  });
+
+  socket.on('startDrawPhase', function (playerID) {
+    console.log('DRAW PHASE');
+    io.emit('setCurrentPlayer', playerID);
+    playerCardsState.addPlayerCard(playerID, maxHandSize[Object.keys(players).length] - players[playerID].playerCards.length);
+    setTimeout(function() {
+      io.emit('updatePlayerCards', playerID);
+    }, 500);
+    setTimeout(function() {
+      io.emit('nextPhase');
+      socket.emit('startClientDiscardPhase', playerID);
+    }, 2000);
+  });
+
+  socket.on('startDiscardPhase', function(id) {
+    console.log('DISCARD PHASE');
+
+  });
+
+  socket.on('startTradePhase', function(id) {
+    console.log('TRADE PHASE');
+
   });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected at id: " + socket.id);
     delete players[socket.id];
     io.emit('disconnect', socket.id);
+    io.emit('disconnectUpdate', players);
   });
 });
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port, () => {console.log(`Listening on port ${port}`)});
-// GAME LOOP
 
+// GAME LOGIC
 let maxHandSize = {1: 6, 2: 5, 3: 5, 4: 5, 5: 4, 6: 4};
 let phaseSkippable = {0: false, 1: true, 2: true, 3: true, 4: false, 5: false};
 let winCondition = false;
 let loseCondition = false;
-let phaseIndex = 0;
-let turnIndex = 0;
+
+const initializePhase = async () => {
+  started[0] = false;
+  MonstersState.clearBoard();
+  MonstersState.initializeBoard();
+  playerDeckState.removePlayerCardIndices();
+  playerCardsState.clearPlayerCards();
+  playerDeckState.initializePlayerDeck();
+};
+
+const tradeCardsPhase = async (playerID) => {
+
+};
+
+const playCardsPhase = async (playerID) => {
+
+};
+
+const missing = [false];
+
+const moveMonstersPhase = async (playerID) => {
+
+};
+
+const spawnMonstersPhase = async (playerID) => {
+
+};
+
+// GAME LOOP
 let player;
-
-const drawPhase = async (playerID) => {
-  nextPhase[0] = false;
-  playerCardsState.addPlayerCard(playerID, maxHandSize[Object.keys(players).length] - players[playerID].playerCards.length);
-  await new Promise((resolve, reject) => setTimeout(resolve, 2500));
-  io.emit('nextPhase');
-  while (!nextPhase[0]) {
-
-  }
+const main = () => {
+    // START GAME
+    console.log('MAIN HAS STARTED');
+    player = Object.keys(players)[0];
+    return player;
 };
 
-const discardAndDrawPhase = async (playerID) => {
-  nextPhase[0] = false;
-  
-};
-// while (!winCondition || !loseCondition) {
-// // START GAME
-//   if (started[0]) {
-//     turnIndex += 1;
-//     let numPlayers = Object.keys(players).length;
-//     player = Object.keys(players)[turnIndex % numPlayers];
-//       // DRAW PHASE
-    
-//   }
-// }
+initializePhase();

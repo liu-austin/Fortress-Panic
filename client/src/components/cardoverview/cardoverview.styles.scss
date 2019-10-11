@@ -1,21 +1,24 @@
 .card-overview {
     background-color: goldenrod;
-    border-radius: 10px;
+    border-radius: 5px;
     display: inline-block;
     text-align: center;
-    width: 15%;
+    width: 73.3px;
     cursor: pointer;
-    margin-right: 1.5%;
-    margin-top: 0;
-    height: 100%;
+    margin-right: 13.3px;
+    margin-top: 0px;
+    height: 80px;
+    word-wrap: break-word;
+    padding-left: 7px;
+    padding-right: 7px;
 
-    & p {
-        padding: 14px 0;
-        font-size: 20px;
+    & span {
+        margin: 0 0 0 0;
+        font-size: 19px;
     }
 }
 
 .card-overview:hover {
-    background-color: gold;
+    background-color: orange;
 }
 
