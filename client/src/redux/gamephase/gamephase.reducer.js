@@ -18,6 +18,11 @@ const gamePhaseReducer = (state=INITIAL_STATE, action) => {
                         ...state,
                         phase: GamePhases[(GamePhases.indexOf(state.phase) + 1) % 6]
                     });
+            case gamePhaseActionTypes.SET_NEXT_PHASE:
+                return ({
+                    ...state,
+                    phase: action.payload
+                });
         default:
             return state;
     }

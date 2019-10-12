@@ -49,8 +49,21 @@ io.on("connection", (socket) => {
   // send the players object to the new player
   socket.emit('currentPlayers', players);
 
+  Object.keys(players)
+
   socket.emit('hasGameStarted', started[0]);
 
+  socket.broadcast.emit('getCurrentPlayer', socket.id);
+
+  socket.broadcast.emit('getCurrentPhase', socket.id);
+
+  socket.on('returnCurrentPhase', function(obj) {
+      io.emit('setCurrentPhase', obj);
+  });
+
+  socket.on('returnCurrentPlayer', function(obj) {
+    io.emit('updateCurrentPlayer', obj);
+  });
   // update all other players of the new player
   socket.broadcast.emit('newPlayer', players[socket.id]);
 
@@ -85,6 +98,10 @@ io.on("connection", (socket) => {
     socket.emit('isStartedResponse', started[0]);
   });
 
+  socket.on('cardUpdate', function(id) {
+    io.emit('updatePlayerCards', id);
+  });
+
   socket.on('nameChange', function(obj) {
     players[obj[0]].displayName = obj[1];
     socket.broadcast.emit('changeName', obj);
@@ -94,10 +111,22 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('setCurrentPlayer', id);
   });
 
+  socket.on('returnID', function(id) {
+    socket.emit('setCurrentPhase', [id, 'DRAW UP']);
+  });
+
   socket.on('startDrawPhase', function (playerID) {
     console.log('DRAW PHASE');
     io.emit('setCurrentPlayer', playerID);
+    Object.keys(players).forEach(player => {
+      if (players[player].playerId === String(playerID)) {
+        players[player].currentTurn = true;
+      } else {
+        players[player].currentTurn = false;
+      }
+    });
     playerCardsState.addPlayerCard(playerID, maxHandSize[Object.keys(players).length] - players[playerID].playerCards.length);
+    io.emit('getIDs');
     setTimeout(function() {
       io.emit('updatePlayerCards', playerID);
     }, 500);
@@ -118,10 +147,20 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected at id: " + socket.id);
-    delete players[socket.id];
-    io.emit('disconnect', socket.id);
-    io.emit('disconnectUpdate', players);
+    if (players[socket.id].currentTurn) {
+      let playerIndex = Object.keys(players).indexOf(socket.id);
+      console.log("Client disconnected at id: " + socket.id);
+      delete players[socket.id];
+      io.emit('disconnect', socket.id);
+      io.emit('disconnectUpdate', players);
+      let nextPlayer = Object.keys(players)[playerIndex % Object.keys(players).length];
+      socket.broadcast.emit('startDisconnectDrawPhase', nextPlayer);
+    } else {
+      console.log("Client disconnected at id: " + socket.id);
+      delete players[socket.id];
+      io.emit('disconnect', socket.id);
+      io.emit('disconnectUpdate', players);
+    }
   });
 });
 

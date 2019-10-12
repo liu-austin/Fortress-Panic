@@ -12,3 +12,10 @@ export const forceNextPhase = () => {
         type: gamePhaseActionTypes.FORCE_NEXT_PHASE
     });
 };
+
+export const setNextPhase = (phase) => {
+    return ({
+        type: gamePhaseActionTypes.SET_NEXT_PHASE,
+        payload: phase
+    });
+};

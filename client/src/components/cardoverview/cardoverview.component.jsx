@@ -2,11 +2,16 @@
 import React from 'react';
 import './cardoverview.styles.scss';
 import { connect } from 'react-redux';
+import { selectCard, selectCardInfo } from '../../redux/selectedcard/selectedcard.action';
 
-const CardOverview = ({ cardInfo }) => {
-    // const { id, name, text, imageUrl } = cardInfo;
+const CardOverview = ({ cardInfo, cardselected, selectCardInfo }) => {
+    const clickCard = () => {
+        selectCardInfo(cardInfo);
+        cardselected();
+    };
+
     return (
-        <div className="card-overview" key="1">
+        <div className="card-overview" key={cardInfo ? cardInfo.key : null} onClick={cardInfo ? clickCard : null}>
             <span className='name'>{cardInfo ? cardInfo.name : null}</span>
         </div>
     );
@@ -14,7 +19,8 @@ const CardOverview = ({ cardInfo }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return ({
-        // addItem: cardInfo => dispatch(addItem(cardInfo))
+        cardselected: () => dispatch(selectCard()),
+        selectCardInfo: (cardinfo) => dispatch(selectCardInfo(cardinfo))
      });
 }
 

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 // import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { selectPlayers } from '../../redux/players/player.selector';
-import { addPlayer, updatePlayerName, retrievePlayers, removePlayer, logOutPlayer, updatePlayerCards } from '../../redux/players/player.action';
+import { addPlayer, updatePlayerName, retrievePlayers, removePlayer, logOutPlayer, updatePlayerCards, setPlayerTurnActive, setPlayerTurnInactive } from '../../redux/players/player.action';
 import { auth } from '../../firebase/firebase.utils';
 import { setSelectedPlayer } from '../../redux/selectedplayer/selectedplayer.action';
 import { setCurrentUser } from '../../redux/user/user.action';
@@ -16,17 +16,19 @@ import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
-  updatePlayerCards, pressStartButton, setCurrentPlayer}) => {
+  updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive}) => {
 
   const host = 'http://localhost:9000/';
 
     socket.removeAllListeners('startClientDrawPhase');
+    socket.removeAllListeners('startDisconnectDrawPhase');
     socket.removeAllListeners('startClientDiscardPhase');
     socket.removeAllListeners('startClientTradePhase');
     socket.removeAllListeners('startClientPlayPhase');
     socket.removeAllListeners('updateDisplayName');
     socket.removeAllListeners('isStartedResponse');
     socket.removeAllListeners('currentPlayers');
+    socket.removeAllListeners('getIDs');
     socket.removeAllListeners('newPlayer');
     socket.removeAllListeners('nextPhase');
     socket.removeAllListeners('setCurrentPlayer');
@@ -53,6 +55,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('newPlayer', function(playerInfo) {
         addPlayer(playerInfo);
+        socket.emit('cardUpdate', socket.id);
       });
 
       socket.on('nextPhase', function() {
@@ -61,6 +64,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('setCurrentPlayer', function(playerID) {
         setCurrentPlayer(players[playerID].displayName);
+        setPlayerTurnActive(playerID);
+      });
+
+      socket.on('setPlayerInactive', function(id) {
+        setPlayerTurnInactive(id);
       });
 
       socket.on('logOutPlayer', function(id) {
@@ -69,6 +77,10 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('updateLoginName', function(id) {
         setSelectedPlayer(id);
+      });
+
+      socket.on('getIDs', function() {
+        socket.emit('returnID', socket.id);
       });
 
       socket.on('updatePlayerCards', function(id) {
@@ -80,6 +92,12 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('startClientDrawPhase', function(playerID) {
         socket.emit('startDrawPhase', playerID);
+      });
+
+      socket.on('startDisconnectDrawPhase', function(playerID) {
+        if (socket.id === playerID) {
+          socket.emit('startDrawPhase', playerID);
+        }
       });
 
       socket.on('startClientDiscardPhase', function(playerID) {
@@ -100,6 +118,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
           auth.signOut();
           setCurrentUser(null);
         }
+        socket.emit('cardUpdate', socket.id);
       });
 
     return (
@@ -140,7 +159,9 @@ const mapDispatchToProps = dispatch => {
         forceNextPhase: () => dispatch(forceNextPhase()),
         updatePlayerCards: (id, cards) => dispatch(updatePlayerCards(id, cards)),
         pressStartButton: () => dispatch(pressStartButton()),
-        setCurrentPlayer: (playerName) => dispatch(setCurrentPlayer(playerName))
+        setCurrentPlayer: (playerName) => dispatch(setCurrentPlayer(playerName)),
+        setPlayerTurnActive: (id) => dispatch(setPlayerTurnActive(id)),
+        setPlayerTurnInactive: (id) => dispatch(setPlayerTurnInactive(id))
     });
   };
 
