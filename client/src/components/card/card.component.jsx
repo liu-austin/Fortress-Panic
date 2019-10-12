@@ -43,17 +43,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(null, mapDispatchToProps)(Card);
-
-
-// const Card = ({ cardInfo }) => {
-//     const { id, name, text, imageUrl } = cardInfo;
-//     return (
-//         <div className="card" key={id}>
-//             <span className='name' >{name}</span>
-//             <div className='image' style={{backgroundImage: `url(${imageUrl})`}} />
-//             <div className="card-footer">
-//                 <span className='text' >{text}</span>
-//             </div>
-//         </div>
-//     );
-// };

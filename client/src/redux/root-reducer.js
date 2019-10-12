@@ -16,6 +16,8 @@ import selectedPlayerReducer from './selectedplayer/selectedplayer.reducer';
 import currentPlayerReducer from './currentplayer/currentplayer.reducer';
 import selectedCardReducer from './selectedcard/selectedcard.reducer';
 import monsterInfoReducer from './monsterinfo/monsterinfo.reducer';
+import defensesReducer from './defenses/defenses.reducer';
+import monstersReducer from './monsters/monsters.reducer';
 
 // key is the entry point fives therom where we start persisting state, root is the 
 // bottom level. storage is object that gives method of 
@@ -40,7 +42,9 @@ const rootReducer = combineReducers({
     selectedplayer: selectedPlayerReducer,
     currentplayer: currentPlayerReducer,
     selectedcard: selectedCardReducer,
-    monsterinfo: monsterInfoReducer
+    monsterinfo: monsterInfoReducer,
+    defenses: defensesReducer,
+    monster: monstersReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

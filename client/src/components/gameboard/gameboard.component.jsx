@@ -10,14 +10,20 @@ import ArcherRegion from '../grid-regions/archer-region/archer-region.component'
 import KnightRegion from '../grid-regions/knight-region/knight-region.component';
 import SwordsmanRegion from '../grid-regions/swordsman-region/swordsman-region.component';
 import { selectRotationAngle } from '../../redux/rotation/rotation.selectors';
+import { selectActiveMonsters } from '../../redux/monsters/monsters.selectors';
 
-const GameBoard = ({startButtonPressed, rotationAngle}) => {
+const GameBoard = ({startButtonPressed, rotationAngle, monsters}) => {
     return (
         <div className='gameboard csstransforms' style={{transform: `rotate(${rotationAngle}deg)`}}>
             <Castle />
             {
                 startButtonPressed ? (
-                    <div className='region-container'><ForestRegion/><ArcherRegion/><KnightRegion/><SwordsmanRegion/></div>
+                    <div className='region-container'>
+                        <ForestRegion/>
+                        <ArcherRegion/>
+                        <KnightRegion/>
+                        <SwordsmanRegion/>
+                    </div>
                     ) : <CircularOrb />
             }
         </div>
@@ -27,7 +33,8 @@ const GameBoard = ({startButtonPressed, rotationAngle}) => {
 const mapStateToProps = (state) => {
     return ({
         rotationAngle: selectRotationAngle(state),
-        startButtonPressed: selectStartButtonPressed(state)
+        startButtonPressed: selectStartButtonPressed(state),
+        monsters: selectActiveMonsters(state)
     });
 };
 

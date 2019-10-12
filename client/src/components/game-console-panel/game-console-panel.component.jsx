@@ -11,8 +11,9 @@ import { socket } from '../../assets/socketIO/socketIO.utils';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
 import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer.selectors';
 import { selectPlayers } from '../../redux/players/player.selector';
+import { selectMonstersLeft } from '../../redux/monsters/monsters.selectors';
 
-const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, consoleMessage, displayNewMessage, currentPlayer, setCurrentPlayer }) => {
+const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, consoleMessage, displayNewMessage, currentPlayer, setCurrentPlayer, monstersLeft }) => {
     socket.removeAllListeners('getCurrentPhase');
     socket.removeAllListeners('setCurrentPhase');
     socket.removeAllListeners('getCurrentPlayer');
@@ -66,7 +67,7 @@ const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, 
                             <td>{currentPlayer}</td>
                             <td>{currentPhase}</td>
                             <td><button className='end-phase-button' onClick={handleClick}>NEXT PHASE</button></td>
-                            <td>0</td>
+                            <td>{monstersLeft ? monstersLeft : 31}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -83,7 +84,8 @@ const mapStateToProps = (state) => {
         currentPhase: selectCurrentPhase(state),
         consoleMessage: selectConsoleMessage(state),
         currentPlayer: selectCurrentPlayerName(state),
-        players: selectPlayers(state)
+        players: selectPlayers(state),
+        monstersLeft: selectMonstersLeft(state)
     });
 };
 

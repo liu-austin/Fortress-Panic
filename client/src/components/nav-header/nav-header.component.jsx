@@ -14,9 +14,11 @@ import { setCurrentUser } from '../../redux/user/user.action';
 import { forceNextPhase } from '../../redux/gamephase/gamephase.action';
 import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
+import { getDefenses } from '../../redux/defenses/defenses.action';
+import { getMonsters } from '../../redux/monsters/monsters.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
-  updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive}) => {
+  updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -36,6 +38,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('updateLoginName');
     socket.removeAllListeners('updatePlayerCards');
     socket.removeAllListeners('disconnect');
+    socket.removeAllListeners('getDefenses');
+    socket.removeAllListeners('getMonsters');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -52,6 +56,20 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       socket.on('currentPlayers', function(players) {
         retrievePlayers(players);
       });
+
+      socket.on('getDefenses', function() {
+        fetch(host + 'findDefenses')
+        .then(response => response.json())
+        .then(alldefenses => alldefenses.filter(defense => defense.active))
+        .then(data => getDefenses(data));
+      });
+
+      socket.on('getMonsters', function() {
+        fetch(host + 'findMonsters')
+        .then(response => response.json())
+        .then(data => getMonsters(data));
+      });
+
 
       socket.on('newPlayer', function(playerInfo) {
         addPlayer(playerInfo);
@@ -161,7 +179,9 @@ const mapDispatchToProps = dispatch => {
         pressStartButton: () => dispatch(pressStartButton()),
         setCurrentPlayer: (playerName) => dispatch(setCurrentPlayer(playerName)),
         setPlayerTurnActive: (id) => dispatch(setPlayerTurnActive(id)),
-        setPlayerTurnInactive: (id) => dispatch(setPlayerTurnInactive(id))
+        setPlayerTurnInactive: (id) => dispatch(setPlayerTurnInactive(id)),
+        getDefenses: (defenses) => dispatch(getDefenses(defenses)),
+        getMonsters: (monsters) => dispatch(getMonsters(monsters))
     });
   };
 

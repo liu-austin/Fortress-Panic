@@ -49,7 +49,9 @@ io.on("connection", (socket) => {
   // send the players object to the new player
   socket.emit('currentPlayers', players);
 
-  Object.keys(players)
+  socket.emit('getDefenses');
+
+  socket.emit('getMonsters');
 
   socket.emit('hasGameStarted', started[0]);
 
