@@ -127,7 +127,7 @@ io.on("connection", (socket) => {
         players[player].currentTurn = false;
       }
     });
-    playerCardsState.addPlayerCard(playerID, maxHandSize[Object.keys(players).length] - players[playerID].playerCards.length);
+    playerCardsState.addPlayerCard(playerID, Math.max(maxHandSize[Object.keys(players).length] - players[playerID].playerCards.length), 0);
     io.emit('getIDs');
     setTimeout(function() {
       io.emit('updatePlayerCards', playerID);
@@ -140,12 +140,72 @@ io.on("connection", (socket) => {
 
   socket.on('startDiscardPhase', function(id) {
     console.log('DISCARD PHASE');
+    io.emit('allowDiscard');
+  });
 
+  socket.on('discardAndDraw', function(obj) {
+    playerCardsState.discardCard(obj[1]);
+    playerCardsState.addPlayerCard(obj[0], 1);
+    setTimeout(function() {
+      io.emit('updatePlayerCards', obj[0]);
+    }, 500);
   });
 
   socket.on('startTradePhase', function(id) {
     console.log('TRADE PHASE');
+    io.emit('allowTrade');
 
+  });
+
+  socket.on('tradeTargetSet', function(obj) {
+    io.emit('initiateTrade', obj);
+  });
+
+  socket.on('tradeResult', function(obj) {
+    io.emit('displayTradeResult', obj);
+  });
+
+  socket.on('tradeAccepted', function(obj) {
+    playerCardsState.tradeCards(obj[0].position, obj[1].position, obj[0]._id, obj[1]._id);
+    setTimeout(function() {
+      io.emit('updatePlayerCards', obj[0].position);
+      io.emit('updatePlayerCards', obj[1].position);
+    }, 500);
+  });
+
+  socket.on('startPlayPhase', function(id) {
+    console.log('PLAY PHASE');
+
+  });
+
+  socket.on('playCard', function(obj) {
+    if (obj.key < 29) {
+      io.emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
+    } else if (obj.key === 29) {
+      io.emit('playSlayerCard', [obj.position, monsterRegions[obj.key]]);
+    } else if (obj.key > 29 && obj.key < 37) {
+      io.emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
+    } else if (obj.key > 36 && obj.key < 39) {
+      io.emit('playDriveItBackCard', obj.position);
+    } else if (obj.key > 38 && obj.key < 41) {
+
+    } else if (obj.key > 40 && obj.key < 43) {
+
+    } else if (obj.key > 42 && obj.key < 47) {
+
+    } else if (obj.key > 46 && obj.key < 49) {
+
+    }
+  });
+
+  socket.on('hitMonster', function(id) {
+    MonstersState.hitMonster(id);
+    io.emit('getMonsters');
+  });
+
+  socket.on('killMonster', function(id) {
+    MonstersState.killMonster(id);
+    io.emit('getMonsters');
   });
 
   socket.on("disconnect", () => {
@@ -177,6 +237,63 @@ let maxHandSize = {1: 6, 2: 5, 3: 5, 4: 5, 5: 4, 6: 4};
 let phaseSkippable = {0: false, 1: true, 2: true, 3: true, 4: false, 5: false};
 let winCondition = false;
 let loseCondition = false;
+let monsterRegions = {
+  0: ['archer 1', 'archer 2'],
+  1: ['archer 1', 'archer 2'],
+  2: ['archer 1', 'archer 2'],
+  3: ['knight 1', 'knight 2'],
+  4: ['knight 1', 'knight 2'],
+  5: ['knight 1', 'knight 2'],
+  6: ['swordsman 1', 'swordsman 2'],
+  7: ['swordsman 1', 'swordsman 2'],
+  8: ['swordsman 1', 'swordsman 2'],
+  9: ['archer 3', 'archer 4'],
+  10: ['archer 3', 'archer 4'],
+  11: ['archer 3', 'archer 4'],
+  12: ['knight 3', 'knight 4'],
+  13: ['knight 3', 'knight 4'],
+  14: ['knight 3', 'knight 4'],
+  15: ['swordsman 3', 'swordsman 4'],
+  16: ['swordsman 3', 'swordsman 4'],
+  17: ['swordsman 3', 'swordsman 4'],
+  18: ['archer 5', 'archer 6'],
+  19: ['archer 5', 'archer 6'],
+  20: ['archer 5', 'archer 6'],
+  21: ['knight 5', 'knight 6'],
+  22: ['knight 5', 'knight 6'],
+  23: ['knight 5', 'knight 6'],
+  24: ['swordsman 5', 'swordsman 6'],
+  25: ['swordsman 5', 'swordsman 6'],
+  26: ['swordsman 5', 'swordsman 6'],
+  27: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6'],
+  28: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6'],
+  29: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6', 
+      'archer 1', 'archer 2', 'archer 3', 'archer 4', 'archer 5', 'archer 6', 
+      'knight 1', 'knight 2', 'knight 3', 'knight 4', 'knight 5', 'knight 6',
+      'swordsman 1', 'swordsman 2', 'swordsman 3', 'swordsman 4', 'swordsman 5', 'swordsman 6',
+      'forest 1', 'forest 2', 'forest 3', 'forest 4', 'forest 5', 'forest 6'],
+  30: ['archer 1', 'archer 2', 'archer 3', 'archer 4', 'archer 5', 'archer 6'],
+  31: ['knight 1', 'knight 2', 'knight 3', 'knight 4', 'knight 5', 'knight 6'],
+  32: ['swordsman 1', 'swordsman 2', 'swordsman 3', 'swordsman 4', 'swordsman 5', 'swordsman 6'],
+  33: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6', 
+      'archer 1', 'archer 2', 'archer 3', 'archer 4', 'archer 5', 'archer 6', 
+      'knight 1', 'knight 2', 'knight 3', 'knight 4', 'knight 5', 'knight 6',
+      'swordsman 1', 'swordsman 2', 'swordsman 3', 'swordsman 4', 'swordsman 5', 'swordsman 6',
+      'forest 1', 'forest 2', 'forest 3', 'forest 4', 'forest 5', 'forest 6'],
+  34: ['castle 1', 'castle 2', 'archer 1', 'archer 2', 'knight 1', 'knight 2', 'swordsman 1', 'swordsman 2', 'forest 1', 'forest 2'],
+  35: ['castle 5', 'castle 6', 'archer 5', 'archer 6', 'knight 5', 'knight 6', 'swordsman 5', 'swordsman 6', 'forest 5', 'forest 6'],
+  36: ['castle 3', 'castle 4', 'archer 3', 'archer 4', 'knight 3', 'knight 4', 'swordsman 3', 'swordsman 4', 'forest 3', 'forest 4'],
+  37: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6', 
+      'archer 1', 'archer 2', 'archer 3', 'archer 4', 'archer 5', 'archer 6', 
+      'knight 1', 'knight 2', 'knight 3', 'knight 4', 'knight 5', 'knight 6',
+      'swordsman 1', 'swordsman 2', 'swordsman 3', 'swordsman 4', 'swordsman 5', 'swordsman 6',
+      'forest 1', 'forest 2', 'forest 3', 'forest 4', 'forest 5', 'forest 6'],
+  38: ['castle 1', 'castle 2', 'castle 3', 'castle 4', 'castle 5', 'castle 6', 
+      'archer 1', 'archer 2', 'archer 3', 'archer 4', 'archer 5', 'archer 6', 
+      'knight 1', 'knight 2', 'knight 3', 'knight 4', 'knight 5', 'knight 6',
+      'swordsman 1', 'swordsman 2', 'swordsman 3', 'swordsman 4', 'swordsman 5', 'swordsman 6',
+      'forest 1', 'forest 2', 'forest 3', 'forest 4', 'forest 5', 'forest 6']
+};
 
 const initializePhase = async () => {
   started[0] = false;

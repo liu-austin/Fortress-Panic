@@ -2,7 +2,8 @@
 import monstersActionTypes from './monsters.types';
 
 const INITIAL_STATE = {
-    monsters: null
+    monsters: null,
+    monsterregion: []
 };
 
 const monstersReducer = (state=INITIAL_STATE, action) => {
@@ -11,6 +12,11 @@ const monstersReducer = (state=INITIAL_STATE, action) => {
             return ({
                 ...state,
                 monsters: action.payload
+            });
+        case monstersActionTypes.SET_MONSTER_REGION:
+            return ({
+                ...state,
+                monsterregion: action.payload
             });
         default:
             return state;

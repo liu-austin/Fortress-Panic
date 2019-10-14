@@ -48,6 +48,13 @@ const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, 
                 displayNewMessage('CANNOT SKIP THIS PHASE.');
             } else {
                 socket.emit('goToNextPhase');
+                if (currentPhase === 'DISCARD AND DRAW') {
+                    socket.emit('startTradePhase', socket.id);
+                } else if (currentPhase === 'TRADE CARD') {
+                    socket.emit('startPlayPhase', socket.id);
+                } else if (currentPhase === 'PLAY CARDS') {
+                    socket.emit('startMoveMonstersPhase', socket.id);
+                }
             }
         }
     };

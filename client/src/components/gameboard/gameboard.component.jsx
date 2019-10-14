@@ -19,10 +19,10 @@ const GameBoard = ({startButtonPressed, rotationAngle, monsters}) => {
             {
                 startButtonPressed ? (
                     <div className='region-container'>
-                        <ForestRegion/>
-                        <ArcherRegion/>
-                        <KnightRegion/>
-                        <SwordsmanRegion/>
+                        <ForestRegion monsters={monsters ? monsters.filter(m => m.location.includes('forest')) : null}/>
+                        <ArcherRegion monsters={monsters ? monsters.filter(m => m.location.includes('archer')) : null}/>
+                        <KnightRegion monsters={monsters ? monsters.filter(m => m.location.includes('knight')) : null}/>
+                        <SwordsmanRegion monsters={monsters ? monsters.filter(m => m.location.includes('swordsman')): null}/>
                     </div>
                     ) : <CircularOrb />
             }

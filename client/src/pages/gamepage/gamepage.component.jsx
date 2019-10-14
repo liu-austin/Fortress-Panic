@@ -9,10 +9,12 @@ import PlayerCardsPanel from '../../components/player-cards-panel/player-cards-p
 import Card from '../../components/card/card.component';
 import MonsterDisplay from '../../components/monster-display/monster-display.component';
 import { connect } from 'react-redux';
-import { selectCardSelected, selectSelectedCardInfo } from '../../redux/selectedcard/selectedcard.selectors';
+import { selectCardSelected, selectSelectedCardInfo, selectTradeTargetInfo } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterHud, selectMonsterInfo } from '../../redux/monsterinfo/monsterinfo.selectors';
+import { selectTradeHud } from '../../redux/selectedcard/selectedcard.selectors';
+import TradeHud from '../../components/tradehud/tradehud.component';
 
-const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonsterinfo}) => {
+const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonsterinfo, tradehud, tradetargetinfo}) => {
     return (
         <div className='game-container'>
             <div className='gameboard-container shrink'>
@@ -52,6 +54,18 @@ const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonste
             <div className='chatbox-panel-container'>
                 <ChatBox/>
             </div>
+            <div className='tradehud-panel-container'>
+            {
+                tradehud ? 
+                (
+                    <TradeHud cardInfo={selectedcardinfo} tradeTarget={tradetargetinfo}/>
+                ) 
+                : 
+                (
+                    null
+                )
+            }
+            </div>
         </div>
     );
 };
@@ -61,7 +75,9 @@ const mapStateToProps = (state) => {
         cardselected: selectCardSelected(state),
         selectedcardinfo: selectSelectedCardInfo(state),
         displaymonsters: selectMonsterHud(state),
-        selectmonsterinfo: selectMonsterInfo(state)
+        selectmonsterinfo: selectMonsterInfo(state),
+        tradehud: selectTradeHud(state),
+        tradetargetinfo: selectTradeTargetInfo(state)
     });
 };
 

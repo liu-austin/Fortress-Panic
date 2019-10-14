@@ -1,0 +1,81 @@
+.tradeHudContainer {
+    height: 400px;
+    width: 500px;
+    z-index: 10000;
+    background-color: darkslategrey;
+    border-radius: 15px;
+}
+
+.textHud {
+    text-align: center;
+
+    span {
+        font-family: 'MedievalSharp', cursive;
+        color: gainsboro;
+        display: inline-block;
+        margin: 10px 85px 10px;
+        font-size: 30px;
+    }
+}
+
+.buttonHud {
+    text-align: center;
+
+    button {
+        border: 2px red solid;
+        border-radius: 7.5px;
+        height: 50px;
+        width: 230px;
+        display: inline-block;
+        margin: 0 10px;
+        font-size: 30px;
+        cursor: pointer;
+        background-color: goldenrod;
+        font-family: 'MedievalSharp', cursive;
+    }
+}
+
+.card {
+    display: inline-block;
+    width: 230px;
+    border-radius: 10px;
+    margin: 0px 10px 7.5px;
+    background-color: #444;
+    .name {
+        font-family: 'MedievalSharp', cursive;
+        text-align: center;
+        font-size: 20px;
+        line-height: 40px;
+    }
+
+    .image-container {
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 5px;
+      z-index: 1000;
+
+      & .image {
+        border-radius: 7.5px;
+        border-left: maroon solid 18px;
+        border-right: maroon solid 18px;
+  
+        display: block;
+        margin: auto;
+        max-height: 100%;
+      }
+    }
+
+    .card-footer {
+      left: 5%;
+      width: 85%;
+      height: 80px;
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+      .text {
+        left: 5%;
+        width: 90%;
+      }
+    }
+  }

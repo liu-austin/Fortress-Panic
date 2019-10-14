@@ -58,13 +58,13 @@ const redHeroCard = {name: 'RED HERO',
                     };
 const greenHeroCard = {name: 'GREEN HERO', 
                     src: '/card-art/green-hero.jpg',
-                    description: 'HIT ONE MONSTER IN A GREEN HERO RING.',
+                    description: 'HIT ONE MONSTER IN A GREEN RING.',
                     };
 const blueHeroCard = {name: 'BLUE HERO', 
                     src: '/card-art/blue-hero.jpg',
-                    description: 'HIT ONE MONSTER IN A BLUE HERO RING.'
+                    description: 'HIT ONE MONSTER IN A BLUE RING.'
                     };
-const barbarianCard = {name: 'SLAYER', 
+const slayerCard = {name: 'SLAYER', 
                     src: '/card-art/slayer.jpg',
                     description: 'DESTROY ONE MONSTER IN ANY RING.',
                     };
@@ -96,7 +96,6 @@ const brickCard = {name: 'BRICK',
                     src: '/card-art/brick.jpg',
                     description: 'COMBINE THIS CARD WITH A MORTAR CARD TO REBUILD A WALL.'
                     };
-
 const playerCardsList = [
 redArcherCard,
 redArcherCard,
@@ -127,7 +126,7 @@ blueSwordsmanCard,
 blueSwordsmanCard,
 castleGuardCard,
 castleGuardCard,
-barbarianCard,
+slayerCard,
 anyColorArcherCard,
 anyColorKnightCard,
 anyColorSwordsmanCard,
@@ -135,12 +134,12 @@ anyColorHeroCard,
 redHeroCard,
 blueHeroCard,
 greenHeroCard,
+driveItBackCard,
+driveItBackCard,
 niceShotCard,
 niceShotCard,
 missingCard,
 missingCard,
-driveItBackCard,
-driveItBackCard,
 brickCard,
 brickCard,
 mortarCard,

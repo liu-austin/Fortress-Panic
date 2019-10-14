@@ -2,12 +2,23 @@
 import React from 'react';
 import './cardoverview.styles.scss';
 import { connect } from 'react-redux';
-import { selectCard, selectCardInfo } from '../../redux/selectedcard/selectedcard.action';
+import { selectCard, unselectCard, selectCardInfo, setTradeTarget, toggleTradeFor } from '../../redux/selectedcard/selectedcard.action';
+import { selectTradeFor, selectSelectedCardInfo } from '../../redux/selectedcard/selectedcard.selectors';
+import { socket } from '../../assets/socketIO/socketIO.utils';
+import { displayNewMessage } from '../../redux/console/console.action';
 
-const CardOverview = ({ cardInfo, cardselected, selectCardInfo }) => {
+const CardOverview = ({ cardInfo, cardselected, cardunselected, selectCardInfo, setTradeTarget, toggleTradeFor, tradefor, selectedcard, displayNewMessage }) => {
     const clickCard = () => {
-        selectCardInfo(cardInfo);
-        cardselected();
+        if (!tradefor) {
+            selectCardInfo(cardInfo);
+            cardselected();
+        } else {
+            cardunselected();
+            setTradeTarget(cardInfo);
+            toggleTradeFor();
+            displayNewMessage('AWAITING TRADE RESPONSE.');
+            socket.emit('tradeTargetSet', [selectedcard, cardInfo]);
+        }
     };
 
     return (
@@ -17,11 +28,22 @@ const CardOverview = ({ cardInfo, cardselected, selectCardInfo }) => {
     );
 };
 
+const mapStateToProps = (state) => {
+    return ({
+        tradefor: selectTradeFor(state),
+        selectedcard: selectSelectedCardInfo(state)
+    });
+};
+
 const mapDispatchToProps = (dispatch) => {
     return ({
         cardselected: () => dispatch(selectCard()),
-        selectCardInfo: (cardinfo) => dispatch(selectCardInfo(cardinfo))
+        cardunselected: () => dispatch(unselectCard()),
+        selectCardInfo: (cardinfo) => dispatch(selectCardInfo(cardinfo)),
+        setTradeTarget: (cardinfo) => dispatch(setTradeTarget(cardinfo)),
+        toggleTradeFor: () => dispatch(toggleTradeFor()),
+        displayNewMessage: (msg) => dispatch(displayNewMessage(msg))
      });
 }
 
-export default connect(null, mapDispatchToProps)(CardOverview);
+export default connect(mapStateToProps, mapDispatchToProps)(CardOverview);

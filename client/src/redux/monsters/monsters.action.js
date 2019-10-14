@@ -7,3 +7,10 @@ export const getMonsters = (monstersInfo) => {
         payload: monstersInfo
     });
 };
+
+export const setMonsterRegion = (regionInfo) => {
+    return ({
+        type: monstersActionTypes.SET_MONSTER_REGION,
+        payload: regionInfo
+    });
+};

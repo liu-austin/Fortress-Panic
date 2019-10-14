@@ -11,7 +11,6 @@ const playerCardsState = {
     outerMovementChart: {forest: 'archer', archer: 'knight', knight:'swordsman', swordsman: 'castle'},
     drawnPlayerCards: [],
     clearPlayerCards: async function() {
-        playerDeckState.initializePlayerDeck();
         await playerCardsModel.deleteMany({}, function (err) {
             if (err) return handleError(err);
           }).exec();
@@ -47,29 +46,12 @@ const playerCardsState = {
         }
         await playerCardsModel.deleteMany({position: 'discard'}).exec();
     },
-    discardCard: async function(key) {
-        await playersCardModel.updateOne({key: key}, {position: 'discard'}).exec();
+    discardCard: async function(cardID) {
+        await playerCardsModel.findByIdAndUpdate(cardID, {position: 'discard'}).exec();
     },
-    tradeCards: async function(id1, id2, key1, key2) {
-        await playersCardModel.updateOne({key: key1}, {position: id2}).exec();
-        await playersCardModel.updateOne({key: key2}, {position: id1}).exec();
-    },
-    playerCardsEffects: {'Goblin King': {method: 'addMonster', input: 3}, 
-    'Ogre Mage': {method: 'discard', input: null}, 
-    'Shaman': {method: 'heal', input: null},
-    'Orc Warlord': {method: 'moveMonsters', input: null},
-    'Blue Monsters Move 1': {method: 'moveMonsters', input: /5|6/},
-    'Green Monsters Move 1': {method: 'moveMonsters', input: /3|4/},
-    'Red Monsters Move 1': {method: 'moveMonsters', input: /1|2/},
-    'Plague! Archers': {method: 'discard', input: /Archer/},
-    'Plague! Knights': {method: 'discard', input: /Knight/},
-    'Plague! Swordsmen': {method: 'discard', input: /Swordsman/},
-    'All Players Discard 1 Card': {method: 'discard', input: null},
-    'Draw 3 Monsters': {method: 'addMonster', input: 3},
-    'Draw 4 Monsters': {method: 'addMonster', input: 4},
-    'Monsters Move Clockwise': {method: 'moveClockwise', input: null},
-    'Monsters Move Counter-Clockwise': {method: 'moveCounterClockwise', input: null},
-    'Giant Boulder': {method: 'giantBoulder', input: null}
+    tradeCards: async function(id1, id2, cardid1, cardid2) {
+        await playerCardsModel.findByIdAndUpdate(cardid1, {position: id2}).exec();
+        await playerCardsModel.findByIdAndUpdate(cardid2, {position: id1}).exec();
     }
 };
 

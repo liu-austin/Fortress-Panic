@@ -15,10 +15,13 @@ import { forceNextPhase } from '../../redux/gamephase/gamephase.action';
 import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
-import { getMonsters } from '../../redux/monsters/monsters.action';
+import { getMonsters, setMonsterRegion } from '../../redux/monsters/monsters.action';
+import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, toggleTargetable, toggleMissing, toggleNiceShot } from '../../redux/selectedcard/selectedcard.action';
+import { displayNewMessage } from '../../redux/console/console.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
-  updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters}) => {
+  updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
+  toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -40,6 +43,12 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('disconnect');
     socket.removeAllListeners('getDefenses');
     socket.removeAllListeners('getMonsters');
+    socket.removeAllListeners('allowDiscard');
+    socket.removeAllListeners('allowTrade');
+    socket.removeAllListeners('initiateTrade');
+    socket.removeAllListeners('displayTradeResult');
+    socket.removeAllListeners('playHitCard');
+    socket.removeAllListeners('playSlayerCard');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -70,7 +79,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         .then(data => getMonsters(data));
       });
 
-
       socket.on('newPlayer', function(playerInfo) {
         addPlayer(playerInfo);
         socket.emit('cardUpdate', socket.id);
@@ -78,6 +86,14 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('nextPhase', function() {
         forceNextPhase();
+      });
+
+      socket.on('allowDiscard', function() {
+        allowDiscard();
+      });
+
+      socket.on('allowTrade', function() {
+        allowTrade();
       });
 
       socket.on('setCurrentPlayer', function(playerID) {
@@ -106,6 +122,40 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
           .then(response => response.json())
           .then(allcards => allcards.filter(card => card.position === id))
           .then(data => updatePlayerCards(id, data));
+      });
+
+      socket.on('initiateTrade', function(obj) {
+        if (obj[1].position === socket.id) {
+          unselectCard();
+          selectCardInfo(obj[0]);
+          setTradeTarget(obj[1]);
+          setTimeout(function() {
+            toggleTradeHud();
+          }, 750);
+        }
+      });
+
+      socket.on('displayTradeResult', function(obj) {
+        if (socket.id === obj[0]) {
+          displayNewMessage(obj[1]);
+        }
+      });
+
+      socket.on('playHitCard', function(obj) {
+        if (socket.id === obj[0]) {
+          setMonsterRegion(obj[1]);
+          toggleTargetable();
+          displayNewMessage('SELECT A VALID MONSTER.');
+        }
+      });
+
+      socket.on('playSlayerCard', function(obj) {
+        if (socket.id === obj[0]) {
+          setMonsterRegion(obj[1]);
+          toggleTargetable();
+          toggleNiceShot();
+          displayNewMessage('SELECT A VALID MONSTER.');
+        }
       });
 
       socket.on('startClientDrawPhase', function(playerID) {
@@ -181,7 +231,18 @@ const mapDispatchToProps = dispatch => {
         setPlayerTurnActive: (id) => dispatch(setPlayerTurnActive(id)),
         setPlayerTurnInactive: (id) => dispatch(setPlayerTurnInactive(id)),
         getDefenses: (defenses) => dispatch(getDefenses(defenses)),
-        getMonsters: (monsters) => dispatch(getMonsters(monsters))
+        getMonsters: (monsters) => dispatch(getMonsters(monsters)),
+        allowDiscard: () => dispatch(allowDiscard()),
+        allowTrade: () => dispatch(allowTrade()),
+        toggleTradeHud: () => dispatch(toggleTradeHud()),
+        unselectCard: () => dispatch(unselectCard()),
+        selectCardInfo: (cardInfo) => dispatch(selectCardInfo(cardInfo)),
+        setTradeTarget: (cardInfo) => dispatch(setTradeTarget(cardInfo)),
+        displayNewMessage: (msg) => dispatch(displayNewMessage(msg)),
+        setMonsterRegion: (regionInfo) => dispatch(setMonsterRegion(regionInfo)),
+        toggleNiceShot: () => dispatch(toggleNiceShot()),
+        toggleMissing: () => dispatch(toggleMissing()),
+        toggleTargetable: () => dispatch(toggleTargetable())
     });
   };
 
