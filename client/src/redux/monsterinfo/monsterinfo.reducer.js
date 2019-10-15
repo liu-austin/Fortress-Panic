@@ -18,7 +18,7 @@ const monsterInfoReducer = (state=INITIAL_STATE, action) => {
                     ...state,
                     selected: false
                 });
-        case monsterInfoActionTypes.SELECT_MONSTER_INFO:
+        case monsterInfoActionTypes.SET_MONSTER_INFO:
             return ({
                 ...state,
                 monsterInfo: action.payload

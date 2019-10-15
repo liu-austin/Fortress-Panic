@@ -20,11 +20,13 @@ import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo,
         toggleRebuild } from '../../redux/selectedcard/selectedcard.action';
 import { selectSelectedCardInfo, selectDriveItBack, selectNiceShot, selectMissing, selectRebuild } from '../../redux/selectedcard/selectedcard.selectors';
 import { displayNewMessage } from '../../redux/console/console.action';
+import { selectMonsterHud, unselectMonsterHud, setMonsterInfo } from '../../redux/monsterinfo/monsterinfo.action';
+import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer.selectors';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
-  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild}) => {
+  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -60,6 +62,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('playJokerCard');
     socket.removeAllListeners('getSelectedCard');
     socket.removeEventListener('endPlayPhase');
+    socket.removeAllListeners('startClientSpawnMonstersPhase');
+    socket.removeAllListeners('missingPlayed');
+    socket.removeAllListeners('openMonsterDisplay');
+    socket.removeAllListeners('updateAllPlayerCards');
+    socket.removeAllListeners('findCurrentPlayerId');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -261,7 +268,21 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
           if (niceshot) {
             toggleNiceShot();
           }
-          socket.emit('moveMonsters');
+          socket.emit('moveMonsters', id);
+        }
+      });
+
+      socket.on('openMonsterDisplay', function(array) {
+        setMonsterInfo(array);
+        setTimeout(function() {
+          selectMonsterHud();
+        }, 500);
+      });
+
+      socket.on('findCurrentPlayerId', function() {
+        unselectMonsterHud();
+        if (players[socket.id].displayName === currentplayer) {
+          socket.emit('returnCurrentPlayerId', socket.id);
         }
       });
 
@@ -285,6 +306,23 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('startClientPlayPhase', function(playerID) {
         socket.emit('startPlayPhase', playerID);
+      });
+
+      socket.on('startClientSpawnMonstersPhase', function(playerID) {
+        if (socket.id === playerID) {
+          socket.emit('startSpawnMonstersPhase', missing);
+          if (missing) {
+            toggleMissing();
+          }
+        }
+      });
+
+      socket.on('updateAllPlayerCards', function() {
+        socket.emit('returnIdsForUpdate', socket.id);
+      });
+
+      socket.on('missingPlayed', function() {
+        displayNewMessage('MISSING CARD PLAYED THIS TURN. NO NEW MONSTERS SPAWNED.');
       });
 
       socket.on('disconnect', function(id) {
@@ -323,7 +361,8 @@ const mapStateToProps = (state) => {
         driveitback: selectDriveItBack(state),
         missing: selectMissing(state),
         niceshot: selectNiceShot(state),
-        rebuild: selectRebuild(state)
+        rebuild: selectRebuild(state),
+        currentplayer: selectCurrentPlayerName(state)
     });
 };
 
@@ -356,7 +395,10 @@ const mapDispatchToProps = dispatch => {
         toggleMissing: () => dispatch(toggleMissing()),
         toggleTargetable: () => dispatch(toggleTargetable()),
         toggleDriveItBack: () => dispatch(toggleDriveItBack()),
-        toggleRebuild: () => dispatch(toggleRebuild())
+        toggleRebuild: () => dispatch(toggleRebuild()),
+        selectMonsterHud: () => dispatch(selectMonsterHud()),
+        unselectMonsterHud: () => dispatch(unselectMonsterHud()),
+        setMonsterInfo: (monsterinfo) => dispatch(setMonsterInfo(monsterinfo))
     });
   };
 

@@ -13,9 +13,9 @@ export const unselectMonsterHud = () => {
     });
 };
 
-export const selectMonsterInfo = (monsterInfo) => {
+export const setMonsterInfo = (monsterInfo) => {
     return ({
-        type: monsterInfoActionTypes.SELECT_MONSTER_INFO,
+        type: monsterInfoActionTypes.SET_MONSTER_INFO,
         payload: monsterInfo
     });
 };

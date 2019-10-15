@@ -5,6 +5,7 @@ const defensesModel = require('../defenses/defenses.dao');
 const defensesState = require('../defenses/defenses.states');
 const monsterDeckModel = require('../monster-deck/monster-deck.dao');
 const monsterDeckState = require('../monster-deck/monster-deck.states');
+const playerCardsModel = require('../player-cards/player-cards.dao');
 
 const MonstersState = {
     outerMovementChart: {forest: 'archer', archer: 'knight', knight:'swordsman', swordsman: 'castle'},
@@ -66,7 +67,7 @@ const MonstersState = {
             }
         }
     },
-    endTurn: function() {
+    clearMonsters: function() {
         MonstersState.drawnMonsters.splice(0, MonstersState.drawnMonsters.length);
     },
     initializeMonsters: function() {
@@ -185,7 +186,19 @@ const MonstersState = {
         }
     },
     discard: async function() {
-
+        if (arguments[0] === null) {
+            let allCards = await playerCardsModel.find({}).exec();
+            let allDrawnCards = allCards.filter(card => card.position !== 'discard');
+            let playerlist = [];
+            for (let i = 0; i < allDrawnCards.length; i++) {
+                if (!playerlist.includes(allDrawnCards[i].position)) {
+                    playerlist.push(allDrawnCards[i].position);
+                    await playerCardsModel.findByIdAndUpdate(allDrawnCards[i]._id, {position: 'discard'}).exec();
+                }
+            }
+        } else {
+            await playerCardsModel.updateMany({name: {$regex: arguments[0]}}, {position: 'discard'}).exec();
+        }
     },
     moveClockwise: async function() {
         let allMonsters = await monstersModel.find({active: true}).exec();
@@ -283,9 +296,9 @@ const MonstersState = {
     'Blue Monsters Move 1': {method: 'moveMonsters', input: /5|6/},
     'Green Monsters Move 1': {method: 'moveMonsters', input: /3|4/},
     'Red Monsters Move 1': {method: 'moveMonsters', input: /1|2/},
-    'Plague! Archers': {method: 'discard', input: /Archer/},
-    'Plague! Knights': {method: 'discard', input: /Knight/},
-    'Plague! Swordsmen': {method: 'discard', input: /Swordsman/},
+    'Plague! Archers': {method: 'discard', input: /ARCHER/},
+    'Plague! Knights': {method: 'discard', input: /KNIGHT/},
+    'Plague! Swordsmen': {method: 'discard', input: /SWORDSMAN/},
     'All Players Discard 1 Card': {method: 'discard', input: null},
     'Draw 3 Monsters': {method: 'addMonster', input: 3},
     'Draw 4 Monsters': {method: 'addMonster', input: 4},

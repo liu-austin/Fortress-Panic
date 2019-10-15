@@ -235,7 +235,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on('joker', function(obj) {
-    playerCardsState.addPlayerCard(obj[0], Math.min(Math.max(maxHandSize[Object.keys(players).length] - obj[1], 0), 2));
+    playerCardsState.addPlayerCard(obj[0], Math.min(Math.max(6 - obj[1], 0), 2));
     setTimeout(function() {
       io.emit('updatePlayerCards', obj[0]);
     }, 500);
@@ -260,11 +260,48 @@ io.on("connection", (socket) => {
     io.emit('endPlayPhase', id);
   });
 
-  socket.on('moveMonsters', function() {
+  socket.on('moveMonsters', function(id) {
     MonstersState.moveMonsters(null);
     setTimeout(function() {
       io.emit('getMonsters');
     }, 100);
+    setTimeout(function() {
+      io.emit('nextPhase');
+      socket.emit('startClientSpawnMonstersPhase', id);
+    }, 1000);
+  });
+
+  socket.on('startSpawnMonstersPhase', function(missing) {
+    console.log('SPAWN MONSTERS PHASE');
+    if (!missing) {
+      MonstersState.clearMonsters();
+      setTimeout(function() {
+        MonstersState.addMonster(2);
+      }, 100);
+      setTimeout(function() {
+        io.emit('getMonsters');
+        io.emit('getDefenses');
+        io.emit('updateAllPlayerCards');
+        setTimeout(function() {
+          io.emit('openMonsterDisplay', MonstersState.drawnMonsters);
+        }, 500);
+      }, 1000);
+
+    } else {
+      io.emit('missingPlayed');
+    }
+    setTimeout(function() {
+      io.emit('findCurrentPlayerId');
+    }, 5000);
+  });
+
+  socket.on('returnIdsForUpdate', function(id) {
+    io.emit('updatePlayerCards', id);
+  });
+
+  socket.on('returnCurrentPlayerId', function(id) {
+    let nextPlayerId = Object.keys(players)[(Object.keys(players).indexOf(id) + 1) % Object.keys(players).length];
+    socket.emit('startClientDrawPhase', nextPlayerId);
   });
 
   socket.on("disconnect", () => {
@@ -361,24 +398,6 @@ const initializePhase = async () => {
   playerDeckState.removePlayerCardIndices();
   playerCardsState.clearPlayerCards();
   playerDeckState.initializePlayerDeck();
-};
-
-const tradeCardsPhase = async (playerID) => {
-
-};
-
-const playCardsPhase = async (playerID) => {
-
-};
-
-const missing = [false];
-
-const moveMonstersPhase = async (playerID) => {
-
-};
-
-const spawnMonstersPhase = async (playerID) => {
-
 };
 
 // GAME LOOP

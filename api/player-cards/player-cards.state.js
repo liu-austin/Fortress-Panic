@@ -19,8 +19,9 @@ const playerCardsState = {
         for (let i = 0; i < amount; i++) {
             let playerDeck = await playerDeckModel.find({}).exec();
             if (playerDeck.length === 0) {
-                await new Promise((resolve, reject) => setTimeout(resolve, 1500));
+                await new Promise((resolve, reject) => setTimeout(resolve, 750));
                 playerCardsState.reshuffle();
+                await new Promise((resolve, reject) => setTimeout(resolve, 750));
             } 
             let deckIndex = Math.round(Math.random() * (playerDeck.length - 1));
             let drawnCardIndex = playerDeck[deckIndex];
