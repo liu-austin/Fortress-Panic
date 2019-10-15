@@ -13,7 +13,7 @@
         font-family: 'MedievalSharp', cursive;
         color: gainsboro;
         display: inline-block;
-        margin: 10px 85px 10px;
+        margin: 10px 85px 5px;
         font-size: 30px;
     }
 }
@@ -36,10 +36,11 @@
 }
 
 .card {
+    vertical-align: top;
     display: inline-block;
     width: 230px;
     border-radius: 10px;
-    margin: 0px 10px 7.5px;
+    margin: 0px 10px 10px;
     background-color: #444;
     .name {
         font-family: 'MedievalSharp', cursive;

@@ -188,24 +188,83 @@ io.on("connection", (socket) => {
     } else if (obj.key > 36 && obj.key < 39) {
       io.emit('playDriveItBackCard', obj.position);
     } else if (obj.key > 38 && obj.key < 41) {
-
+      io.emit('playNiceShotCard', obj.position);
     } else if (obj.key > 40 && obj.key < 43) {
-
+      io.emit('playMissingCard', obj.position);
     } else if (obj.key > 42 && obj.key < 47) {
-
+        if (obj.name === 'BRICK') {
+          io.emit('playBrickCard', obj.position);
+        } else if (obj.name === 'MORTAR') {
+          io.emit('playMortarCard', obj.position);
+        }
     } else if (obj.key > 46 && obj.key < 49) {
-
+      io.emit('playJokerCard', obj.position);
     }
   });
 
   socket.on('hitMonster', function(id) {
     MonstersState.hitMonster(id);
-    io.emit('getMonsters');
+    setTimeout(function() {
+      io.emit('getMonsters');
+    }, 100);
+    socket.emit('getSelectedCard');
   });
 
   socket.on('killMonster', function(id) {
     MonstersState.killMonster(id);
-    io.emit('getMonsters');
+    setTimeout(function() {
+      io.emit('getMonsters');
+    }, 100);
+    socket.emit('getSelectedCard');
+  });
+
+  socket.on('driveItBack', function(obj) {
+    monstersModel.findByIdAndUpdate(obj[0], {location: 'forest ' + obj[1].slice(obj[1].length - 1)}).exec();
+    setTimeout(function() {
+      io.emit('getMonsters');
+    }, 400);
+    socket.emit('getSelectedCard');
+  });
+
+  socket.on('niceShot', function() {
+    socket.emit('getSelectedCard');
+  });
+
+  socket.on('missing', function() {
+    socket.emit('getSelectedCard');
+  });
+
+  socket.on('joker', function(obj) {
+    playerCardsState.addPlayerCard(obj[0], Math.min(Math.max(maxHandSize[Object.keys(players).length] - obj[1], 0), 2));
+    setTimeout(function() {
+      io.emit('updatePlayerCards', obj[0]);
+    }, 500);
+  });
+
+  socket.on('rebuild', function(loc) {
+    defensesState.rebuildWall(loc.slice(loc.length-1));
+    setTimeout(function() {
+      io.emit('getDefenses');
+    }, 400);
+  });
+
+  socket.on('returnSelectedCard', function(obj) {
+    playerCardsState.discardCard(obj[1]._id);
+    setTimeout(function() {
+      io.emit('updatePlayerCards', obj[0]);
+    }, 500);
+  });
+
+  socket.on('startMoveMonstersPhase', function(id) {
+    console.log('MOVE MONSTERS PHASE');
+    io.emit('endPlayPhase', id);
+  });
+
+  socket.on('moveMonsters', function() {
+    MonstersState.moveMonsters(null);
+    setTimeout(function() {
+      io.emit('getMonsters');
+    }, 100);
   });
 
   socket.on("disconnect", () => {

@@ -127,14 +127,14 @@ const MonstersState = {
           });
     },
     hitMonster: async function(monsterId) {
-        monstersModel.findByIdAndUpdate(monsterId, {$inc: {hitpoints: -1}}).exec();
         let struckMonster = await monstersModel.findById(monsterId).exec();
-        if (struckMonster.hitpoints <= 0) {
-            MonstersState.killMonster(monsterId);
+        if (struckMonster.hitpoints <= 1) {
+            await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
         }
+        await monstersModel.findByIdAndUpdate(monsterId, {$inc: {hitpoints: -1}}).exec();
     },
-    killMonster: function(monsterId) {
-        monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
+    killMonster: async function(monsterId) {
+        await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
     },
     removeAllMonsters: function() {
         monstersModel.deleteMany({}, function (err) {

@@ -11,7 +11,9 @@ const INITIAL_STATE = {
     tradetarget: null,
     targetable: false,
     missing: false,
-    niceshot: false
+    niceshot: false,
+    driveitback: false,
+    rebuild: false
 };
 
 const selectedCardReducer = (state=INITIAL_STATE, action) => {
@@ -80,6 +82,16 @@ const selectedCardReducer = (state=INITIAL_STATE, action) => {
             return ({
                 ...state,
                 missing: !state.missing
+            });
+        case selectedCardActionTypes.TOGGLE_DRIVE_IT_BACK:
+            return ({
+                ...state,
+                driveitback: !state.driveitback
+            });
+        case selectedCardActionTypes.TOGGLE_REBUILD:
+            return ({
+                ...state,
+                rebuild: !state.rebuild
             });
         default:
             return state;

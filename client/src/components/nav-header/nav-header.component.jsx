@@ -16,12 +16,15 @@ import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
 import { getMonsters, setMonsterRegion } from '../../redux/monsters/monsters.action';
-import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, toggleTargetable, toggleMissing, toggleNiceShot } from '../../redux/selectedcard/selectedcard.action';
+import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, toggleTargetable, toggleMissing, toggleNiceShot, toggleDriveItBack,
+        toggleRebuild } from '../../redux/selectedcard/selectedcard.action';
+import { selectSelectedCardInfo, selectDriveItBack, selectNiceShot, selectMissing, selectRebuild } from '../../redux/selectedcard/selectedcard.selectors';
 import { displayNewMessage } from '../../redux/console/console.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
-  toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot}) => {
+  toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
+  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -49,6 +52,14 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('displayTradeResult');
     socket.removeAllListeners('playHitCard');
     socket.removeAllListeners('playSlayerCard');
+    socket.removeAllListeners('playDriveItBackCard');
+    socket.removeAllListeners('playNiceShotCard');
+    socket.removeAllListeners('playMissingCard');
+    socket.removeAllListeners('playBrickCard');
+    socket.removeAllListeners('playMortarCard');
+    socket.removeAllListeners('playJokerCard');
+    socket.removeAllListeners('getSelectedCard');
+    socket.removeEventListener('endPlayPhase');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -153,8 +164,104 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         if (socket.id === obj[0]) {
           setMonsterRegion(obj[1]);
           toggleTargetable();
-          toggleNiceShot();
+          if (!niceshot) {
+            toggleNiceShot();
+          }
           displayNewMessage('SELECT A VALID MONSTER.');
+        }
+      });
+
+      socket.on('playDriveItBackCard', function(id) {
+        if (socket.id === id && !driveitback) {
+          toggleDriveItBack();
+          displayNewMessage('SELECT A VALID MONSTER.');
+        }
+      });
+
+      socket.on('playNiceShotCard', function(id) {
+        if (socket.id === id && !niceshot) {
+          if (!niceshot) {
+            toggleNiceShot();
+            unselectCard();
+            socket.emit('niceShot');
+          } else {
+            displayNewMessage('NICE SHOT IS ALREADY ACTIVE.');
+          }
+        } 
+      });
+
+      socket.on('playMissingCard', function(id) {
+        if (socket.id === id) {
+          if (!missing) {
+            toggleMissing();
+            unselectCard();
+            socket.emit('missing');
+          } else {
+            displayNewMessage('MISSING IS ALREADY ACTIVE.');
+          }
+        } 
+      });
+
+      socket.on('playBrickCard', function(id) {
+        if (socket.id === id) {
+          let mortarCards = players[socket.id].playerCards.filter(card => card.name === 'MORTAR');
+          if (mortarCards.length) {
+            socket.emit('returnSelectedCard', [id, mortarCards[0]]);
+            socket.emit('returnSelectedCard', [id, selectedcardinfo]);
+            unselectCard();
+            if (!rebuild) {
+              toggleRebuild();
+            }
+            displayNewMessage('SELECT THE SWORDSMAN REGION OF THE CORRESPONDING CASTLE WALL TO REBUILD.');
+          } else {
+            displayNewMessage('YOU DON"T HAVE A MORTAR CARD TO PLAY THIS WITH.');
+          }
+        }
+      });
+
+      socket.on('playMortarCard', function(id) {
+        if (socket.id === id) {
+          let brickCards = players[socket.id].playerCards.filter(card => card.name === 'BRICK');
+          if (brickCards.length) {
+            socket.emit('returnSelectedCard', [id, brickCards[0]]);
+            socket.emit('returnSelectedCard', [id, selectedcardinfo]);
+            unselectCard();
+            if (!rebuild) {
+              toggleRebuild();
+            }
+            displayNewMessage('SELECT THE SWORDSMAN REGION OF THE CORRESPONDING CASTLE WALL TO REBUILD.');
+          } else {
+            displayNewMessage('YOU DON"T HAVE A BRICK CARD TO PLAY THIS WITH.');
+          }
+        }
+      });
+
+      socket.on('playJokerCard', function(id) {
+        if (socket.id === id) {
+          unselectCard();
+          setTimeout(function() {
+            socket.emit('joker', [id, players[id].playerCards.length - 1]);
+          }, 500);
+          socket.emit('returnSelectedCard', [id, selectedcardinfo]);
+        }
+      });
+
+      socket.on('getSelectedCard', function() {
+        socket.emit('returnSelectedCard', [socket.id, selectedcardinfo]);
+      });
+
+      socket.on('endPlayPhase', function(id) {
+        if (socket.id === id) {
+          if (rebuild) {
+            toggleRebuild();
+          }
+          if (driveitback) {
+            toggleDriveItBack();
+          }
+          if (niceshot) {
+            toggleNiceShot();
+          }
+          socket.emit('moveMonsters');
         }
       });
 
@@ -211,7 +318,12 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
 const mapStateToProps = (state) => {
     return ({
-        players: selectPlayers(state)
+        players: selectPlayers(state),
+        selectedcardinfo: selectSelectedCardInfo(state),
+        driveitback: selectDriveItBack(state),
+        missing: selectMissing(state),
+        niceshot: selectNiceShot(state),
+        rebuild: selectRebuild(state)
     });
 };
 
@@ -242,7 +354,9 @@ const mapDispatchToProps = dispatch => {
         setMonsterRegion: (regionInfo) => dispatch(setMonsterRegion(regionInfo)),
         toggleNiceShot: () => dispatch(toggleNiceShot()),
         toggleMissing: () => dispatch(toggleMissing()),
-        toggleTargetable: () => dispatch(toggleTargetable())
+        toggleTargetable: () => dispatch(toggleTargetable()),
+        toggleDriveItBack: () => dispatch(toggleDriveItBack()),
+        toggleRebuild: () => dispatch(toggleRebuild())
     });
   };
 

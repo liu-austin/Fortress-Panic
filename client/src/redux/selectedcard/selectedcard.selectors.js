@@ -53,3 +53,13 @@ export const selectMissing = createSelector(
     [selectSelectedCard],
     selectedcard => selectedcard.missing
 );
+
+export const selectDriveItBack = createSelector(
+    [selectSelectedCard],
+    selectedcard => selectedcard.driveitback
+);
+
+export const selectRebuild = createSelector(
+    [selectSelectedCard],
+    selectedcard => selectedcard.rebuild
+);

@@ -9,7 +9,6 @@ import GoblinKing from '../../monsters/goblin-king.component';
 import OrcWarlord from '../../monsters/orc-warlord.component';
 import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
-import { handleClick } from '../grid-regions.utils';
 
 const ArcherRegion = ({monsters}) => {
     return (
@@ -19,14 +18,12 @@ const ArcherRegion = ({monsters}) => {
                 [6,1,2,3,4,5].map((num,i) => {
                     return (
                         <li key={i}>
-                            <a className={`archer ${num}`} onClick={handleClick} href={'#'}>
+                            <a className={`archer ${num}`} href={'#'}>
                                 <span>Archer</span>
                                 {
                                     monsters ? 
                                     (
                                         monsters.filter(monster => monster.location === 'archer ' + num).map(m => {
-                                            console.log(m);
-                                            console.log(m._id);
                                             if (m.name === 'Goblin') {
                                                 return <Goblin id={m._id} hitpoints={m.hitpoints} location={m.location}/>
                                             } else if (m.name === 'Orc') {

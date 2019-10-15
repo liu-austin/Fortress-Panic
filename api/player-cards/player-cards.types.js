@@ -86,7 +86,7 @@ const niceShotCard = {name: 'NICE SHOT',
                     };
 const jokerCard = {name: 'JOKER', 
                     src: '/card-art/joker.jpg',
-                    description: 'DRAW 2 CARDS. (MAXIMUM 6)'
+                    description: 'DRAW 2 CARDS. (MAXIMUM HAND SIZE 6)'
                     };
 const mortarCard = {name: 'MORTAR', 
                     src: '/card-art/mortar.jpg',

@@ -84,6 +84,8 @@ app.use(function(err, req, res, next) {
 // MonstersState.addMonster(4);
 // MonstersState.giantBoulder();
 
+// MonstersState.moveMonsters(null);
+
 // app.listen(properties.PORT, (req, res) => {
 //   console.log(`Server is running on ${properties.PORT} port.`);
 // });

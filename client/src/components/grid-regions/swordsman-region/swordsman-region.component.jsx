@@ -11,11 +11,22 @@ import GoblinKing from '../../monsters/goblin-king.component';
 import OrcWarlord from '../../monsters/orc-warlord.component';
 import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
-import { handleClick } from '../grid-regions.utils';
 import { connect } from 'react-redux';
 import { selectDefensesInfo } from '../../../redux/defenses/defenses.selectors';
+import { toggleRebuild } from '../../../redux/selectedcard/selectedcard.action';
+import { selectRebuild } from '../../../redux/selectedcard/selectedcard.selectors';
+import { socket } from '../../../assets/socketIO/socketIO.utils';
 
-const SwordsmanRegion = ({defenses, monsters}) => {
+const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
+    const emitterSetup = (number) => {
+        function emitter() {
+            if (rebuild) {
+                socket.emit('rebuild', 'castle ' + number);
+                toggleRebuild();
+            }
+        }
+        return emitter;
+    };
     return (
         <div className="cn-wrapper swordsman opened-nav">
             <ul>
@@ -23,7 +34,7 @@ const SwordsmanRegion = ({defenses, monsters}) => {
                 [6,1,2,3,4,5].map((num,i) => {
                     return (
                         <li key={i}>
-                            <a className={`swordsman ${num}`} onClick={handleClick} href={'#'}>
+                            <a className={`swordsman ${num}`} onClick={emitterSetup(num)} href={'#'}>
                                 <span>Swordsman</span>
                                 {
                                     monsters ? 
@@ -76,6 +87,32 @@ const SwordsmanRegion = ({defenses, monsters}) => {
                                         null
                                     )
                                 }
+                                {
+                                    monsters ? 
+                                    (
+                                        monsters.filter(monster => monster.location === 'castle ' + num).map(m => {
+                                            if (m.name === 'Goblin') {
+                                                return <Goblin className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Orc') {
+                                                return <Orc className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Troll') {
+                                                return <Troll className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Goblin King') {
+                                                return <GoblinKing className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Orc Warlord') {
+                                                return <OrcWarlord className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Shaman') {
+                                                return <Shaman className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            } else if (m.name === 'Ogre Mage') {
+                                                return <OgreMage className='in-castle' id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                            }
+                                        })
+                                    ) 
+                                    : 
+                                    (
+                                        null
+                                    )
+                                }
                             </a>
                         </li>
                     );
@@ -88,8 +125,14 @@ const SwordsmanRegion = ({defenses, monsters}) => {
 
 const mapStateToProps = (state) => {
     return ({
-        defenses: selectDefensesInfo(state)
+        defenses: selectDefensesInfo(state),
+        rebuild: selectRebuild(state)
     });
 };
 
-export default connect(mapStateToProps)(SwordsmanRegion);
+const mapDispatchToProps = dispatch => {
+    return ({
+        toggleRebuild: () => dispatch(toggleRebuild())
+    });
+  };
+export default connect(mapStateToProps, mapDispatchToProps)(SwordsmanRegion);

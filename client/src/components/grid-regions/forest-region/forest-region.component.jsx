@@ -9,7 +9,6 @@ import GoblinKing from '../../monsters/goblin-king.component';
 import OrcWarlord from '../../monsters/orc-warlord.component';
 import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
-import { handleClick } from '../grid-regions.utils';
 
 const ForestRegion = ({monsters}) => {
     return (
@@ -19,7 +18,7 @@ const ForestRegion = ({monsters}) => {
                 [6,1,2,3,4,5].map((num,i) => {
                     return (
                         <li key={i}>
-                            <a className={`forest ${num}`} onClick={handleClick} href={'#'}>
+                            <a className={`forest ${num}`} href={'#'}>
                                 <span>Forest</span>
                                 {
                                     monsters ? 

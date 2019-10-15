@@ -81,6 +81,14 @@ export const toggleMissing = () => {
     });
 };
 
+export const toggleDriveItBack = () => {
+    return ({
+        type: selectedCardActionTypes.TOGGLE_DRIVE_IT_BACK
+    });
+};
 
-
-
+export const toggleRebuild = () => {
+    return ({
+        type: selectedCardActionTypes.TOGGLE_REBUILD
+    });
+};
