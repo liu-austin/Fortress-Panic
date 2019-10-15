@@ -8,3 +8,8 @@ export const selectCurrentPlayerName = createSelector(
     [selectCurrentPlayer],
     currentplayer => currentplayer.currentPlayer
 );
+
+export const selectCurrentPlayerId = createSelector(
+    [selectCurrentPlayer],
+    currentplayer => currentplayer.id
+);

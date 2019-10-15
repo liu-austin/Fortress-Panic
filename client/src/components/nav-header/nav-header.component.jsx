@@ -13,7 +13,7 @@ import { setSelectedPlayer } from '../../redux/selectedplayer/selectedplayer.act
 import { setCurrentUser } from '../../redux/user/user.action';
 import { forceNextPhase } from '../../redux/gamephase/gamephase.action';
 import { pressStartButton } from '../../redux/startbutton/startbutton.action';
-import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
+import { setCurrentPlayer, setCurrentPlayerId } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
 import { getMonsters, setMonsterRegion } from '../../redux/monsters/monsters.action';
 import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, toggleTargetable, toggleMissing, toggleNiceShot, toggleDriveItBack,
@@ -26,7 +26,7 @@ import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
-  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer}) => {
+  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -115,6 +115,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       });
 
       socket.on('setCurrentPlayer', function(playerID) {
+        setCurrentPlayerId(playerID);
         setCurrentPlayer(players[playerID].displayName);
         setPlayerTurnActive(playerID);
       });
@@ -282,12 +283,12 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       socket.on('findCurrentPlayerId', function() {
         unselectMonsterHud();
         if (players[socket.id].displayName === currentplayer) {
-          socket.emit('returnCurrentPlayerId', socket.id);
+          socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
         }
       });
 
-      socket.on('startClientDrawPhase', function(playerID) {
-        socket.emit('startDrawPhase', playerID);
+      socket.on('startClientDrawPhase', function(obj) {
+        socket.emit('startDrawPhase', obj);
       });
 
       socket.on('startDisconnectDrawPhase', function(playerID) {
@@ -398,7 +399,8 @@ const mapDispatchToProps = dispatch => {
         toggleRebuild: () => dispatch(toggleRebuild()),
         selectMonsterHud: () => dispatch(selectMonsterHud()),
         unselectMonsterHud: () => dispatch(unselectMonsterHud()),
-        setMonsterInfo: (monsterinfo) => dispatch(setMonsterInfo(monsterinfo))
+        setMonsterInfo: (monsterinfo) => dispatch(setMonsterInfo(monsterinfo)),
+        setCurrentPlayerId: (id) => dispatch(setCurrentPlayerId(id))
     });
   };
 

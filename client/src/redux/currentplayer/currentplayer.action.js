@@ -7,3 +7,10 @@ export const setCurrentPlayer = (playerName) => {
         payload: playerName
     });
 };
+
+export const setCurrentPlayerId = (id) => {
+    return ({
+        type: currentPlayerActionTypes.SET_CURRENT_PLAYER_ID,
+        payload: id
+    });
+};

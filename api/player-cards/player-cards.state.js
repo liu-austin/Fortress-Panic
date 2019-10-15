@@ -18,7 +18,7 @@ const playerCardsState = {
     addPlayerCard: async function(id, amount) {
         for (let i = 0; i < amount; i++) {
             let playerDeck = await playerDeckModel.find({}).exec();
-            if (playerDeck.length === 0) {
+            if (playerDeck.length < 7) {
                 await new Promise((resolve, reject) => setTimeout(resolve, 750));
                 playerCardsState.reshuffle();
                 await new Promise((resolve, reject) => setTimeout(resolve, 750));
