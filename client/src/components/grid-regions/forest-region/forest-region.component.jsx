@@ -25,19 +25,19 @@ const ForestRegion = ({monsters}) => {
                                     (
                                         monsters.filter(monster => monster.location === 'forest ' + num).map(m => {
                                             if (m.name === 'Goblin') {
-                                                return <Goblin id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <Goblin id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Orc') {
-                                                return <Orc id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <Orc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Troll') {
-                                                return <Troll id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <Troll id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin King') {
-                                                return <GoblinKing id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <GoblinKing id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Orc Warlord') {
-                                                return <OrcWarlord id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <OrcWarlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Shaman') {
-                                                return <Shaman id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Ogre Mage') {
-                                                return <OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location}/>
+                                                return <OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 

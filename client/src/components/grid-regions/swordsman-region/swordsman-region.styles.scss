@@ -103,8 +103,10 @@
 }
 
 .in-castle {
+	z-index: 20000;
     position: absolute;
     left: 190px;
-	top: 125px;
+	top: 85px;
+	padding-top: 10px;
 	display: inline-block;
 }

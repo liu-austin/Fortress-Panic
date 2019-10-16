@@ -30,7 +30,7 @@ const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage }) => 
         <div className='hex-container'>
         {
             startButtonPressed ? (
-                <div className='hexagon-xl hexagon-default hexagon-hover'></div>
+                null// <div className='hexagon-xl hexagon-default hexagon-hover'></div>
             ) : (                    
             <div className='floating hexagon-xl hexagon-start' onClick={firstStartButtonPress}>
                 <div className='text-container'>

@@ -18,6 +18,7 @@ import selectedCardReducer from './selectedcard/selectedcard.reducer';
 import monsterInfoReducer from './monsterinfo/monsterinfo.reducer';
 import defensesReducer from './defenses/defenses.reducer';
 import monstersReducer from './monsters/monsters.reducer';
+import endConditionReducer from './endcondition/endcondition.reducer';
 
 // key is the entry point fives therom where we start persisting state, root is the 
 // bottom level. storage is object that gives method of 
@@ -44,7 +45,22 @@ const rootReducer = combineReducers({
     selectedcard: selectedCardReducer,
     monsterinfo: monsterInfoReducer,
     defenses: defensesReducer,
-    monster: monstersReducer
+    monster: monstersReducer,
+    endcondition: endConditionReducer
 });
 
-export default persistReducer(persistConfig, rootReducer);
+const resetReducer = (state, action) => {
+    if (action.type === 'RESET_GAME') {
+        state = undefined;
+    }
+    return rootReducer(state, action);
+};
+
+export const resetGame = () => {
+    return ({
+        type: 'RESET_GAME'
+    });
+};
+
+
+export default persistReducer(persistConfig, resetReducer);

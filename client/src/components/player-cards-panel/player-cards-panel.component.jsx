@@ -28,18 +28,21 @@ const PlayerCardsPanel = ({players, retrievePlayers}) => {
                                 <div className='player-display'>
                                     <div className='player-hud'>
                                         <div className='score-container'>
-                                            <span className='display-name'>{players[player].displayName}</span>
+                                            <span className='display-name'>{players[player] ? players[player].displayName : null}</span>
                                             <br/>
-                                            <span className='display-points'>POINTS: {players[player].points}</span>
+                                            <span className='display-points'>POINTS: {players[player] ? players[player].points : null}</span>
                                         </div>
                                     </div>
                                     <div className='hand-container'>
                                     {
-                                        players[player].playerCards.map(card => {
+                                        players[player].playerCards ? 
+                                            (players[player].playerCards.map(card => {
                                             return (
                                                 <CardOverview cardInfo={card}/>
                                             );
-                                        })
+                                            })) 
+                                        : 
+                                        (null)
                                     }
                                     </div>
                                 </div>

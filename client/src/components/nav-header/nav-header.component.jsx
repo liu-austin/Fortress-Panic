@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 // import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { selectPlayers } from '../../redux/players/player.selector';
-import { addPlayer, updatePlayerName, retrievePlayers, removePlayer, logOutPlayer, updatePlayerCards, setPlayerTurnActive, setPlayerTurnInactive } from '../../redux/players/player.action';
+import { addPlayer, updatePlayerName, retrievePlayers, removePlayer, logOutPlayer, updatePlayerCards, setPlayerTurnActive, setPlayerTurnInactive, updatePlayerScore } from '../../redux/players/player.action';
 import { auth } from '../../firebase/firebase.utils';
 import { setSelectedPlayer } from '../../redux/selectedplayer/selectedplayer.action';
 import { setCurrentUser } from '../../redux/user/user.action';
@@ -26,7 +26,8 @@ import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
-  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId}) => {
+  toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
+  updatePlayerScore}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -67,6 +68,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('openMonsterDisplay');
     socket.removeAllListeners('updateAllPlayerCards');
     socket.removeAllListeners('findCurrentPlayerId');
+    socket.removeAllListeners('updateScore');
+    socket.removeAllListeners('getScores');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -116,8 +119,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('setCurrentPlayer', function(playerID) {
         setCurrentPlayerId(playerID);
-        setCurrentPlayer(players[playerID].displayName);
         setPlayerTurnActive(playerID);
+        setCurrentPlayer(players[playerID].displayName);
       });
 
       socket.on('setPlayerInactive', function(id) {
@@ -158,6 +161,19 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         if (socket.id === obj[0]) {
           displayNewMessage(obj[1]);
         }
+      });
+
+      socket.on('getScores', function(playerObj) {
+        for (let i in playerObj) {
+          console.log(i, playerObj[i].points);
+          if (!socket.id === i) {
+            updatePlayerScore(i,playerObj[i].points);
+          } 
+        }
+      });
+
+      socket.on('updateScore', function(obj) {
+        updatePlayerScore(obj[0], obj[1]);
       });
 
       socket.on('playHitCard', function(obj) {
@@ -270,6 +286,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             toggleNiceShot();
           }
           socket.emit('moveMonsters', id);
+          displayNewMessage('AWAITING MONSTERS MOVEMENT.');
         }
       });
 
@@ -293,7 +310,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('startDisconnectDrawPhase', function(playerID) {
         if (socket.id === playerID) {
-          socket.emit('startDrawPhase', playerID);
+          socket.emit('startDrawPhase', [playerID, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
         }
       });
 
@@ -316,6 +333,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             toggleMissing();
           }
         }
+        displayNewMessage('AWAITING MONSTERS SPAWNING.');
       });
 
       socket.on('updateAllPlayerCards', function() {
@@ -400,7 +418,8 @@ const mapDispatchToProps = dispatch => {
         selectMonsterHud: () => dispatch(selectMonsterHud()),
         unselectMonsterHud: () => dispatch(unselectMonsterHud()),
         setMonsterInfo: (monsterinfo) => dispatch(setMonsterInfo(monsterinfo)),
-        setCurrentPlayerId: (id) => dispatch(setCurrentPlayerId(id))
+        setCurrentPlayerId: (id) => dispatch(setCurrentPlayerId(id)),
+        updatePlayerScore: (id, points) => dispatch(updatePlayerScore(id, points))
     });
   };
 

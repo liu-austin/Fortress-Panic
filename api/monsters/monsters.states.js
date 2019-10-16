@@ -51,7 +51,9 @@ const MonstersState = {
                         points: drawnMonster.points
                     });
                     await monster.save();
+                    await new Promise((resolve, reject) => setTimeout(resolve, 250));
                     MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](MonstersState.monsterEffects[drawnMonster.name].input);
+                    await new Promise((resolve, reject) => setTimeout(resolve, 250));
                 } else if (drawnMonster.type === 'Monster Effect') {
                     let monster = new monstersModel({
                         name: drawnMonster.name,
@@ -60,7 +62,9 @@ const MonstersState = {
                         active: false
                     });
                     await monster.save();
+                    await new Promise((resolve, reject) => setTimeout(resolve, 500));
                     MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](MonstersState.monsterEffects[drawnMonster.name].input);
+                    await new Promise((resolve, reject) => setTimeout(resolve, 500));
                 }
             } else {
                 break;
@@ -248,7 +252,7 @@ const MonstersState = {
     giantBoulder: async function() {
         let rollDistance = 1;
         let number = Math.round(Math.random() * 5) + 1;
-        let opposites = {'1': '4', '2': '5', '3': '6', '4': '1', '5': '2', '6': '3'};
+        // let opposites = {'1': '4', '2': '5', '3': '6', '4': '1', '5': '2', '6': '3'};
         await monstersModel.updateMany({active: true, location: 'forest ' + number}, {active: false}).exec();
         // await new Promise((resolve, reject) => setTimeout(resolve, 1000));
         await monstersModel.updateMany({active: true, location: 'archer ' + number}, {active: false}).exec();
@@ -257,36 +261,35 @@ const MonstersState = {
         let checkWallCollision1 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + number, active: true}).exec();
         if (checkWallCollision1) {
             defensesState.killDefense(number, 'Wall');
-            return [number, rollDistance];
         } else {
             rollDistance += 1;
             let checkTowerCollision1 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + number, active: true}).exec();
             if (checkTowerCollision1) {
                 defensesState.killDefense(number, 'Tower');
-                return [number, rollDistance];
-            } else {
-                let oppositeNumber = opposites[String(number)];
-                rollDistance += 1;
-                let checkTowerCollision2 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + oppositeNumber, active: true}).exec();
-                if (checkTowerCollision2) {
-                    defensesState.killDefense(oppositeNumber, 'Tower');
-                    return [number, rollDistance];
-                } else {
-                    rollDistance += 1;
-                    let checkWallCollision2 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + oppositeNumber, active: true}).exec();
-                    if (checkWallCollision2) {
-                        defensesState.killDefense(oppositeNumber, 'Wall');
-                        return [number, rollDistance];
-                    } else {
-                        rollDistance += 1;
-                        await monstersModel.updateMany({active: true, location: 'swordsman ' + oppositeNumber}, {active: false}).exec();
-                        await monstersModel.updateMany({active: true, location: 'knight ' + oppositeNumber}, {active: false}).exec();
-                        await monstersModel.updateMany({active: true, location: 'archer ' + oppositeNumber}, {active: false}).exec();
-                        await monstersModel.updateMany({active: true, location: 'forest ' + oppositeNumber}, {active: false}).exec();
-                        return [number, rollDistance];
-                    }
-                }
-            }
+            } 
+            // else {
+            //     let oppositeNumber = opposites[String(number)];
+            //     rollDistance += 1;
+            //     let checkTowerCollision2 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + oppositeNumber, active: true}).exec();
+            //     if (checkTowerCollision2) {
+            //         defensesState.killDefense(oppositeNumber, 'Tower');
+            //         return [number, rollDistance];
+            //     } else {
+            //         rollDistance += 1;
+            //         let checkWallCollision2 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + oppositeNumber, active: true}).exec();
+            //         if (checkWallCollision2) {
+            //             defensesState.killDefense(oppositeNumber, 'Wall');
+            //             return [number, rollDistance];
+            //         } else {
+            //             rollDistance += 1;
+            //             await monstersModel.updateMany({active: true, location: 'swordsman ' + oppositeNumber}, {active: false}).exec();
+            //             await monstersModel.updateMany({active: true, location: 'knight ' + oppositeNumber}, {active: false}).exec();
+            //             await monstersModel.updateMany({active: true, location: 'archer ' + oppositeNumber}, {active: false}).exec();
+            //             await monstersModel.updateMany({active: true, location: 'forest ' + oppositeNumber}, {active: false}).exec();
+            //             return [number, rollDistance];
+            //         }
+            //     }
+            // }
         }
     },
     monsterEffects: {'Goblin King': {method: 'addMonster', input: 3}, 

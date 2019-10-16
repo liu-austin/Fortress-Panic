@@ -26,7 +26,7 @@ const playerReducer = (state=INITIAL_STATE, action) => {
         case playerActionTypes.UPDATE_PLAYER_SCORE:
             return ({
                 ...state,
-                [action.payload[0]]: {...state[action.payload[0]], points: action.payload[1]} + state[action.payload[0]].points
+                [action.payload[0]]: {...state[action.payload[0]], points: action.payload[1] + state[action.payload[0]].points}
             });
         case playerActionTypes.LOG_OUT_PLAYER:
             return ({

@@ -11,9 +11,10 @@ import { selectDriveItBack } from '../../redux/selectedcard/selectedcard.selecto
 import { displayNewMessage } from '../../redux/console/console.action';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { selectCurrentPhase } from '../../redux/gamephase/gamephase.selectors';
+import { selectCurrentPlayerId } from '../../redux/currentplayer/currentplayer.selectors';
 
-const OgreMage = ({id, hitpoints, location, monsterregion, targetable, niceshot, displayNewMessage, setMonsterRegion, toggleNiceShot, toggleTargetable, unselectCard, driveitback,
-    toggleDriveItBack, currentphase}) => {
+const OgreMage = ({points, id, hitpoints, location, monsterregion, targetable, niceshot, displayNewMessage, setMonsterRegion, toggleNiceShot, toggleTargetable, unselectCard, driveitback,
+    toggleDriveItBack, currentphase, currentplayerid}) => {
         const handleClick = () => {
             if (currentphase === 'PLAY CARDS') {
                 if (driveitback) {
@@ -23,12 +24,16 @@ const OgreMage = ({id, hitpoints, location, monsterregion, targetable, niceshot,
                     setMonsterRegion([]);
                     unselectCard();
                 } else if (targetable && niceshot && monsterregion.includes(location)) {
+                    socket.emit('addPoints', [currentplayerid, points * 10]);
                     socket.emit('killMonster', id);
                     toggleTargetable();
                     toggleNiceShot();
                     setMonsterRegion([]);
                     unselectCard();
                 } else if (targetable && monsterregion.includes(location)) {
+                    if (hitpoints === 1) {
+                        socket.emit('addPoints', [currentplayerid, points * 10]);
+                    }
                     socket.emit('hitMonster', id);
                     toggleTargetable();
                     setMonsterRegion([]);
@@ -56,7 +61,8 @@ const mapStateToProps = (state) => {
         targetable: selectTargetable(state),
         niceshot: selectNiceShot(state),
         driveitback: selectDriveItBack(state),
-        currentphase: selectCurrentPhase(state)
+        currentphase: selectCurrentPhase(state),
+        currentplayerid: selectCurrentPlayerId(state)
     });
 };
 
