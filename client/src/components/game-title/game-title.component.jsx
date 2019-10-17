@@ -5,7 +5,7 @@ const GameTitle = () => {
     return (
         <div className='home-title-container'>
             <div className='title-container'>
-                <a className='go-to-main' href='#menu'>
+                <a className='go-to-main' href={'/main'}>
                     <h1 className='overhead-title'>FORTRESS PANIC</h1>
                 </a>
             </div>

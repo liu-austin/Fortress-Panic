@@ -16,18 +16,22 @@ import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer, setCurrentPlayerId } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
 import { getMonsters, setMonsterRegion } from '../../redux/monsters/monsters.action';
+import { selectMonstersLeft } from '../../redux/monsters/monsters.selectors';
 import { allowDiscard, allowTrade, toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, toggleTargetable, toggleMissing, toggleNiceShot, toggleDriveItBack,
         toggleRebuild } from '../../redux/selectedcard/selectedcard.action';
 import { selectSelectedCardInfo, selectDriveItBack, selectNiceShot, selectMissing, selectRebuild } from '../../redux/selectedcard/selectedcard.selectors';
 import { displayNewMessage } from '../../redux/console/console.action';
 import { selectMonsterHud, unselectMonsterHud, setMonsterInfo } from '../../redux/monsterinfo/monsterinfo.action';
 import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer.selectors';
+import {showEndGameHud, setLose, setHighScorePlayer, setWin} from '../../redux/endcondition/endcondition.action';
+import { selectTowersLeft } from '../../redux/defenses/defenses.selectors';
+import { resetGame } from '../../redux/root-reducer';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
   toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
-  updatePlayerScore}) => {
+  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -70,6 +74,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('findCurrentPlayerId');
     socket.removeAllListeners('updateScore');
     socket.removeAllListeners('getScores');
+    socket.removeAllListeners('loseGame');
+    socket.removeAllListeners('winGame');
+    socket.removeAllListeners('checkLoseGame');
+    socket.removeAllListeners('checkWinGame');
+    socket.removeAllListeners('resetGame');
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -92,12 +101,36 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         .then(response => response.json())
         .then(alldefenses => alldefenses.filter(defense => defense.active))
         .then(data => getDefenses(data));
+        socket.emit('startCheckLoseGame');
+      });
+
+      socket.on('checkLoseGame', function() {
+        setTimeout(function() {
+          if (towersleft === 0) {
+            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+            setTimeout(function() {
+              socket.emit('startLoseGame', highScorePlayerId);
+            }, 500);
+          }
+        }, 1000);
+      });
+
+      socket.on('checkWinGame', function() {
+        setTimeout(function() {
+          if (monstersleft === 25) {
+            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+            setTimeout(function() {
+              socket.emit('startWinGame', highScorePlayerId);
+            }, 500);
+          }
+        }, 1000);
       });
 
       socket.on('getMonsters', function() {
         fetch(host + 'findMonsters')
         .then(response => response.json())
         .then(data => getMonsters(data));
+        socket.emit('startCheckWinGame');
       });
 
       socket.on('newPlayer', function(playerInfo) {
@@ -165,7 +198,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('getScores', function(playerObj) {
         for (let i in playerObj) {
-          console.log(i, playerObj[i].points);
           if (!socket.id === i) {
             updatePlayerScore(i,playerObj[i].points);
           } 
@@ -353,11 +385,31 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         socket.emit('cardUpdate', socket.id);
       });
 
+      socket.on('loseGame', function(id) {
+        setHighScorePlayer(id);
+        setTimeout(function() {
+          setLose();
+          showEndGameHud();
+        }, 450);
+      });
+
+      socket.on('winGame', function(id) {
+        setHighScorePlayer(id);
+        setTimeout(function() {
+          setWin();
+          showEndGameHud();
+        }, 450);
+      });
+
+      socket.on('resetGame', function() {
+        resetGame();
+      });
+
     return (
         <div className="topnav sticky">
             <GameTitle/>
             <a className='menu-item' href="#gamerules">GAME RULES</a>
-            <a className='menu-item' href="#lobby">LOBBY</a>
+            <a className='menu-item' href={'/lobby'}>LOBBY</a>
             <a className='menu-item' href="#about">ABOUT</a>
             <div className='sign-in-container'>
             {
@@ -381,7 +433,9 @@ const mapStateToProps = (state) => {
         missing: selectMissing(state),
         niceshot: selectNiceShot(state),
         rebuild: selectRebuild(state),
-        currentplayer: selectCurrentPlayerName(state)
+        currentplayer: selectCurrentPlayerName(state),
+        monstersleft: selectMonstersLeft(state),
+        towersleft: selectTowersLeft(state)
     });
 };
 
@@ -419,7 +473,12 @@ const mapDispatchToProps = dispatch => {
         unselectMonsterHud: () => dispatch(unselectMonsterHud()),
         setMonsterInfo: (monsterinfo) => dispatch(setMonsterInfo(monsterinfo)),
         setCurrentPlayerId: (id) => dispatch(setCurrentPlayerId(id)),
-        updatePlayerScore: (id, points) => dispatch(updatePlayerScore(id, points))
+        updatePlayerScore: (id, points) => dispatch(updatePlayerScore(id, points)),
+        setLose: () => dispatch(setLose()),
+        showEndGameHud: () => dispatch(showEndGameHud()),
+        setWin: () => dispatch(setWin()),
+        setHighScorePlayer: (id) => dispatch(setHighScorePlayer(id)),
+        resetGame: () => dispatch(resetGame())
     });
   };
 

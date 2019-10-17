@@ -8,3 +8,8 @@ export const selectDefensesInfo = createSelector(
     [selectDefenses],
     defenses => defenses.defenses
 );
+
+export const selectTowersLeft = createSelector(
+    [selectDefensesInfo],
+    defenses => defenses ? defenses.filter(defense => defense.name === 'Tower' && defense.active === true).length : null
+);

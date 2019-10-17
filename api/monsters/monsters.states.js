@@ -156,19 +156,19 @@ const MonstersState = {
         }
         allMonsters.forEach(async function(monster) {
             if (Object.keys(MonstersState.outerMovementChart).includes(monster.location.slice(0, monster.location.length - 2))) {
-                let checkWallCollision = await defensesModel.findOne({name: 'Wall', location: 'castle ' + monster.location.slice(monster.location.length - 1, monster.location.length), active: true}).exec();
+                let checkWallCollision = await defensesModel.findOne({name: 'Wall', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
                 if (monster.location.includes('swordsman') && checkWallCollision) {
                     let hitMonster = await monstersModel.find({location: monster.location}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1, monster.location.length), 'Wall');
+                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Wall');
                     }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, 
-                        {location: MonstersState.outerMovementChart[monster.location.slice(0, monster.location.length - 2)] + monster.location.slice(monster.location.length - 2, monster.location.length)}).exec();
+                        {location: MonstersState.outerMovementChart[monster.location.slice(0, monster.location.length - 2)] + monster.location.slice(monster.location.length - 2)}).exec();
                 }
             } else {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1, monster.location.length), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
                 if (checkTowerCollison) {
                     let hitMonster = await monstersModel.find({location: monster.location}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
@@ -176,17 +176,19 @@ const MonstersState = {
                         defensesState.killDefense(monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
                     }
                 } else {
-                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1, monster.location.length) % 6) + 1)}).exec();
+                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
             }
         });
     },
     checkWinGame: async function() {
-        let playedMonsters = monstersModel.find({$or:[{type: 'Monster'},{type: 'Boss Monster'}]}).exec();
+        let playedMonsters = await monstersModel.find({$or:[{type: 'Monster'},{type: 'Boss Monster'}]}).exec();
         if (playedMonsters.filter(function(playedMonster) {
             return playedMonster.active === false;
         }).length === 31) {
-            winGame = true;
+            return true;
+        } else {
+            return false;
         }
     },
     discard: async function() {
@@ -208,18 +210,18 @@ const MonstersState = {
         let allMonsters = await monstersModel.find({active: true}).exec();
         allMonsters.forEach(async function(monster) {
             if (monster.location.includes('castle')) {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1, monster.location.length), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
                 if (checkTowerCollison) {
                     let hitMonster = await monstersModel.find({location: monster.location}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
+                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Tower');
                     }
                 } else {
-                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1, monster.location.length) % 6) + 1)}).exec();
+                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
             } else {
-                monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1, monster.location.length) % 6) + 1)}).exec();
+                monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
             }
         });
     },
@@ -228,18 +230,18 @@ const MonstersState = {
         let allMonsters = await monstersModel.find({active: true}).exec();
         allMonsters.forEach(async function(monster) {
             if (monster.location.includes('castle')) {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1, monster.location.length), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
                 if (checkTowerCollison) {
                     let hitMonster = await monstersModel.find({location: monster.location}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
+                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Tower');
                     }
                 } else {
-                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1, monster.location.length)]}).exec();
+                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1)]}).exec();
                 }
             } else {
-                monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1, monster.location.length)]}).exec();
+                monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1)]}).exec();
             }
         });
     },
@@ -250,46 +252,16 @@ const MonstersState = {
         });
     },
     giantBoulder: async function() {
-        let rollDistance = 1;
         let number = Math.round(Math.random() * 5) + 1;
-        // let opposites = {'1': '4', '2': '5', '3': '6', '4': '1', '5': '2', '6': '3'};
-        await monstersModel.updateMany({active: true, location: 'forest ' + number}, {active: false}).exec();
-        // await new Promise((resolve, reject) => setTimeout(resolve, 1000));
-        await monstersModel.updateMany({active: true, location: 'archer ' + number}, {active: false}).exec();
-        await monstersModel.updateMany({active: true, location: 'knight ' + number}, {active: false}).exec();
-        await monstersModel.updateMany({active: true, location: 'swordsman ' + number}, {active: false}).exec();
+        await monstersModel.updateMany({active: true, location: {$regex: number}}, {active: false}).exec();
         let checkWallCollision1 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + number, active: true}).exec();
         if (checkWallCollision1) {
             defensesState.killDefense(number, 'Wall');
         } else {
-            rollDistance += 1;
             let checkTowerCollision1 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + number, active: true}).exec();
             if (checkTowerCollision1) {
                 defensesState.killDefense(number, 'Tower');
             } 
-            // else {
-            //     let oppositeNumber = opposites[String(number)];
-            //     rollDistance += 1;
-            //     let checkTowerCollision2 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + oppositeNumber, active: true}).exec();
-            //     if (checkTowerCollision2) {
-            //         defensesState.killDefense(oppositeNumber, 'Tower');
-            //         return [number, rollDistance];
-            //     } else {
-            //         rollDistance += 1;
-            //         let checkWallCollision2 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + oppositeNumber, active: true}).exec();
-            //         if (checkWallCollision2) {
-            //             defensesState.killDefense(oppositeNumber, 'Wall');
-            //             return [number, rollDistance];
-            //         } else {
-            //             rollDistance += 1;
-            //             await monstersModel.updateMany({active: true, location: 'swordsman ' + oppositeNumber}, {active: false}).exec();
-            //             await monstersModel.updateMany({active: true, location: 'knight ' + oppositeNumber}, {active: false}).exec();
-            //             await monstersModel.updateMany({active: true, location: 'archer ' + oppositeNumber}, {active: false}).exec();
-            //             await monstersModel.updateMany({active: true, location: 'forest ' + oppositeNumber}, {active: false}).exec();
-            //             return [number, rollDistance];
-            //         }
-            //     }
-            // }
         }
     },
     monsterEffects: {'Goblin King': {method: 'addMonster', input: 3}, 
@@ -307,7 +279,7 @@ const MonstersState = {
     'Draw 4 Monsters': {method: 'addMonster', input: 4},
     'Monsters Move Clockwise': {method: 'moveClockwise', input: null},
     'Monsters Move Counter-Clockwise': {method: 'moveCounterClockwise', input: null},
-    'Giant Boulder': {method: 'giantBoulder', input: null}
+    'Destroy Region': {method: 'giantBoulder', input: null}
     }
 };
 

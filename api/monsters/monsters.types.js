@@ -115,7 +115,7 @@ const monstersMoveCounterClockwiseCard = {name: 'Monsters Move Counter-Clockwise
                     hitpoints: 0
                     };
 
-const giantBoulderCard = {name: 'DESTROY REGION', 
+const giantBoulderCard = {name: 'Destroy Region', 
                     type: 'Monster Effect',
                     description: 'A random region is selected starting from the forest and moving inwards, destroying all monsters until it destroys a wall or tower.',
                     hitpoints: 0

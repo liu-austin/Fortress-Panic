@@ -13,8 +13,10 @@ import { selectCardSelected, selectSelectedCardInfo, selectTradeTargetInfo } fro
 import { selectMonsterHud, selectMonsterInfo } from '../../redux/monsterinfo/monsterinfo.selectors';
 import { selectTradeHud } from '../../redux/selectedcard/selectedcard.selectors';
 import TradeHud from '../../components/tradehud/tradehud.component';
+import EndConditionDisplay from '../../components/endconditiondisplay/endconditiondisplay.component';
+import { selectEndGameHud } from '../../redux/endcondition/endcondition.selectors';
 
-const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonsterinfo, tradehud, tradetargetinfo}) => {
+const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonsterinfo, tradehud, tradetargetinfo, endgame}) => {
     return (
         <div className='game-container'>
             <div className='gameboard-container shrink'>
@@ -66,6 +68,18 @@ const GamePage = ({cardselected, selectedcardinfo, displaymonsters, selectmonste
                 )
             }
             </div>
+            <div className='endCondition-panel-container'>
+            {
+                endgame ?
+                (
+                    <EndConditionDisplay/>
+                ) 
+                : 
+                (
+                    null
+                )
+            }
+            </div>
         </div>
     );
 };
@@ -77,7 +91,8 @@ const mapStateToProps = (state) => {
         displaymonsters: selectMonsterHud(state),
         selectmonsterinfo: selectMonsterInfo(state),
         tradehud: selectTradeHud(state),
-        tradetargetinfo: selectTradeTargetInfo(state)
+        tradetargetinfo: selectTradeTargetInfo(state),
+        endgame: selectEndGameHud(state)
     });
 };
 

@@ -13,3 +13,14 @@ export const selectLose = createSelector(
     [selectEndCondition],
     endcondition => endcondition.lose
 );
+
+export const selectEndGameHud = createSelector(
+    [selectEndCondition],
+    endcondition => endcondition.showhud
+);
+
+export const selectHighScorePlayerId = createSelector(
+    [selectEndCondition],
+    endcondition => endcondition.highscoreplayerid
+);
+

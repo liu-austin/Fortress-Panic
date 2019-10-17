@@ -74,7 +74,7 @@ const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, 
                             <td>{currentPlayer}</td>
                             <td>{currentPhase}</td>
                             <td><button className='end-phase-button' onClick={handleClick}>NEXT PHASE</button></td>
-                            <td>{monstersLeft ? monstersLeft : 31}</td>
+                            <td>{monstersLeft ? monstersLeft : 0}</td>
                         </tr>
                     </tbody>
                 </table>

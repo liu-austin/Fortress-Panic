@@ -7,6 +7,8 @@ import ShopPage from './pages/shop/shop.component';
 import NavHeader from './components/nav-header/nav-header.component';
 import LoginPage from './pages/loginpage/loginpage.component';
 import CheckOut from './pages/checkout/checkout.component';
+import MainPage from './pages/mainpage/mainpage.component';
+import LobbyPage from './pages/lobbypage/lobbypage.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
@@ -80,7 +82,8 @@ class App extends React.Component {
         <NavHeader />
         <Switch>
           <Route exact path='/' component={GamePage} />
-          <Route path='/shop' component={ShopPage} />
+          <Route exact path='/main' component={MainPage} />
+          <Route path='/lobby' component={LobbyPage} />
           <Route exact path='/login' render={() => this.props.players[socket.id] ? 
             (this.props.players[socket.id].logged ? 
               (<Redirect to='/' />) 

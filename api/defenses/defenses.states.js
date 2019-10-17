@@ -74,11 +74,11 @@ const defensesState = {
           });
     },
     checkLoseGame: async function() {
-        let towers = await defensesModel.find({name: 'Tower'}).exec();
-        if (towers.every(function(tower) {
-            return tower.active === false;
-        })) {
-            defensesState.loseGame = true;
+        let towers = await defensesModel.find({name: 'Tower', active: true}).exec();
+        if (towers.length) {
+            return false;
+        } else {
+            return true;
         }
     },
     killDefense: function(locationNumber, type) {

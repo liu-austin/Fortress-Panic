@@ -1,0 +1,75 @@
+.main-background {
+    background-image: url("../../assets/images/backgrounds/gameboard-background8.jpg");
+  /* Center and scale the image nicely */
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:51.3vw;
+    text-align: center;
+  }
+
+  .main-container {
+      display: inline-block;
+      top: 300px;
+      width: 500px;
+      height: 350px;
+      background-color: rgba(128,128,128,0.6);
+      border-radius: 20px;
+  }
+
+  .main-content {
+    top: 20px;
+    text-align: center;
+
+    & button {
+        cursor: pointer;
+        width: 480px;
+        height: 60px;
+        border-radius: 20px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffee66;
+        box-shadow:inset 0px 1px 0px 0px #cf866c;
+        background-color:goldenrod;
+        margin-bottom: 7.5px;
+
+        & a {
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    }
+
+    & button:hover {
+        background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+        background-color:#bc3315;
+    }
+  }
+
+  .main-title-container {
+      top: 10px;
+      width: 480px;
+      display: inline-block;
+  }
+
+  .overhead-title-main {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 57px;
+    color: gainsboro;
+    padding: 5px 5px 0px;
+    background-color: #444444;
+    border: 4px solid #20655f;
+    border-radius: 20px;
+}
+
+.subtitle-container {
+    display: inline-block;
+    width: 400px;
+    top: 10px;
+    margin-top: 10px;
+}
+
+.subtitle {
+    font-size: 28px;
+    color: white;
+}
+

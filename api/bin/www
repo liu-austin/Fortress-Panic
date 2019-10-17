@@ -252,7 +252,7 @@ io.on("connection", (socket) => {
     defensesState.rebuildWall(loc.slice(loc.length-1));
     setTimeout(function() {
       io.emit('getDefenses');
-    }, 500);
+    }, 1500);
   });
 
   socket.on('returnSelectedCard', function(obj) {
@@ -264,18 +264,20 @@ io.on("connection", (socket) => {
 
   socket.on('startMoveMonstersPhase', function(id) {
     console.log('MOVE MONSTERS PHASE');
-    io.emit('endPlayPhase', id);
+    MonstersState.moveMonsters(null);
+    setTimeout(function() {
+      io.emit('endPlayPhase', id);
+    }, 250);
   });
 
   socket.on('moveMonsters', function(id) {
-    MonstersState.moveMonsters(null);
     setTimeout(function() {
       io.emit('getMonsters');
-    }, 4500);
+    }, 4750);
     setTimeout(function() {
       io.emit('nextPhase');
       socket.emit('startClientSpawnMonstersPhase', id);
-    }, 5000);
+    }, 5500);
   });
 
   socket.on('startSpawnMonstersPhase', function(missing) {
@@ -286,21 +288,22 @@ io.on("connection", (socket) => {
       setTimeout(function() {
         setTimeout(function() {
           io.emit('getMonsters');
-        }, 1750);
+        }, 2500);
         setTimeout(function() {
           io.emit('getDefenses');
-        }, 2500);
+        }, 2750);
         setTimeout(function() {
           io.emit('updateAllPlayerCards');
         }, 1000);
         setTimeout(function() {
           io.emit('openMonsterDisplay', MonstersState.drawnMonsters);
         }, 700);
-      }, 1000);
+      }, 1250);
 
     } else {
       io.emit('missingPlayed');
     }
+  
     setTimeout(function() {
       io.emit('findCurrentPlayerId');
     }, 6500);
@@ -313,6 +316,26 @@ io.on("connection", (socket) => {
   socket.on('returnCurrentPlayerId', function(obj) {
     let nextPlayerId = Object.keys(players)[(Object.keys(players).indexOf(obj[0]) + 1) % Object.keys(players).length];
     socket.emit('startClientDrawPhase', [nextPlayerId, obj[1]]);
+  });
+
+  socket.on('startCheckWinGame', function() {
+    socket.emit('checkWinGame');
+  });
+
+  socket.on('startCheckLoseGame', function() {
+    socket.emit('checkLoseGame');
+  });
+
+  socket.on('startLoseGame', function(id) {
+    socket.emit('loseGame', id);
+  });
+
+  socket.on('startWinGame', function(id) {
+    socket.emit('winGame', id);
+  });
+
+  socket.on('startResetGame', function() {
+    socket.emit('resetGame');
   });
 
   socket.on("disconnect", () => {
@@ -342,8 +365,6 @@ server.listen(port, () => {console.log(`Listening on port ${port}`)});
 // GAME LOGIC
 let maxHandSize = {1: 6, 2: 5, 3: 5, 4: 5, 5: 4, 6: 4};
 let phaseSkippable = {0: false, 1: true, 2: true, 3: true, 4: false, 5: false};
-let winCondition = false;
-let loseCondition = false;
 let monsterRegions = {
   0: ['archer 1', 'archer 2'],
   1: ['archer 1', 'archer 2'],
