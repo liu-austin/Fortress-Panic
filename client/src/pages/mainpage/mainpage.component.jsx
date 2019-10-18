@@ -2,8 +2,13 @@
 import React from 'react';
 // import './homepage.styles.scss';
 import './mainpage.styles.scss';
+import { connect } from 'react-redux';
+import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 
-const MainPage = () => {
+const MainPage = ({setCurrentPage}) => {
+    const goToLobby = () => {
+        setCurrentPage('/lobby');
+    };
     return (
         <div className='main-background'>
             <div className='main-container'>
@@ -14,13 +19,23 @@ const MainPage = () => {
                     <span className='subtitle'>A CO-OP MULTIPLAYER STRATEGY GAME</span>
                 </div>
                 <div className="main-content">
-                    <button><a href={'/lobby'}>ENTER GAME LOBBY</a></button>
-                    <button><a href={'/rules'}>GAME RULES</a></button>
-                    <button><a href={'/about'}>ABOUT THIS GAME</a></button>
+                    <button onClick={goToLobby}>ENTER GAME LOBBY</button>
+                    <button>GAME RULES</button>
+                    <button>ABOUT THIS GAME</button>
                 </div>
             </div>
         </div>
     );
 };
 
-export default MainPage;
+const mapDispatchToProps = dispatch => {
+    return ({
+        setCurrentPage: (page) => dispatch(setCurrentPage(page))
+    });
+  };
+
+export default connect(null, mapDispatchToProps)(MainPage);
+
+// <button><a href={'/lobby'}>ENTER GAME LOBBY</a></button>
+// <button><a href={'/rules'}>GAME RULES</a></button>
+// <button><a href={'/about'}>ABOUT THIS GAME</a></button>

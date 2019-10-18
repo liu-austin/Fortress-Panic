@@ -3,7 +3,6 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import GamePage from './pages/gamepage/gamepage.component';
-import ShopPage from './pages/shop/shop.component';
 import NavHeader from './components/nav-header/nav-header.component';
 import LoginPage from './pages/loginpage/loginpage.component';
 import CheckOut from './pages/checkout/checkout.component';
@@ -20,6 +19,9 @@ import { updatePlayerName } from './redux/players/player.action';
 import { setSelectedPlayer } from './redux/selectedplayer/selectedplayer.action';
 import { selectSelectedPlayer } from './redux/selectedplayer/selectedplayer.selectors';
 import { selectStartButtonPressed } from './redux/startbutton/startbutton.selectors';
+import { withRouter } from 'react-router-dom';
+import { selectCurrentPage, selectPreviousPage } from './redux/currentpage/currentpage.selectors';
+import { setCurrentPage } from './redux/currentpage/currentpage.action';
 
 class App extends React.Component {
   constructor(props) {
@@ -29,7 +31,6 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
          if (userAuth && this.props.currentUser !== 'reset') {
            // userAuth represents a signed-in user so set that to current user
@@ -40,29 +41,28 @@ class App extends React.Component {
               id: snapShot.id, ...snapShot.data()
             });
            });
+
            if (this.props.selectedplayer) {
             await new Promise((resolve, reject) => setTimeout(resolve, 1000));
             if (this.props.currentUser) {
               if (this.props.selectedplayer.selectedplayer !== null) {
                 this.props.updatePlayerName(this.props.selectedplayer.selectedplayer,this.props.currentUser.displayName);
                 socket.emit('nameChange', [this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName]);
+                
+                this.props.setCurrentPage(this.props.previouspage);
               }
             }
            }
+           if (!this.props.players[socket.id].logged) {
+            this.props.setCurrentUser(null);
+            auth.signOut();
+           } 
          } 
        });
 
        if (!this.props.startButtonPressed) {
         socket.emit('isStarted?');
        }
-
-       if (this.props.players[socket.id]) {
-         if (!this.props.players[socket.id].logged) {
-          this.props.setCurrentUser(null);
-         }
-       }
-
-      
   }
 
   componentWillUnmount() {
@@ -75,20 +75,46 @@ class App extends React.Component {
     return (
       <div>
         <NavHeader />
-        <Switch>
-          <Route exact path='/' component={MainPage} />
-          <Route exact path='/game' component={GamePage} />
-          <Route path='/lobby' component={LobbyPage} />
-          <Route exact path='/login' render={() => this.props.players[socket.id] ? 
-            (this.props.players[socket.id].logged ? 
-              (<Redirect to='/' />) 
-              : 
-              (<LoginPage />)) 
-              : 
-              (<LoginPage />)
-            } />
-          <Route exact path='/checkout' component={CheckOut} />
-        </Switch>
+        {
+          this.props.currentpage === '/' ? 
+          (
+            <MainPage/>
+          ) 
+          : 
+          (
+            null
+          )
+        }
+        {
+          this.props.currentpage === '/lobby' ? 
+          (
+            <LobbyPage/>
+          ) 
+          : 
+          (
+            null
+          )
+        }
+        {
+          this.props.currentpage === '/game' ? 
+          (
+            <GamePage/>
+          ) 
+          : 
+          (
+            null
+          )
+        }
+        {
+          this.props.currentpage === '/login' ? 
+          (
+            <LoginPage/>
+          ) 
+          : 
+          (
+            null
+          )
+        }
       </div>
     );
   }
@@ -98,15 +124,42 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
   players: selectPlayers,
   selectedplayer: selectSelectedPlayer,
-  startButtonPressed: selectStartButtonPressed
+  startButtonPressed: selectStartButtonPressed,
+  currentpage: selectCurrentPage,
+  previouspage: selectPreviousPage
 });
 
 const mapDispatchToProps = dispatch => {
   return ({
     updatePlayerName: (id, displayName) => dispatch(updatePlayerName(id, displayName)),
     setCurrentUser: user => dispatch(setCurrentUser(user)),
-    setSelectedPlayer: playerid => dispatch(setSelectedPlayer(playerid))
+    setSelectedPlayer: playerid => dispatch(setSelectedPlayer(playerid)),
+    setCurrentPage: (page) => dispatch(setCurrentPage(page))
   });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+
+// <Route exact path='/login' render={() => this.props.players[socket.id] ? 
+//   (this.props.players[socket.id].logged ? 
+//     (<Redirect to='/game' />) 
+//     : 
+//     (<LoginPage />)) 
+//     : 
+//     (<LoginPage />)
+//   } />
+
+// <Switch>
+// <Route exact path='/' component={MainPage} />
+// <Route exact path='/game' component={GamePage} />
+// <Route path='/lobby' component={LobbyPage} />
+// <Route exact path='/login' render={() => this.props.players[socket.id] ? 
+// (this.props.players[socket.id].logged ? 
+//   (this.props.history.goBack()) 
+//   : 
+//   (<LoginPage />)) 
+//   : 
+//   (<LoginPage />)
+// } />
+// <Route exact path='/checkout' component={CheckOut} />
+// </Switch>

@@ -26,12 +26,13 @@ import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer
 import {showEndGameHud, setLose, setHighScorePlayer, setWin} from '../../redux/endcondition/endcondition.action';
 import { selectTowersLeft } from '../../redux/defenses/defenses.selectors';
 import { resetGame } from '../../redux/root-reducer';
+import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
   toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
-  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame}) => {
+  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -407,11 +408,15 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         resetGame();
       });
 
+      const goToLobby = () => {
+        setCurrentPage('/lobby');
+      };
+
     return (
         <div className="topnav sticky">
             <GameTitle/>
             <a className='menu-item' href="#gamerules">GAME RULES</a>
-            <a className='menu-item' href={'/lobby'}>LOBBY</a>
+            <a onClick={goToLobby} className='menu-item' href={'#lobby'}>LOBBY</a>
             <a className='menu-item' href="#about">ABOUT</a>
             <div className='sign-in-container'>
             {
@@ -480,7 +485,8 @@ const mapDispatchToProps = dispatch => {
         showEndGameHud: () => dispatch(showEndGameHud()),
         setWin: () => dispatch(setWin()),
         setHighScorePlayer: (id) => dispatch(setHighScorePlayer(id)),
-        resetGame: () => dispatch(resetGame())
+        resetGame: () => dispatch(resetGame()),
+        setCurrentPage: (page) => dispatch(setCurrentPage(page))
     });
   };
 

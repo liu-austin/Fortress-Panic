@@ -11,8 +11,9 @@ import { setCurrentUser } from '../../redux/user/user.action';
 import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action';
 import { selectStartButtonPressed } from '../../redux/startbutton/startbutton.selectors';
 import { displayNewMessage } from '../../redux/console/console.action';
+import { setCurrentPage, setPreviousPage } from '../../redux/currentpage/currentpage.action';
 
-const TopNavButton = ({players, logOutPlayer, setCurrentUser, setCurrentPlayer, started, displayNewMessage}) => {
+const TopNavButton = ({players, logOutPlayer, setCurrentUser, setCurrentPlayer, started, displayNewMessage, setCurrentPage, setPreviousPage}) => {
     const handleLogOut = () => {
         auth.signOut();
         logOutPlayer(socket.id);
@@ -25,6 +26,11 @@ const TopNavButton = ({players, logOutPlayer, setCurrentUser, setCurrentPlayer, 
     const noSignIns = () => {
         displayNewMessage('NO SIGN-INS WHILE GAME IN PROGRESS.')
     };
+
+    const goToLogin = () => {
+        setPreviousPage();
+        setCurrentPage('/login');
+      };
 
     return (
         <div className='status-button-container'>
@@ -45,9 +51,9 @@ const TopNavButton = ({players, logOutPlayer, setCurrentUser, setCurrentPlayer, 
             (players[socket.id].logged ? 
                 (<button className='status-button' onClick={handleLogOut}>LOG OUT</button>) 
                 : 
-                (<button className='status-button'><a href={'/login'}>SIGN IN</a></button>)) 
+                (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)) 
                 : 
-                (<button className='status-button'><a href={'/login'}>SIGN IN</a></button>)
+                (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)
         )
 
     }
@@ -67,7 +73,9 @@ const mapDispatchToProps = dispatch => {
         logOutPlayer: (id) => dispatch(logOutPlayer(id)),
         setCurrentUser: (player) => dispatch(setCurrentUser(player)),
         setCurrentPlayer: (name) => dispatch(setCurrentPlayer(name)),
-        displayNewMessage: (msg) => dispatch(displayNewMessage(msg))
+        displayNewMessage: (msg) => dispatch(displayNewMessage(msg)),
+        setCurrentPage: (page) => dispatch(setCurrentPage(page)),
+        setPreviousPage: () => dispatch(setPreviousPage())
     });
   };
 

@@ -14,8 +14,8 @@ class LobbyPage extends React.Component {
     
         this.selectRoom = ev => {
             ev.preventDefault();
-            this.props.setNamespace(ev);
-            socket.emit('setNamespace', ev);
+            this.props.setNamespace(this.state.namespace);
+            socket.emit('setNamespace', this.state.namespace);
             this.setState({namespace: ''});
         };
     }
@@ -51,7 +51,7 @@ class LobbyPage extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return ({
-        setNamespace: () => dispatch(setNamespace())
+        setNamespace: (ns) => dispatch(setNamespace(ns))
      });
 };
 

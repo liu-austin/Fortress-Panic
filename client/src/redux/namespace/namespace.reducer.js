@@ -10,12 +10,12 @@ const nameSpaceReducer = (state=INITIAL_STATE, action) => {
         case nameSpaceActionTypes.SET_NAMESPACE:
             return ({
                 ...state,
-                namespaced: action.payload
+                namespace: action.payload
             });
         case nameSpaceActionTypes.CLEAR_NAMESPACE:
             return ({
                 ...state,
-                namespaced: null
+                namespace: null
             });
         default:
             return state;

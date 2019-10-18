@@ -20,6 +20,7 @@ import defensesReducer from './defenses/defenses.reducer';
 import monstersReducer from './monsters/monsters.reducer';
 import endConditionReducer from './endcondition/endcondition.reducer';
 import nameSpaceReducer from './namespace/namespace.reducer';
+import currentPageReducer from './currentpage/currentpage.reducer';
 
 // key is the entry point fives therom where we start persisting state, root is the 
 // bottom level. storage is object that gives method of 
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
     defenses: defensesReducer,
     monster: monstersReducer,
     endcondition: endConditionReducer,
-    namespace: nameSpaceReducer
+    namespace: nameSpaceReducer,
+    page: currentPageReducer
 });
 
 const resetReducer = (state, action) => {

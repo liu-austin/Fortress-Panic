@@ -1,16 +1,26 @@
+// jshint esversion:6
 import React from 'react';
 import './game-title.styles.scss';
+import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
+import { connect } from 'react-redux';
 
-const GameTitle = () => {
+const GameTitle = ({setCurrentPage}) => {
+    const goToMain = () => {
+        setCurrentPage('/');
+    };
     return (
-        <div className='home-title-container'>
+        <div onClick={goToMain} className='home-title-container'>
             <div className='title-container'>
-                <a className='go-to-main' href={'/'}>
-                    <h1 className='overhead-title'>FORTRESS PANIC</h1>
-                </a>
+                <h1 className='overhead-title'>FORTRESS PANIC</h1>
             </div>
         </div>    
     );
 };
 
-export default GameTitle;
+const mapDispatchToProps = (dispatch) => {
+    return ({
+        setCurrentPage: (page) => dispatch(setCurrentPage(page))
+     });
+};
+
+export default connect(null, mapDispatchToProps)(GameTitle);

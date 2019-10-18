@@ -31,11 +31,18 @@
         box-shadow:inset 0px 1px 0px 0px #cf866c;
         background-color:goldenrod;
         margin-bottom: 7.5px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
 
         & a {
+            display: inline-block;
+            height: 100%;
+            width: 100%;
             color: white;
             font-weight: bold;
             font-size: 20px;
+            line-height: 50px;
         }
     }
 
@@ -72,4 +79,3 @@
     font-size: 28px;
     color: white;
 }
-
