@@ -6,12 +6,14 @@ import { socket } from '../../assets/socketIO/socketIO.utils';
 import { closeEndGameHud } from '../../redux/endcondition/endcondition.action';
 import { selectWin, selectLose, selectHighScorePlayerId } from '../../redux/endcondition/endcondition.selectors';
 import { selectPlayers } from '../../redux/players/player.selector';
+import { withRouter } from 'react-router-dom';
 
-const EndConditionDisplay = ({win, players, id}) => {
+const EndConditionDisplay = ({win, players, history, id}) => {
     const exitGame = () => {
-        // setTimeout(function() {
-            socket.emit('startResetGame');
-        // }, 500);
+        socket.emit('startResetGame');
+        setTimeout(function() {
+            history.push('/');
+        }, 500);
     };
     return (
         <div className='endConditionContainer'>
@@ -32,7 +34,7 @@ const EndConditionDisplay = ({win, players, id}) => {
                     <span>{'HIGH SCORE: ' + players[id].points + ' - ' + players[id].displayName}</span>
                 </div>
                 <div className='exitButtonHud'>
-                    <button onClick={exitGame}><a href={'/main'} >GO TO MAIN MENU</a></button>
+                    <button onClick={exitGame}><a href={'#main'} >GO TO MAIN MENU</a></button>
                 </div>
             </div>
         </div>
@@ -54,4 +56,4 @@ const mapDispatchToProps = (dispatch) => {
      });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EndConditionDisplay);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EndConditionDisplay));

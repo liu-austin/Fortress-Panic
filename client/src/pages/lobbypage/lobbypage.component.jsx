@@ -28,12 +28,13 @@ class LobbyPage extends React.Component {
                         <span className='game-room-title'>CHOOSE A GAME ROOM:</span>
                     </div>
                     <div className="game-room-hud">
-                        <button><a href={'/'}>GAME ROOM 1</a></button>
-                        <button><a href={'/'}>GAME ROOM 2</a></button>
-                        <button><a href={'/'}>GAME ROOM 3</a></button>
-                        <button><a href={'/'}>GAME ROOM 4</a></button>
-                        <button><a href={'/'}>GAME ROOM 5</a></button>
-                        <button><a href={'/'}>GAME ROOM 6</a></button>
+                    {
+                        [1,2,3,4,5,6].map(num => {
+                            return (
+                                <button>{`GAME ROOM ${num}`}</button>
+                            );
+                        })
+                    }
                     </div>
                     <div className='custom-room-container'>
                         <form onSubmit={this.handleSubmit}>

@@ -24,20 +24,12 @@ import { selectStartButtonPressed } from './redux/startbutton/startbutton.select
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { apiResponse: [] };
   }
-  // async getMonsters() {
-  //   //await the response of the fetch call
-  //   const response = await fetch('http://localhost:9000/findMonsters')
-  //   //proceed once the first promise is resolved.
-  //   const body = await response.json(); // this is probably a sync function, you don't need await here
-  //   //proceed only when the second promise is resolved
-  //   return body;
-  // }
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
          if (userAuth && this.props.currentUser !== 'reset') {
            // userAuth represents a signed-in user so set that to current user
@@ -52,7 +44,7 @@ class App extends React.Component {
             await new Promise((resolve, reject) => setTimeout(resolve, 1000));
             if (this.props.currentUser) {
               if (this.props.selectedplayer.selectedplayer !== null) {
-                this.props.updatePlayerName(this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName);
+                this.props.updatePlayerName(this.props.selectedplayer.selectedplayer,this.props.currentUser.displayName);
                 socket.emit('nameChange', [this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName]);
               }
             }
@@ -66,13 +58,16 @@ class App extends React.Component {
 
        if (this.props.players[socket.id]) {
          if (!this.props.players[socket.id].logged) {
-          this.props.selectCurrentUser(null);
+          this.props.setCurrentUser(null);
          }
        }
+
+      
   }
 
   componentWillUnmount() {
     this.props.setCurrentUser(null);
+    auth.signOut();
     this.unsubscribeFromAuth();
   }
 
@@ -81,8 +76,8 @@ class App extends React.Component {
       <div>
         <NavHeader />
         <Switch>
-          <Route exact path='/' component={GamePage} />
-          <Route exact path='/main' component={MainPage} />
+          <Route exact path='/' component={MainPage} />
+          <Route exact path='/game' component={GamePage} />
           <Route path='/lobby' component={LobbyPage} />
           <Route exact path='/login' render={() => this.props.players[socket.id] ? 
             (this.props.players[socket.id].logged ? 

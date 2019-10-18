@@ -117,7 +117,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('checkWinGame', function() {
         setTimeout(function() {
-          if (monstersleft === 25) {
+          if (monstersleft === 28) {
             let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
             setTimeout(function() {
               socket.emit('startWinGame', highScorePlayerId);
@@ -331,9 +331,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('findCurrentPlayerId', function() {
         unselectMonsterHud();
-        if (players[socket.id].displayName === currentplayer) {
-          socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
-        }
+        if (players[socket.id]) {
+          if (players[socket.id].displayName === currentplayer) {
+            socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
+          }
+        } 
       });
 
       socket.on('startClientDrawPhase', function(obj) {
