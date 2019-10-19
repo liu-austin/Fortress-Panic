@@ -4,6 +4,7 @@ import './lobbypage.styles.scss';
 import { connect } from 'react-redux';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { setNamespace } from '../../redux/namespace/namespace.action';
+import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 
 class LobbyPage extends React.Component {
     constructor(props) {
@@ -15,11 +16,24 @@ class LobbyPage extends React.Component {
         this.selectRoom = ev => {
             ev.preventDefault();
             this.props.setNamespace(this.state.namespace);
-            socket.emit('setNamespace', this.state.namespace);
+            socket.emit('setNamespace', [socket.id, this.state.namespace]);
+            socket.emit('startLoading');
             this.setState({namespace: ''});
+            this.props.setCurrentPage('/loading');
+        };
+
+        const {setCurrentPage, setNamespace} = this.props;
+        this.goToGameRoom = (number) => {
+            function goToGame() {
+                setNamespace('room ' + number);
+                socket.emit('setNamespace', [socket.id, 'room ' + number]);
+                socket.emit('startLoading');
+                setCurrentPage('/loading');
+            }
+            return goToGame;
         };
     }
-  
+
     render() {
         return (
             <div className='game-lobby-container'>
@@ -31,7 +45,7 @@ class LobbyPage extends React.Component {
                     {
                         [1,2,3,4,5,6].map(num => {
                             return (
-                                <button>{`GAME ROOM ${num}`}</button>
+                                <button onClick={this.goToGameRoom(num)}>{`GAME ROOM ${num}`}</button>
                             );
                         })
                     }
@@ -51,7 +65,8 @@ class LobbyPage extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return ({
-        setNamespace: (ns) => dispatch(setNamespace(ns))
+        setNamespace: (ns) => dispatch(setNamespace(ns)),
+        setCurrentPage: (page) => dispatch(setCurrentPage(page))
      });
 };
 

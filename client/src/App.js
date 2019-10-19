@@ -5,7 +5,7 @@ import './App.css';
 import GamePage from './pages/gamepage/gamepage.component';
 import NavHeader from './components/nav-header/nav-header.component';
 import LoginPage from './pages/loginpage/loginpage.component';
-import CheckOut from './pages/checkout/checkout.component';
+import LoadingPage from './pages/loadingpage/loadingpage.component';
 import MainPage from './pages/mainpage/mainpage.component';
 import LobbyPage from './pages/lobbypage/lobbypage.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
@@ -22,6 +22,7 @@ import { selectStartButtonPressed } from './redux/startbutton/startbutton.select
 import { withRouter } from 'react-router-dom';
 import { selectCurrentPage, selectPreviousPage } from './redux/currentpage/currentpage.selectors';
 import { setCurrentPage } from './redux/currentpage/currentpage.action';
+import { setProgress } from './redux/loadingbar/loadingbar.action';
 
 class App extends React.Component {
   constructor(props) {
@@ -99,7 +100,17 @@ class App extends React.Component {
           this.props.currentpage === '/game' ? 
           (
             <GamePage/>
-          ) 
+          )
+          : 
+          (
+            null
+          )
+        }
+        {
+          this.props.currentpage === '/loading' ? 
+          (
+            <LoadingPage/>
+          )
           : 
           (
             null
@@ -134,7 +145,8 @@ const mapDispatchToProps = dispatch => {
     updatePlayerName: (id, displayName) => dispatch(updatePlayerName(id, displayName)),
     setCurrentUser: user => dispatch(setCurrentUser(user)),
     setSelectedPlayer: playerid => dispatch(setSelectedPlayer(playerid)),
-    setCurrentPage: (page) => dispatch(setCurrentPage(page))
+    setCurrentPage: (page) => dispatch(setCurrentPage(page)),
+    setProgress: (progress) => dispatch(setProgress(progress))
   });
 };
 

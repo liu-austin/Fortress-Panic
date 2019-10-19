@@ -44,8 +44,16 @@ io.on("connection", (socket) => {
     playerCards: [],
     points: 0,
     logged: false,
-    currentTurn: false
+    currentTurn: false,
+    room: socket.id
   };
+
+  socket.on('setNamespace', function(obj) {
+    players[obj[0]].room = obj[1];
+    socket.join(obj[1]);
+    
+  });
+
   // send the players object to the new player
   socket.emit('currentPlayers', players);
 
@@ -60,6 +68,10 @@ io.on("connection", (socket) => {
   socket.broadcast.emit('getCurrentPlayer', socket.id);
 
   socket.broadcast.emit('getCurrentPhase', socket.id);
+
+  socket.on('startLoading', function() {
+    socket.emit('clientStartLoading');
+  });
 
   socket.on('returnCurrentPhase', function(obj) {
       io.emit('setCurrentPhase', obj);

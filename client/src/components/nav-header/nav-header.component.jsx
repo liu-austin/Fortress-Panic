@@ -27,12 +27,14 @@ import {showEndGameHud, setLose, setHighScorePlayer, setWin} from '../../redux/e
 import { selectTowersLeft } from '../../redux/defenses/defenses.selectors';
 import { resetGame } from '../../redux/root-reducer';
 import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
+import { setProgress, addProgress } from '../../redux/loadingbar/loadingbar.action';
+import { selectProgress } from '../../redux/loadingbar/loadingbar.selectors';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
   toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
-  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage}) => {
+  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage, setProgress, addProgress, progress}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -80,6 +82,19 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('checkLoseGame');
     socket.removeAllListeners('checkWinGame');
     socket.removeAllListeners('resetGame');
+    socket.removeAllListeners('clientStartLoading');
+
+    socket.on('clientStartLoading', function() {
+      let moveProgress = () => {
+        addProgress();
+      };
+      let loadGameBar = setInterval(moveProgress, 50);
+      setTimeout(function() {
+        clearInterval(loadGameBar);
+        setCurrentPage('/game');
+      }, 5000);
+      setProgress(0);
+    });
 
     socket.on('updateDisplayName', function(displayNameInfo) {
         if (displayNameInfo[0] !== null) {
@@ -442,7 +457,8 @@ const mapStateToProps = (state) => {
         rebuild: selectRebuild(state),
         currentplayer: selectCurrentPlayerName(state),
         monstersleft: selectMonstersLeft(state),
-        towersleft: selectTowersLeft(state)
+        towersleft: selectTowersLeft(state),
+        progress: selectProgress(state)
     });
 };
 
@@ -486,7 +502,9 @@ const mapDispatchToProps = dispatch => {
         setWin: () => dispatch(setWin()),
         setHighScorePlayer: (id) => dispatch(setHighScorePlayer(id)),
         resetGame: () => dispatch(resetGame()),
-        setCurrentPage: (page) => dispatch(setCurrentPage(page))
+        setCurrentPage: (page) => dispatch(setCurrentPage(page)),
+        setProgress: (progress) => dispatch(setProgress(progress)),
+        addProgress: () => dispatch(addProgress())
     });
   };
 
