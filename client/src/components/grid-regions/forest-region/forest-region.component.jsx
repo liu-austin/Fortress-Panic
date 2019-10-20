@@ -9,6 +9,8 @@ import GoblinKing from '../../monsters/goblin-king.component';
 import OrcWarlord from '../../monsters/orc-warlord.component';
 import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
+import Overlord from '../../monsters/overlord.component';
+import Dragon from '../../monsters/dragon.component';
 
 const ForestRegion = ({monsters}) => {
     return (
@@ -38,6 +40,10 @@ const ForestRegion = ({monsters}) => {
                                                 return <Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Ogre Mage') {
                                                 return <OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Overlord') {
+                                                return <Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Dragon') {
+                                                return <Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 

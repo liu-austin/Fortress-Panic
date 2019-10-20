@@ -276,6 +276,56 @@ const MonstersState = {
             } 
         }
     },
+    spawnFinalBoss: async function(room, number) {
+        let bossMonster;
+        if (number) {
+            bossMonster = {name: 'Dragon', 
+            type: 'Boss Monster',
+            description: 'During every spawn phase, this monster either moves forward 1 or moves clockwise 1. Destroy effects deal an additional damage point instead.',
+            hitpoints: 5,
+            points: 8
+            };
+        } else {
+            bossMonster = {name: 'Overlord', 
+            type: 'Boss Monster',
+            description: 'During every spawn phase, this monster causes players to discard or heals itself. Destroy effects deal an additional damage point instead.',
+            hitpoints: 4,
+            points: 8
+            };
+        }
+        MonstersState.drawnMonsters[room].push(bossMonster);
+        let monster = new monstersModel({
+            name: bossMonster.name,
+            type: bossMonster.type,
+            description: bossMonster.description,
+            hitpoints: bossMonster.hitpoints,
+            location: 'forest ' + (Math.round(Math.random()*5) + 1),
+            active: true,
+            points: bossMonster.points,
+            room: room
+        });
+        await monster.save();
+        await new Promise((resolve, reject) => setTimeout(resolve, 250));
+        MonstersState[MonstersState.monsterEffects[bossMonster.name].method](room, MonstersState.monsterEffects[bossMonster.name].input);
+        await new Promise((resolve, reject) => setTimeout(resolve, 250));
+        return number;
+    },
+    finalBossEffect: async function(room, number) {
+        let randomNum = Math.round(Math.random());
+        if (number) {
+            if (randomNum) {
+                MonstersState.moveMonsters(room, null);
+            } else {
+                MonstersState.moveClockwise(room, null);
+            }
+        } else {
+            if (randomNum) {
+                MonstersState.heal(room, null);
+            } else {
+                MonstersState.discard(room, null);
+            }
+        }
+    },
     monsterEffects: {'Goblin King': {method: 'addMonster', input: 3}, 
     'Ogre Mage': {method: 'discard', input: null}, 
     'Shaman': {method: 'heal', input: null},
@@ -291,7 +341,9 @@ const MonstersState = {
     'Draw 4 Monsters': {method: 'addMonster', input: 4},
     'Monsters Move Clockwise': {method: 'moveClockwise', input: null},
     'Monsters Move Counter-Clockwise': {method: 'moveCounterClockwise', input: null},
-    'Destroy Region': {method: 'giantBoulder', input: null}
+    'Destroy Region': {method: 'giantBoulder', input: null},
+    'Overlord': {method: 'discard', input: null},
+    'Dragon': {method: 'moveMonsters', input: null}
     }
 };
 

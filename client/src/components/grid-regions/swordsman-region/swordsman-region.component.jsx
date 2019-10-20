@@ -11,6 +11,8 @@ import GoblinKing from '../../monsters/goblin-king.component';
 import OrcWarlord from '../../monsters/orc-warlord.component';
 import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
+import Overlord from '../../monsters/overlord.component';
+import Dragon from '../../monsters/dragon.component';
 import { connect } from 'react-redux';
 import { selectDefensesInfo } from '../../../redux/defenses/defenses.selectors';
 import { toggleRebuild } from '../../../redux/selectedcard/selectedcard.action';
@@ -54,6 +56,10 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Ogre Mage') {
                                                 return <OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Overlord') {
+                                                return <Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Dragon') {
+                                                return <Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
@@ -105,6 +111,10 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <div className='in-castle'><Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Ogre Mage') {
                                                 return <div className='in-castle'><OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                            } else if (m.name === 'Overlord') {
+                                                return <div className='in-castle'><Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                            } else if (m.name === 'Dragon') {
+                                                return <div className='in-castle'><Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             }
                                         })
                                     ) 

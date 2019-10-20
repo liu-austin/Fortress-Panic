@@ -35,6 +35,8 @@ const io = socketIO(server);
 
 let players = {};
 let started = {};
+let bossNumber = Math.round(Math.random());
+let finalBoss = {};
 
 io.on("connection", (socket) => {
   console.log("New client connected at id: " + socket.id);
@@ -61,6 +63,7 @@ io.on("connection", (socket) => {
     io.in(ns).emit('disconnectUpdate', inRoomPlayers);
     // socket.emit('resetGame');
     socket.emit('resetStart');
+    players[socket.id].points = 0;
   });
 
   socket.on('setNamespace', function(obj) {
@@ -198,7 +201,7 @@ io.on("connection", (socket) => {
   socket.on('startTradePhase', function(id) {
     console.log('TRADE PHASE');
     io.in(players[id].room).emit('allowTrade');
-
+    socket.to(players[id].room).emit('nextPhase');
   });
 
   socket.on('tradeTargetSet', function(obj) {
@@ -219,6 +222,7 @@ io.on("connection", (socket) => {
 
   socket.on('startPlayPhase', function(id) {
     console.log('PLAY PHASE');
+    socket.to(players[id].room).emit('nextPhase');
   });
 
   socket.on('playCard', function(obj) {
@@ -305,6 +309,7 @@ io.on("connection", (socket) => {
 
   socket.on('startMoveMonstersPhase', function(id) {
     console.log('MOVE MONSTERS PHASE');
+    socket.to(players[id].room).emit('nextPhase');
     MonstersState.moveMonsters(players[id].room, null);
     setTimeout(function() {
       io.in(players[id].room).emit('endPlayPhase', id);
@@ -314,6 +319,9 @@ io.on("connection", (socket) => {
   socket.on('moveMonsters', function(id) {
     setTimeout(function() {
       io.in(players[id].room).emit('getMonsters', players[socket.id].room);
+      if (finalBoss[players[id].room] === undefined) {
+        socket.emit('checkSpawnFinalBoss');
+      }
     }, 4750);
     setTimeout(function() {
       io.in(players[id].room).emit('nextPhase');
@@ -321,8 +329,16 @@ io.on("connection", (socket) => {
     }, 5500);
   });
 
+  socket.on('spawnFinalBoss', function() {
+    io.in(players[socket.id].room).emit('incomingMessage', 'PREPARE FOR FINAL BOSS.');
+    finalBoss[players[socket.id].room] = MonstersState.spawnFinalBoss(players[socket.id].room, bossNumber);
+  });
+
   socket.on('startSpawnMonstersPhase', function(missing) {
     console.log('SPAWN MONSTERS PHASE');
+    if (finalBoss[players[socket.id].room]) {
+      MonstersState.finalBossEffect(players[socket.id].room, bossNumber);
+    }
     if (!missing) {
       MonstersState.clearMonsters(players[socket.id].room);
       MonstersState.addMonster(players[socket.id].room, 2);

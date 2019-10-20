@@ -89,6 +89,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('clientStartLoading');
     socket.removeAllListeners('startCheckingStarted');
     socket.removeAllListeners('resetStart');
+    socket.removeAllListeners('checkSpawnFinalBoss');
+    socket.removeAllListeners('incomingMessage');
 
     socket.on('resetStart', function() {
       resetStartButton();
@@ -145,6 +147,16 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             }, 500);
           }
         }, 1000);
+      });
+
+      socket.on('checkSpawnFinalBoss', function() {
+        if (monstersleft === 1) {
+          socket.emit('spawnFinalBoss');
+        }
+      });
+
+      socket.on('incomingMessage', function(msg) {
+        displayNewMessage(msg);
       });
 
       socket.on('checkWinGame', function() {
