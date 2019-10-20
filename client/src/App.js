@@ -48,15 +48,18 @@ class App extends React.Component {
               if (this.props.selectedplayer.selectedplayer !== null) {
                 this.props.updatePlayerName(this.props.selectedplayer.selectedplayer,this.props.currentUser.displayName);
                 socket.emit('nameChange', [this.props.selectedplayer.selectedplayer, this.props.currentUser.displayName]);
-                
-                this.props.setCurrentPage(this.props.previouspage);
+                if (socket.id === this.props.selectedplayer.selectedplayer) {
+                  this.props.setCurrentPage(this.props.previouspage);
+                }
               }
             }
            }
-           if (!this.props.players[socket.id].logged) {
-            this.props.setCurrentUser(null);
-            auth.signOut();
-           } 
+           if (this.props.players[socket.id]) {
+            if (!this.props.players[socket.id].logged) {
+              this.props.setCurrentUser(null);
+              auth.signOut();
+             } 
+           }
          } 
        });
   }

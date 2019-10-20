@@ -12,6 +12,11 @@ const startButtonReducer = (state=INITIAL_STATE, action) => {
                 ...state,
                 startButtonPressed: true
             });
+        case startButtonActionTypes.RESET_START_BUTTON:
+            return ({
+                ...state,
+                startButtonPressed: false
+            });
         default:
             return state;
     }

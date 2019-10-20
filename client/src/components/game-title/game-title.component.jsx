@@ -1,11 +1,19 @@
 // jshint esversion:6
 import React from 'react';
 import './game-title.styles.scss';
+import { selectCurrentPage } from '../../redux/currentpage/currentpage.selectors';
 import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 import { connect } from 'react-redux';
+import { socket } from '../../assets/socketIO/socketIO.utils';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
+import { setNamespace } from '../../redux/namespace/namespace.action';
 
-const GameTitle = ({setCurrentPage}) => {
+const GameTitle = ({setCurrentPage, namespace, currentpage, setNamespace}) => {
     const goToMain = () => {
+        if (currentpage === '/game') {
+            setNamespace(socket.id);
+            socket.emit('leave', namespace);
+        }
         setCurrentPage('/');
     };
     return (
@@ -17,10 +25,18 @@ const GameTitle = ({setCurrentPage}) => {
     );
 };
 
+const mapStateToProps = (state) => {
+    return ({
+        namespace: selectNamespace(state),
+        currentpage: selectCurrentPage(state)
+    });
+};
+
 const mapDispatchToProps = (dispatch) => {
     return ({
-        setCurrentPage: (page) => dispatch(setCurrentPage(page))
+        setCurrentPage: (page) => dispatch(setCurrentPage(page)),
+        setNamespace: (ns) => dispatch(setNamespace(ns))
      });
 };
 
-export default connect(null, mapDispatchToProps)(GameTitle);
+export default connect(mapStateToProps, mapDispatchToProps)(GameTitle);

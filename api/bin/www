@@ -50,6 +50,17 @@ io.on("connection", (socket) => {
 
   socket.on('leave', function(ns) {
     socket.leave(ns);
+    players[socket.id].room = socket.id;
+    let inRoomPlayers = {};
+    for (let i in players) {
+      if (players[i].room === ns) {
+        inRoomPlayers[i] = players[i];
+      }
+    }
+    io.in(ns).emit('disconnect', socket.id);
+    io.in(ns).emit('disconnectUpdate', inRoomPlayers);
+    // socket.emit('resetGame');
+    socket.emit('resetStart');
   });
 
   socket.on('setNamespace', function(obj) {
@@ -371,20 +382,31 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     let room = players[socket.id].room;
+    let RoomPlayers = {};
     if (players[socket.id].currentTurn) {
       let playerIndex = Object.keys(players).filter(pl => players[pl].room === room).indexOf(socket.id);
       console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
+      for (let i in players) {
+        if (players[i].room === room) {
+          RoomPlayers[i] = players[i];
+        }
+      }
       io.in(room).emit('disconnect', socket.id);
-      io.in(room).emit('disconnectUpdate', players);
+      io.in(room).emit('disconnectUpdate', RoomPlayers);
       let inRoomPlayers = Object.keys(players).filter(pl => players[pl].room === room);
       let nextPlayer = inRoomPlayers[playerIndex % inRoomPlayers.length];
       socket.to(room).emit('startDisconnectDrawPhase', nextPlayer);
     } else {
       console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
+      for (let i in players) {
+        if (players[i].room === room) {
+          RoomPlayers[i] = players[i];
+        }
+      }
       io.in(room).emit('disconnect', socket.id);
-      io.in(room).emit('disconnectUpdate', players);
+      io.in(room).emit('disconnectUpdate', RoomPlayers);
     }
   });
 });
@@ -397,7 +419,7 @@ server.listen(port, () => {console.log(`Listening on port ${port}`)});
 
 // GAME LOGIC
 let maxHandSize = {1: 6, 2: 5, 3: 5, 4: 5, 5: 4, 6: 4};
-let phaseSkippable = {0: false, 1: true, 2: true, 3: true, 4: false, 5: false};
+
 let monsterRegions = {
   0: ['archer 1', 'archer 2'],
   1: ['archer 1', 'archer 2'],

@@ -57,6 +57,8 @@ const rootReducer = combineReducers({
 
 const resetReducer = (state, action) => {
     if (action.type === 'RESET_GAME') {
+        // const { players, user } = state;
+        // state = { players, user }
         state = undefined;
     }
     return rootReducer(state, action);

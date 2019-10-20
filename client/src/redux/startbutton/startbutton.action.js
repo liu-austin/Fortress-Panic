@@ -6,3 +6,9 @@ export const pressStartButton = () => {
         type: startButtonActionTypes.PRESS_START_BUTTON
     });
 };
+
+export const resetStartButton = () => {
+    return ({
+        type: startButtonActionTypes.RESET_START_BUTTON
+    });
+};

@@ -6,13 +6,17 @@ import { socket } from '../../assets/socketIO/socketIO.utils';
 import { closeEndGameHud } from '../../redux/endcondition/endcondition.action';
 import { selectWin, selectLose, selectHighScorePlayerId } from '../../redux/endcondition/endcondition.selectors';
 import { selectPlayers } from '../../redux/players/player.selector';
-import { withRouter } from 'react-router-dom';
+import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
+import { setNamespace } from '../../redux/namespace/namespace.action';
 
-const EndConditionDisplay = ({win, players, history, id}) => {
+const EndConditionDisplay = ({win, players, setCurrentPage, id, namespace, setNamespace}) => {
     const exitGame = () => {
         socket.emit('startResetGame');
+        setNamespace(socket.id);
         setTimeout(function() {
-            history.push('/');
+            setCurrentPage('/');
+            socket.emit('leave', namespace);
         }, 500);
     };
     return (
@@ -31,7 +35,18 @@ const EndConditionDisplay = ({win, players, history, id}) => {
                 }
                 </div>
                 <div className='highScoreHud'>
-                    <span>{'HIGH SCORE: ' + players[id].points + ' - ' + players[id].displayName}</span>
+                    <span>
+                    {
+                        players[id] ? 
+                        (
+                            'HIGH SCORE: ' + players[id].points + ' - ' + players[id].displayName
+                        )
+                        :
+                        (
+                            null
+                        )
+                    }
+                    </span>
                 </div>
                 <div className='exitButtonHud'>
                     <button onClick={exitGame}><a href={'#main'} >GO TO MAIN MENU</a></button>
@@ -46,14 +61,17 @@ const mapStateToProps = (state) => {
         players: selectPlayers(state),
         win: selectWin(state),
         lose: selectLose(state),
-        id: selectHighScorePlayerId(state)
+        id: selectHighScorePlayerId(state),
+        namespace: selectNamespace(state)
     });
 };
 
 const mapDispatchToProps = (dispatch) => {
     return ({
-        closeEndGameHud: () => dispatch(closeEndGameHud())
+        closeEndGameHud: () => dispatch(closeEndGameHud()),
+        setCurrentPage: (page) => dispatch(setCurrentPage(page)),
+        setNamespace: (ns) => dispatch(setNamespace(ns))
      });
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EndConditionDisplay));
+export default connect(mapStateToProps, mapDispatchToProps)(EndConditionDisplay);

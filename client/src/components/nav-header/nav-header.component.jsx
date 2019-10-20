@@ -13,7 +13,7 @@ import { setSelectedPlayer } from '../../redux/selectedplayer/selectedplayer.act
 import { setCurrentUser } from '../../redux/user/user.action';
 import { forceNextPhase } from '../../redux/gamephase/gamephase.action';
 import { selectStartButtonPressed } from '../../redux/startbutton/startbutton.selectors';
-import { pressStartButton } from '../../redux/startbutton/startbutton.action';
+import { pressStartButton, resetStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer, setCurrentPlayerId } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
 import { getMonsters, setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -31,13 +31,14 @@ import { selectCurrentPage } from '../../redux/currentpage/currentpage.selectors
 import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 import { setProgress, addProgress } from '../../redux/loadingbar/loadingbar.action';
 import { selectNamespace } from '../../redux/namespace/namespace.selectors';
+import { setNamespace } from '../../redux/namespace/namespace.action';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
   toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
   updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage, setProgress, addProgress, namespace, currentpage,
-  startbuttonpressed}) => {
+  startbuttonpressed, setNamespace, resetStartButton}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -87,6 +88,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('resetGame');
     socket.removeAllListeners('clientStartLoading');
     socket.removeAllListeners('startCheckingStarted');
+    socket.removeAllListeners('resetStart');
+
+    socket.on('resetStart', function() {
+      resetStartButton();
+    });
 
     socket.on('clientStartLoading', function() {
       let moveProgress = () => {
@@ -363,7 +369,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
           if (players[socket.id].displayName === currentplayer) {
             socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
           }
-        } 
+        }
+        socket.emit('startCheckLoseGame'); 
       });
 
       socket.on('startClientDrawPhase', function(obj) {
@@ -437,7 +444,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       const goToLobby = () => {
         if (currentpage === '/game') {
-          socket.emit('leave', currentpage);
+          setNamespace(socket.id);
+          socket.emit('leave', namespace);
         }
         setCurrentPage('/lobby');
       };
@@ -521,7 +529,9 @@ const mapDispatchToProps = dispatch => {
         resetGame: () => dispatch(resetGame()),
         setCurrentPage: (page) => dispatch(setCurrentPage(page)),
         setProgress: (progress) => dispatch(setProgress(progress)),
-        addProgress: () => dispatch(addProgress())
+        addProgress: () => dispatch(addProgress()),
+        setNamespace: (ns) => dispatch(setNamespace(ns)),
+        resetStartButton: () => dispatch(resetStartButton())
     });
   };
 
