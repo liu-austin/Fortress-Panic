@@ -7,7 +7,8 @@ exports.createPlayerCard = function (req, res, next) {
         src: req.body.src,
         position: req.body.position,
         description: req.body.description,
-        key: req.body.key
+        key: req.body.key,
+        room: req.body.room
     };
 
     playerCardsModel.create(playerCard, function(err, playerCard) {
@@ -54,7 +55,8 @@ exports.updatePlayerCard = function(req, res, next) {
         src: req.body.src,
         position: req.body.position,
         description: req.body.description,
-        key: req.body.key
+        key: req.body.key,
+        room: req.body.room
     }
     playerCardsModel.update({_id: req.params.id}, playerCard, function(err, playerCard) {
         if(err) {

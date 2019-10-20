@@ -6,8 +6,9 @@ import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { selectStartButtonPressed } from '../../redux/startbutton/startbutton.selectors';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { displayNewMessage } from '../../redux/console/console.action';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
 
-const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage }) => {
+const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage, namespace }) => {
     socket.removeAllListeners('firstStartButtonPress');
     socket.removeAllListeners('otherPlayerStartedGame');
     socket.on('hasGameStarted', function(started) {
@@ -17,7 +18,7 @@ const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage }) => 
     });
 
     const firstStartButtonPress = () => {
-        socket.emit('firstStartButtonPress');
+        socket.emit('firstStartButtonPress', namespace);
         pressStartButton();
         displayNewMessage('THE GAME HAS STARTED.');
     };
@@ -45,7 +46,8 @@ const Castle = ({ pressStartButton, startButtonPressed, displayNewMessage }) => 
 
 const mapStateToProps = (state) => {
     return ({
-        startButtonPressed: selectStartButtonPressed(state)
+        startButtonPressed: selectStartButtonPressed(state),
+        namespace: selectNamespace(state)
     });
 };
 

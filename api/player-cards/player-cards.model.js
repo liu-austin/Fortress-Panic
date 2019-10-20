@@ -20,6 +20,10 @@ const playerCardsSchema = new Schema({
     key: {
         type: Number,
         required: true
+    },
+    room: {
+        type: String, 
+        required: true
     }
 });
 

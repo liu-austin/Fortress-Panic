@@ -5,7 +5,8 @@ exports.createdefense = function (req, res, next) {
     var defense = {
         name: req.body.name,
         location: req.body.location,
-        active: req.body.active
+        active: req.body.active,
+        room: req.body.room
     };
 
     defenses.create(defense, function(err, defense) {
@@ -50,7 +51,8 @@ exports.updatedefense = function(req, res, next) {
     var defense = {
         name: req.body.name,
         location: req.body.location,
-        active: req.body.active
+        active: req.body.active,
+        room: req.body.room
     }
     defenses.update({_id: req.params.id}, defense, function(err, defense) {
         if(err) {

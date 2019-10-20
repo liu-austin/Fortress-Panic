@@ -34,7 +34,7 @@ var server = http.createServer(app);
 const io = socketIO(server);
 
 let players = {};
-let started = [false];
+let started = {};
 
 io.on("connection", (socket) => {
   console.log("New client connected at id: " + socket.id);
@@ -48,83 +48,102 @@ io.on("connection", (socket) => {
     room: socket.id
   };
 
+  socket.on('leave', function(ns) {
+    socket.leave(ns);
+  });
+
   socket.on('setNamespace', function(obj) {
     players[obj[0]].room = obj[1];
     socket.join(obj[1]);
-    
+    started[obj[1]] = started[obj[1]] || [false];
+    if (Object.keys(players).filter(pl => players[pl].room === obj[1]).length === 1) {
+      initializePhase(obj[1]);
+    }
+
+      // send the players object to the new player
+    setTimeout(function() {
+      let inRoomPlayers = {};
+      for (let i in players) {
+        if (players[i].room === obj[1]) {
+          inRoomPlayers[i] = players[i];
+        }
+      }
+      socket.emit('currentPlayers', inRoomPlayers);
+  
+      socket.emit('getDefenses', obj[1]);
+  
+      socket.emit('getMonsters', obj[1]);
+  
+      socket.emit('hasGameStarted', started[obj[1]][0]);
+  
+      socket.emit('getScores', inRoomPlayers);
+  
+      socket.to(obj[1]).emit('getCurrentPlayer', socket.id);
+      socket.to(obj[1]).emit('getCurrentPhase', socket.id);
+        // update all other players of the new player
+      socket.to(players[socket.id].room).emit('newPlayer', players[socket.id]);
+    }, 3000);
+
   });
 
-  // send the players object to the new player
-  socket.emit('currentPlayers', players);
-
-  socket.emit('getDefenses');
-
-  socket.emit('getMonsters');
-
-  socket.emit('hasGameStarted', started[0]);
-
-  socket.emit('getScores', players);
-
-  socket.broadcast.emit('getCurrentPlayer', socket.id);
-
-  socket.broadcast.emit('getCurrentPhase', socket.id);
+  socket.on('initiateCheckStarted', function() {
+    socket.emit('startCheckingStarted');
+  });
 
   socket.on('startLoading', function() {
     socket.emit('clientStartLoading');
   });
 
   socket.on('returnCurrentPhase', function(obj) {
-      io.emit('setCurrentPhase', obj);
+      io.in(obj[0]).emit('setCurrentPhase', obj);
   });
 
   socket.on('returnCurrentPlayer', function(obj) {
-    io.emit('updateCurrentPlayer', obj);
+    io.in(obj[0]).emit('updateCurrentPlayer', obj);
   });
-  // update all other players of the new player
-  socket.broadcast.emit('newPlayer', players[socket.id]);
 
-  socket.on('firstStartButtonPress', function() {
-    started[0] = true;
-    socket.broadcast.emit('otherPlayerStartedGame', 'THE GAME HAS STARTED.');
-    let currentPlayer = main();
-    socket.emit('startClientDrawPhase', [currentPlayer, 0]);
+  socket.on('firstStartButtonPress', function(ns) {
+    started[ns][0] = true;
+    socket.to(ns).emit('otherPlayerStartedGame', 'THE GAME HAS STARTED.');
+    let currentPlayer = main(ns);
+    socket.emit('startClientDrawPhase', [ns, currentPlayer, 0]);
   });
 
   socket.on('playerLogin', function(id) {
     players[socket.id].logged = true; 
-    io.emit('updateLoginName', id);
+    io.in(players[id].room).emit('updateLoginName', id);
   });
 
   socket.on('logOutPlayer', function(id) {
     players[id].displayName = 'Player ' + id.slice(0,4);
     players[socket.id].logged = false;
-    socket.broadcast.emit('logOutPlayer', id);
-    socket.broadcast.emit('changeName', [id, 'Player ' + id.slice(0,4)]);
+    socket.to(players[id].room).emit('logOutPlayer', id);
+    socket.to(players[id].room).emit('changeName', [id, 'Player ' + id.slice(0,4)]);
   });
 
   socket.on('sendMessage', function(data){
-    io.emit('receiveMessage', data);
+    io.in(players[socket.id].room).emit('receiveMessage', data);
   });
 
   socket.on('goToNextPhase', function() {
-    socket.broadcast.emit('nextPhase');
+    socket.to(players[socket.id.room]).emit('nextPhase');
   });
 
   socket.on('isStarted?', function() {
-    socket.emit('isStartedResponse', started[0]);
+    socket.emit('isStartedResponse', started[players[socket.id].room][0]);
   });
 
   socket.on('cardUpdate', function(id) {
-    io.emit('updatePlayerCards', id);
+    io.in(players[socket.id].room).emit('updatePlayerCards', [players[socket.id].room, id]);
   });
 
   socket.on('nameChange', function(obj) {
     players[obj[0]].displayName = obj[1];
-    socket.broadcast.emit('changeName', obj);
+    socket.to(players[obj[0].room]).emit('changeName', obj);
   });
 
   socket.on('setCurrentPlayer', function(id) {
-    socket.broadcast.emit('setCurrentPlayer', id);
+    socket.to(players[id].room).emit('setCurrentPlayer', id);
   });
 
   socket.on('returnID', function(id) {
@@ -133,93 +152,92 @@ io.on("connection", (socket) => {
 
   socket.on('startDrawPhase', function (obj) {
     console.log('DRAW PHASE');
-    io.emit('setCurrentPlayer', obj[0]);
-    Object.keys(players).forEach(player => {
-      if (players[player].playerId === String(obj[0])) {
+    io.in(obj[0]).emit('setCurrentPlayer', obj[1]);
+    Object.keys(players).filter(pl => players[pl].room === obj[0]).forEach(player => {
+      if (players[player].playerId === String(obj[1])) {
         players[player].currentTurn = true;
       } else {
         players[player].currentTurn = false;
       }
     });
-    playerCardsState.addPlayerCard(obj[0], Math.max(maxHandSize[Object.keys(players).length] - obj[1]), 0);
-    io.emit('getIDs');
+    playerCardsState.addPlayerCard(obj[0], obj[1], Math.max(maxHandSize[Object.keys(players).length] - obj[2]), 0);
+    io.in(obj[0]).emit('getIDs');
     setTimeout(function() {
-      io.emit('updatePlayerCards', obj[0]);
+      io.in(obj[0]).emit('updatePlayerCards', [obj[0], obj[1]]);
     }, 1250);
     setTimeout(function() {
-      io.emit('nextPhase');
-      socket.emit('startClientDiscardPhase', obj[0]);
+      io.in(obj[0]).emit('nextPhase');
+      socket.emit('startClientDiscardPhase', [obj[0], obj[1]]);
     }, 2250);
   });
 
-  socket.on('startDiscardPhase', function(id) {
+  socket.on('startDiscardPhase', function(obj) {
     console.log('DISCARD PHASE');
-    io.emit('allowDiscard');
+    io.in(obj[0]).emit('allowDiscard');
   });
 
   socket.on('discardAndDraw', function(obj) {
     playerCardsState.discardCard(obj[1]);
-    playerCardsState.addPlayerCard(obj[0], 1);
+    playerCardsState.addPlayerCard(players[socket.id].room, obj[0], 1);
     setTimeout(function() {
-      io.emit('updatePlayerCards', obj[0]);
+      io.in(players[socket.id].room).emit('updatePlayerCards', [players[socket.id].room, obj[0]]);
     }, 750);
   });
 
   socket.on('startTradePhase', function(id) {
     console.log('TRADE PHASE');
-    io.emit('allowTrade');
+    io.in(players[id].room).emit('allowTrade');
 
   });
 
   socket.on('tradeTargetSet', function(obj) {
-    io.emit('initiateTrade', obj);
+    io.in(players[obj[0].position].room).emit('initiateTrade', obj);
   });
 
   socket.on('tradeResult', function(obj) {
-    io.emit('displayTradeResult', obj);
+    io.in(players[obj[0]].room).emit('displayTradeResult', obj);
   });
 
   socket.on('tradeAccepted', function(obj) {
     playerCardsState.tradeCards(obj[0].position, obj[1].position, obj[0]._id, obj[1]._id);
     setTimeout(function() {
-      io.emit('updatePlayerCards', obj[0].position);
-      io.emit('updatePlayerCards', obj[1].position);
+      io.in(players[obj[0].position].room).emit('updatePlayerCards', [players[obj[0].position].room, obj[0].position]);
+      io.in(players[obj[0].position].room).emit('updatePlayerCards', [players[obj[0].position].room, obj[1].position]);
     }, 500);
   });
 
   socket.on('startPlayPhase', function(id) {
     console.log('PLAY PHASE');
-
   });
 
   socket.on('playCard', function(obj) {
     if (obj.key < 29) {
-      io.emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
+      io.in(players[obj.position].room).emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
     } else if (obj.key === 29) {
-      io.emit('playSlayerCard', [obj.position, monsterRegions[obj.key]]);
+      io.in(players[obj.position].room).emit('playSlayerCard', [obj.position, monsterRegions[obj.key]]);
     } else if (obj.key > 29 && obj.key < 37) {
-      io.emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
+      io.in(players[obj.position].room).emit('playHitCard', [obj.position, monsterRegions[obj.key]]);
     } else if (obj.key > 36 && obj.key < 39) {
-      io.emit('playDriveItBackCard', obj.position);
+      io.in(players[obj.position].room).emit('playDriveItBackCard', obj.position);
     } else if (obj.key > 38 && obj.key < 41) {
-      io.emit('playNiceShotCard', obj.position);
+      io.in(players[obj.position].room).emit('playNiceShotCard', obj.position);
     } else if (obj.key > 40 && obj.key < 43) {
-      io.emit('playMissingCard', obj.position);
+      io.in(players[obj.position].room).emit('playMissingCard', obj.position);
     } else if (obj.key > 42 && obj.key < 47) {
         if (obj.name === 'BRICK') {
-          io.emit('playBrickCard', obj.position);
+          io.in(players[obj.position].room).emit('playBrickCard', obj.position);
         } else if (obj.name === 'MORTAR') {
-          io.emit('playMortarCard', obj.position);
+          io.in(players[obj.position].room).emit('playMortarCard', obj.position);
         }
     } else if (obj.key > 46 && obj.key < 49) {
-      io.emit('playJokerCard', obj.position);
+      io.in(players[obj.position].room).emit('playJokerCard', obj.position);
     }
   });
 
   socket.on('hitMonster', function(id) {
     MonstersState.hitMonster(id);
     setTimeout(function() {
-      io.emit('getMonsters');
+      io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
     }, 250);
     socket.emit('getSelectedCard');
   });
@@ -227,20 +245,20 @@ io.on("connection", (socket) => {
   socket.on('killMonster', function(id) {
     MonstersState.killMonster(id);
     setTimeout(function() {
-      io.emit('getMonsters');
+      io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
     }, 250);
     socket.emit('getSelectedCard');
   });
 
   socket.on('addPoints', function(obj) {
     players[obj[0]].points += obj[1];
-    io.emit('updateScore', obj);
+    io.in(players[socket.id].room).emit('updateScore', obj);
   });
 
   socket.on('driveItBack', function(obj) {
     monstersModel.findByIdAndUpdate(obj[0], {location: 'forest ' + obj[1].slice(obj[1].length - 1)}).exec();
     setTimeout(function() {
-      io.emit('getMonsters');
+      io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
     }, 400);
     socket.emit('getSelectedCard');
   });
@@ -254,40 +272,40 @@ io.on("connection", (socket) => {
   });
 
   socket.on('joker', function(obj) {
-    playerCardsState.addPlayerCard(obj[0], Math.min(Math.max(6 - obj[1], 0), 2));
+    playerCardsState.addPlayerCard(players[obj[0]].room, obj[0], Math.min(Math.max(6 - obj[1], 0), 2));
     setTimeout(function() {
-      io.emit('updatePlayerCards', obj[0]);
+      io.in(players[obj[0]].room).emit('updatePlayerCards', [players[obj[0]].room, obj[0]]);
     }, 750);
   });
 
   socket.on('rebuild', function(loc) {
-    defensesState.rebuildWall(loc.slice(loc.length-1));
+    defensesState.rebuildWall(players[socket.id].room, loc.slice(loc.length-1));
     setTimeout(function() {
-      io.emit('getDefenses');
+      io.in(players[socket.id].room).emit('getDefenses', players[socket.id].room);
     }, 1500);
   });
 
   socket.on('returnSelectedCard', function(obj) {
     playerCardsState.discardCard(obj[1]._id);
     setTimeout(function() {
-      io.emit('updatePlayerCards', obj[0]);
+      io.in(players[obj[0]].room).emit('updatePlayerCards', [players[obj[0]].room, obj[0]]);
     }, 600);
   });
 
   socket.on('startMoveMonstersPhase', function(id) {
     console.log('MOVE MONSTERS PHASE');
-    MonstersState.moveMonsters(null);
+    MonstersState.moveMonsters(players[id].room, null);
     setTimeout(function() {
-      io.emit('endPlayPhase', id);
+      io.in(players[id].room).emit('endPlayPhase', id);
     }, 250);
   });
 
   socket.on('moveMonsters', function(id) {
     setTimeout(function() {
-      io.emit('getMonsters');
+      io.in(players[id].room).emit('getMonsters', players[socket.id].room);
     }, 4750);
     setTimeout(function() {
-      io.emit('nextPhase');
+      io.in(players[id].room).emit('nextPhase');
       socket.emit('startClientSpawnMonstersPhase', id);
     }, 5500);
   });
@@ -295,39 +313,40 @@ io.on("connection", (socket) => {
   socket.on('startSpawnMonstersPhase', function(missing) {
     console.log('SPAWN MONSTERS PHASE');
     if (!missing) {
-      MonstersState.clearMonsters();
-      MonstersState.addMonster(2);
+      MonstersState.clearMonsters(players[socket.id].room);
+      MonstersState.addMonster(players[socket.id].room, 2);
       setTimeout(function() {
         setTimeout(function() {
-          io.emit('getMonsters');
+          io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
         }, 2500);
         setTimeout(function() {
-          io.emit('getDefenses');
+          io.in(players[socket.id].room).emit('getDefenses', players[socket.id].room);
         }, 2750);
         setTimeout(function() {
-          io.emit('updateAllPlayerCards');
+          io.in(players[socket.id].room).emit('updateAllPlayerCards');
         }, 1000);
         setTimeout(function() {
-          io.emit('openMonsterDisplay', MonstersState.drawnMonsters);
-        }, 700);
+          io.in(players[socket.id].room).emit('openMonsterDisplay', MonstersState.drawnMonsters[players[socket.id].room]);
+        }, 1000);
       }, 1250);
 
     } else {
-      io.emit('missingPlayed');
+      io.in(players[socket.id].room).emit('missingPlayed');
     }
   
     setTimeout(function() {
-      io.emit('findCurrentPlayerId');
-    }, 6500);
+      io.in(players[socket.id].room).emit('findCurrentPlayerId');
+    }, 7000);
   });
 
   socket.on('returnIdsForUpdate', function(id) {
-    io.emit('updatePlayerCards', id);
+    io.in(players[id].room).emit('updatePlayerCards', [players[id].room, id]);
   });
 
   socket.on('returnCurrentPlayerId', function(obj) {
-    let nextPlayerId = Object.keys(players)[(Object.keys(players).indexOf(obj[0]) + 1) % Object.keys(players).length];
-    socket.emit('startClientDrawPhase', [nextPlayerId, obj[1]]);
+    let inRoomPlayers = Object.keys(players).filter(player => players[player].room === players[obj[0]].room);
+    let nextPlayerId = inRoomPlayers[(inRoomPlayers.indexOf(obj[0]) + 1) % inRoomPlayers.length];
+    socket.emit('startClientDrawPhase', [players[obj[0]].room, nextPlayerId, obj[1]]);
   });
 
   socket.on('startCheckWinGame', function() {
@@ -351,19 +370,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    let room = players[socket.id].room;
     if (players[socket.id].currentTurn) {
-      let playerIndex = Object.keys(players).indexOf(socket.id);
+      let playerIndex = Object.keys(players).filter(pl => players[pl].room === room).indexOf(socket.id);
       console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
-      io.emit('disconnect', socket.id);
-      io.emit('disconnectUpdate', players);
-      let nextPlayer = Object.keys(players)[playerIndex % Object.keys(players).length];
-      socket.broadcast.emit('startDisconnectDrawPhase', nextPlayer);
+      io.in(room).emit('disconnect', socket.id);
+      io.in(room).emit('disconnectUpdate', players);
+      let inRoomPlayers = Object.keys(players).filter(pl => players[pl].room === room);
+      let nextPlayer = inRoomPlayers[playerIndex % inRoomPlayers.length];
+      socket.to(room).emit('startDisconnectDrawPhase', nextPlayer);
     } else {
       console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
-      io.emit('disconnect', socket.id);
-      io.emit('disconnectUpdate', players);
+      io.in(room).emit('disconnect', socket.id);
+      io.in(room).emit('disconnectUpdate', players);
     }
   });
 });
@@ -435,22 +456,22 @@ let monsterRegions = {
       'forest 1', 'forest 2', 'forest 3', 'forest 4', 'forest 5', 'forest 6']
 };
 
-const initializePhase = async () => {
-  started[0] = false;
-  MonstersState.clearBoard();
-  MonstersState.initializeBoard();
-  playerDeckState.removePlayerCardIndices();
-  playerCardsState.clearPlayerCards();
-  playerDeckState.initializePlayerDeck();
+const initializePhase = async (ns) => {
+  started[ns][0] = false;
+  MonstersState.clearBoard(ns);
+  MonstersState.initializeBoard(ns);
+  playerDeckState.removePlayerCardIndices(ns);
+  playerCardsState.clearPlayerCards(ns);
+  playerDeckState.initializePlayerDeck(ns);
 };
 
 // GAME LOOP
 let player;
-const main = () => {
+const main = (namespace) => {
     // START GAME
     console.log('MAIN HAS STARTED');
-    player = Object.keys(players)[0];
+    player = Object.keys(players).filter(pl => players[pl].room === namespace)[0];
     return player;
 };
 
-initializePhase();
+

@@ -3,7 +3,8 @@ var monsterDeckModel = require('./monster-deck.dao');
 
 exports.createMonsterIndex = function (req, res, next) {
     var monsterIndex = {
-        index: req.body.index
+        index: req.body.index,
+        room: req.body.room
     };
 
     monsterDeckModel.create(monsterIndex, function(err, monsterIndex) {
@@ -46,7 +47,8 @@ exports.getMonsterIndex = function(req, res, next) {
 
 exports.updateMonsterIndex = function(req, res, next) {
     var monsterIndex = {
-        index: req.body.index
+        index: req.body.index,
+        room: req.body.room
     }
     monsterDeckModel.update({_id: req.params.id}, monsterIndex, function(err, monsterIndex) {
         if(err) {

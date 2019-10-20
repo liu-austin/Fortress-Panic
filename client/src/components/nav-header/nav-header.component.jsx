@@ -12,6 +12,7 @@ import { auth } from '../../firebase/firebase.utils';
 import { setSelectedPlayer } from '../../redux/selectedplayer/selectedplayer.action';
 import { setCurrentUser } from '../../redux/user/user.action';
 import { forceNextPhase } from '../../redux/gamephase/gamephase.action';
+import { selectStartButtonPressed } from '../../redux/startbutton/startbutton.selectors';
 import { pressStartButton } from '../../redux/startbutton/startbutton.action';
 import { setCurrentPlayer, setCurrentPlayerId } from '../../redux/currentplayer/currentplayer.action';
 import { getDefenses } from '../../redux/defenses/defenses.action';
@@ -26,15 +27,17 @@ import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer
 import {showEndGameHud, setLose, setHighScorePlayer, setWin} from '../../redux/endcondition/endcondition.action';
 import { selectTowersLeft } from '../../redux/defenses/defenses.selectors';
 import { resetGame } from '../../redux/root-reducer';
+import { selectCurrentPage } from '../../redux/currentpage/currentpage.selectors';
 import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 import { setProgress, addProgress } from '../../redux/loadingbar/loadingbar.action';
-import { selectProgress } from '../../redux/loadingbar/loadingbar.selectors';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
 
 const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, removePlayer, logOutPlayer, setSelectedPlayer, setCurrentUser, forceNextPhase, 
   updatePlayerCards, pressStartButton, setCurrentPlayer, setPlayerTurnActive, setPlayerTurnInactive, getDefenses, getMonsters, allowDiscard, allowTrade,
   toggleTradeHud, unselectCard, selectCardInfo, setTradeTarget, displayNewMessage, setMonsterRegion, toggleMissing, toggleTargetable, toggleNiceShot, selectedcardinfo, 
   toggleDriveItBack, driveitback, missing, niceshot, rebuild, toggleRebuild, selectMonsterHud, unselectMonsterHud, setMonsterInfo, currentplayer, setCurrentPlayerId,
-  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage, setProgress, addProgress, progress}) => {
+  updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage, setProgress, addProgress, namespace, currentpage,
+  startbuttonpressed}) => {
 
   const host = 'http://localhost:9000/';
 
@@ -83,6 +86,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('checkWinGame');
     socket.removeAllListeners('resetGame');
     socket.removeAllListeners('clientStartLoading');
+    socket.removeAllListeners('startCheckingStarted');
 
     socket.on('clientStartLoading', function() {
       let moveProgress = () => {
@@ -102,6 +106,12 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         }
       });
 
+      socket.on('startCheckingStarted', function() {
+        if (!startbuttonpressed) {
+          socket.emit('isStarted?');
+         }
+      });
+
       socket.on('isStartedResponse', function(started) {
         if (started) {
           pressStartButton();
@@ -112,8 +122,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         retrievePlayers(players);
       });
 
-      socket.on('getDefenses', function() {
-        fetch(host + 'findDefenses')
+      socket.on('getDefenses', function(room) {
+        fetch(host + 'findDefenses/' + room)
         .then(response => response.json())
         .then(alldefenses => alldefenses.filter(defense => defense.active))
         .then(data => getDefenses(data));
@@ -133,7 +143,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
 
       socket.on('checkWinGame', function() {
         setTimeout(function() {
-          if (monstersleft === 28) {
+          if (monstersleft === 0) {
             let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
             setTimeout(function() {
               socket.emit('startWinGame', highScorePlayerId);
@@ -142,8 +152,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         }, 1000);
       });
 
-      socket.on('getMonsters', function() {
-        fetch(host + 'findMonsters')
+      socket.on('getMonsters', function(room) {
+        fetch(host + 'findMonsters/' +  room)
         .then(response => response.json())
         .then(data => getMonsters(data));
         socket.emit('startCheckWinGame');
@@ -188,11 +198,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         socket.emit('returnID', socket.id);
       });
 
-      socket.on('updatePlayerCards', function(id) {
-        fetch(host + 'findPlayerCards')
+      socket.on('updatePlayerCards', function(obj) {
+        fetch(host + 'findPlayerCards/' + obj[0])
           .then(response => response.json())
-          .then(allcards => allcards.filter(card => card.position === id))
-          .then(data => updatePlayerCards(id, data));
+          .then(allcards => allcards.filter(card => card.position === obj[1]))
+          .then(data => updatePlayerCards(obj[1], data));
       });
 
       socket.on('initiateTrade', function(obj) {
@@ -342,11 +352,13 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         setMonsterInfo(array);
         setTimeout(function() {
           selectMonsterHud();
-        }, 500);
+        }, 750);
       });
 
       socket.on('findCurrentPlayerId', function() {
-        unselectMonsterHud();
+        setTimeout(function() {
+          unselectMonsterHud();
+        }, 1250);
         if (players[socket.id]) {
           if (players[socket.id].displayName === currentplayer) {
             socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
@@ -364,8 +376,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         }
       });
 
-      socket.on('startClientDiscardPhase', function(playerID) {
-        socket.emit('startDiscardPhase', playerID);
+      socket.on('startClientDiscardPhase', function(obj) {
+        socket.emit('startDiscardPhase', obj);
       });
 
       socket.on('startClientTradePhase', function(playerID) {
@@ -424,6 +436,9 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       });
 
       const goToLobby = () => {
+        if (currentpage === '/game') {
+          socket.emit('leave', currentpage);
+        }
         setCurrentPage('/lobby');
       };
 
@@ -458,7 +473,9 @@ const mapStateToProps = (state) => {
         currentplayer: selectCurrentPlayerName(state),
         monstersleft: selectMonstersLeft(state),
         towersleft: selectTowersLeft(state),
-        progress: selectProgress(state)
+        namespace: selectNamespace(state),
+        currentpage: selectCurrentPage(state),
+        startbuttonpressed: selectStartButtonPressed(state)
     });
 };
 

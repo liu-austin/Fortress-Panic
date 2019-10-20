@@ -3,20 +3,21 @@ const MonstersList = require('../monsters/monsters.types');
 const monsterDeckModel = require('./monster-deck.dao');
 
 const monsterDeckState = {
-    initializeMonsterDeck: function() {
+    initializeMonsterDeck: function(room) {
         let monsterIndex;
         for (let i = 0; i < MonstersList.length; i++) {
             monsterIndex = new monsterDeckModel({
-                index: i
+                index: i,
+                room: room
             });
             monsterIndex.save();
         }
     },
-    removeMonsterIndex: function(index) {
-        monsterDeckModel.deleteOne({index: index}).exec();
+    removeMonsterIndex: function(room, index) {
+        monsterDeckModel.deleteOne({index: index, room: room}).exec();
     },
-    removeMonsterIndices: function() {
-        monsterDeckModel.deleteMany({}, function (err) {
+    removeMonsterIndices: function(room) {
+        monsterDeckModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
           }).exec();
     }

@@ -9,7 +9,8 @@ exports.createMonster = function (req, res, next) {
         hitpoints: req.body.hitpoints,
         location: req.body.location,
         active: req.body.active,
-        points: req.body.points
+        points: req.body.points,
+        room: req.body.room
     };
 
     Monsters.create(monster, function(err, monster) {
@@ -58,7 +59,8 @@ exports.updateMonster = function(req, res, next) {
         hitpoints: req.body.hitpoints,
         location: req.body.location,
         active: req.body.active,
-        points: req.body.points
+        points: req.body.points,
+        room: req.body.room
     }
     Monsters.update({_id: req.params.id}, monster, function(err, monster) {
         if(err) {

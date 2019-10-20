@@ -25,7 +25,7 @@ const goblinKingCard = {name: 'Goblin King',
                     type: 'Boss Monster',
                     description: 'When this monster spawns, spawn 3 more monsters.',
                     hitpoints: 2,
-                    points: 3
+                    points: 4
                     };
                     
 const orcWarlordCard = {name: 'Orc Warlord', 
@@ -46,7 +46,7 @@ const shamanCard = {name: 'Shaman',
                     type: 'Boss Monster',
                     description: 'When this monster spawns, all monsters gain 1 hitpoint.',
                     hitpoints: 1,
-                    points: 2
+                    points: 4
                     };
 
 const blueMonstersMove1Card = {name: 'Blue Monsters Move 1', 

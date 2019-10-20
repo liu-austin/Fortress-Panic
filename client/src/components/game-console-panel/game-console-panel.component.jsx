@@ -12,19 +12,20 @@ import { setCurrentPlayer } from '../../redux/currentplayer/currentplayer.action
 import { selectCurrentPlayerName } from '../../redux/currentplayer/currentplayer.selectors';
 import { selectPlayers } from '../../redux/players/player.selector';
 import { selectMonstersLeft } from '../../redux/monsters/monsters.selectors';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
 
-const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, consoleMessage, displayNewMessage, currentPlayer, setCurrentPlayer, monstersLeft }) => {
+const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, consoleMessage, displayNewMessage, currentPlayer, setCurrentPlayer, monstersLeft, namespace }) => {
     socket.removeAllListeners('getCurrentPhase');
     socket.removeAllListeners('setCurrentPhase');
     socket.removeAllListeners('getCurrentPlayer');
     socket.removeAllListeners('updateCurrentPlayer');
 
     socket.on('getCurrentPhase', function(id) {
-        socket.emit('returnCurrentPhase', [id, currentPhase]);
+        socket.emit('returnCurrentPhase', [namespace, id, currentPhase]);
     });
 
     socket.on('getCurrentPlayer', function(id) {
-        socket.emit('returnCurrentPlayer', [id, currentPlayer]);
+        socket.emit('returnCurrentPlayer', [namespace, id, currentPlayer]);
     });
 
     socket.on('setCurrentPhase', function(obj) {
@@ -92,7 +93,8 @@ const mapStateToProps = (state) => {
         consoleMessage: selectConsoleMessage(state),
         currentPlayer: selectCurrentPlayerName(state),
         players: selectPlayers(state),
-        monstersLeft: selectMonstersLeft(state)
+        monstersLeft: selectMonstersLeft(state),
+        namespace: selectNamespace(state)
     });
 };
 

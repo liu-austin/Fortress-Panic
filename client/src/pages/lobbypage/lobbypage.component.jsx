@@ -4,6 +4,7 @@ import './lobbypage.styles.scss';
 import { connect } from 'react-redux';
 import { socket } from '../../assets/socketIO/socketIO.utils';
 import { setNamespace } from '../../redux/namespace/namespace.action';
+import { selectNamespace } from '../../redux/namespace/namespace.selectors';
 import { setCurrentPage } from '../../redux/currentpage/currentpage.action';
 
 class LobbyPage extends React.Component {
@@ -15,20 +16,28 @@ class LobbyPage extends React.Component {
     
         this.selectRoom = ev => {
             ev.preventDefault();
+            socket.emit('leave', this.props.room);
             this.props.setNamespace(this.state.namespace);
             socket.emit('setNamespace', [socket.id, this.state.namespace]);
             socket.emit('startLoading');
             this.setState({namespace: ''});
             this.props.setCurrentPage('/loading');
+            setTimeout(function() {
+                socket.emit('initiateCheckStarted');
+            }, 1000);
         };
 
-        const {setCurrentPage, setNamespace} = this.props;
+        const {setCurrentPage, setNamespace, room} = this.props;
         this.goToGameRoom = (number) => {
             function goToGame() {
+                socket.emit('leave', room);
                 setNamespace('room ' + number);
                 socket.emit('setNamespace', [socket.id, 'room ' + number]);
                 socket.emit('startLoading');
                 setCurrentPage('/loading');
+                setTimeout(function() {
+                    socket.emit('initiateCheckStarted');
+                }, 1000);
             }
             return goToGame;
         };
@@ -63,6 +72,12 @@ class LobbyPage extends React.Component {
     }
 }   
 
+const mapStateToProps = (state) => {
+    return ({
+        room: selectNamespace(state)
+    });
+};
+
 const mapDispatchToProps = (dispatch) => {
     return ({
         setNamespace: (ns) => dispatch(setNamespace(ns)),
@@ -70,4 +85,4 @@ const mapDispatchToProps = (dispatch) => {
      });
 };
 
-export default connect(null, mapDispatchToProps)(LobbyPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LobbyPage);

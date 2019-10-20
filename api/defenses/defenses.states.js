@@ -4,66 +4,78 @@ const defensesModel = require('./defenses.dao');
 
 const defensesState = {
     lostGame: false,
-    initializeDefenses: function() {
+    initializeDefenses: function(room) {
         let wall1 = new defensesModel({
             name: 'Wall',
             location: 'castle 1',
-            active: true
+            active: true,
+            room: room
         });
         let wall2 = new defensesModel({
             name: 'Wall',
             location: 'castle 2',
-            active: true
+            active: true,
+            room: room
         });
         let wall3 = new defensesModel({
             name: 'Wall',
             location: 'castle 3',
-            active: true
+            active: true,
+            room: room
         });
         let wall4 = new defensesModel({
             name: 'Wall',
             location: 'castle 4',
-            active: true
+            active: true,
+            room: room
         });
         let wall5 = new defensesModel({
             name: 'Wall',
             location: 'castle 5',
-            active: true
+            active: true,
+            room: room
         });
         let wall6 = new defensesModel({
             name: 'Wall',
             location: 'castle 6',
-            active: true
+            active: true,
+            room: room
         });
         let tower1 = new defensesModel({
             name: 'Tower',
             location: 'castle 1',
-            active: true
+            active: true,
+            room: room
         });
         let tower2 = new defensesModel({
             name: 'Tower',
             location: 'castle 2',
-            active: true
+            active: true,
+            room: room
         });
         let tower3 = new defensesModel({
             name: 'Tower',
             location: 'castle 3',
-            active: true
+            active: true,
+            room: room
         });
         let tower4 = new defensesModel({
             name: 'Tower',
             location: 'castle 4',
-            active: true
+            active: true,
+            room: room
         });
         let tower5 = new defensesModel({
             name: 'Tower',
             location: 'castle 5',
-            active: true
+            active: true,
+            room: room
         });
         let tower6 = new defensesModel({
             name: 'Tower',
             location: 'castle 6',
-            active: true
+            active: true,
+            room: room
         });
         defensesModel.insertMany([wall1, wall2, wall3, wall4, wall5, wall6, tower1, tower2, tower3, tower4, tower5, tower6], function (err, initDefenses) {
             if (err){ 
@@ -73,26 +85,26 @@ const defensesState = {
             }
           });
     },
-    checkLoseGame: async function() {
-        let towers = await defensesModel.find({name: 'Tower', active: true}).exec();
+    checkLoseGame: async function(room) {
+        let towers = await defensesModel.find({name: 'Tower', active: true, room: room}).exec();
         if (towers.length) {
             return false;
         } else {
             return true;
         }
     },
-    killDefense: function(locationNumber, type) {
-        defensesModel.findOneAndUpdate({name: type, location: 'castle ' + locationNumber}, {active: false}).exec();
+    killDefense: function(room, locationNumber, type) {
+        defensesModel.findOneAndUpdate({name: type, location: 'castle ' + locationNumber, room: room}, {active: false}).exec();
         defensesState.checkLoseGame();
     },
-    removeDefenses: function() {
-        defensesModel.deleteMany({}, function (err) {
+    removeDefenses: function(room) {
+        defensesModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
             // deleted at most one tank document
           });
     },
-    rebuildWall: function(locationNumber) {
-        defensesModel.findOneAndUpdate({name: 'Wall', location: 'castle ' + locationNumber}, {active: true}).exec();
+    rebuildWall: function(room, locationNumber) {
+        defensesModel.findOneAndUpdate({name: 'Wall', location: 'castle ' + locationNumber, room: room}, {active: true}).exec();
     }
 };
 

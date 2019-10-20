@@ -3,9 +3,9 @@ var router = express.Router();
 var playerDeckModel = require('../player-deck/player-deck.dao');
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/:room', function(req, res) {
 
-	playerDeckModel.find({}, function(err, result) {
+	playerDeckModel.find({room: req.params.room}, function(err, result) {
 		if (err) throw err;
 		if (result) {
 			res.json(result);

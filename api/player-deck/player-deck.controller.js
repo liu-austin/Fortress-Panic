@@ -3,7 +3,8 @@ var playerDeckModel = require('./player-deck.dao');
 
 exports.createPlayerIndex = function (req, res, next) {
     var playerIndex = {
-        index: req.body.index
+        index: req.body.index,
+        room: req.body.room
     };
 
     playerDeckModel.create(playerIndex, function(err, playerIndex) {
@@ -46,7 +47,8 @@ exports.getPlayerIndex = function(req, res, next) {
 
 exports.updatePlayerIndex = function(req, res, next) {
     var playerIndex = {
-        index: req.body.index
+        index: req.body.index,
+        room: req.body.room
     }
     playerDeckModel.update({_id: req.params.id}, playerIndex, function(err, playerIndex) {
         if(err) {

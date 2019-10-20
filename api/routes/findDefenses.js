@@ -3,9 +3,9 @@ var router = express.Router();
 var defensesModel = require('../defenses/defenses.dao');
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/:room', function(req, res) {
 
-	defensesModel.find({}, function(err, result) {
+	defensesModel.find({room: req.params.room}, function(err, result) {
 		if (err) throw err;
 		if (result) {
 			res.json(result);

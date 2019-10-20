@@ -10,26 +10,27 @@ const playerCardsModel = require('../player-cards/player-cards.dao');
 const MonstersState = {
     outerMovementChart: {forest: 'archer', archer: 'knight', knight:'swordsman', swordsman: 'castle'},
     winGame: false,
-    drawnMonsters: [],
-    clearBoard: function() {
-        monsterDeckState.removeMonsterIndices();
-        MonstersState.removeAllMonsters();
-        defensesState.removeDefenses();
+    drawnMonsters: {},
+    clearBoard: function(room) {
+        monsterDeckState.removeMonsterIndices(room);
+        MonstersState.removeAllMonsters(room);
+        defensesState.removeDefenses(room);
     },
-    initializeBoard: function() {
-        monsterDeckState.initializeMonsterDeck();
-        MonstersState.initializeMonsters();
-        defensesState.initializeDefenses();
+    initializeBoard: function(room) {
+        monsterDeckState.initializeMonsterDeck(room);
+        MonstersState.initializeMonsters(room);
+        defensesState.initializeDefenses(room);
     },
-    addMonster: async function(amount) {
+    addMonster: async function(room, amount) {
+        MonstersState.drawnMonsters[room] = MonstersState.drawnMonsters[room] || [];
         for (let i = 0; i < amount; i++) {
-            let monsterDeck = await monsterDeckModel.find({}).exec();
+            let monsterDeck = await monsterDeckModel.find({room: room}).exec();
             if (monsterDeck.length > 0) {
                 let deckIndex = Math.round(Math.random() * (monsterDeck.length - 1));
                 let drawnMonsterIndex = monsterDeck[deckIndex];
                 let drawnMonster = MonstersList[drawnMonsterIndex.index];
-                MonstersState.drawnMonsters.push(drawnMonster);
-                monsterDeckState.removeMonsterIndex(drawnMonsterIndex.index);
+                MonstersState.drawnMonsters[room].push(drawnMonster);
+                monsterDeckState.removeMonsterIndex(room, drawnMonsterIndex.index);
                 if (drawnMonster.type === 'Monster') {
                     let monster = new monstersModel({
                         name: drawnMonster.name,
@@ -37,7 +38,8 @@ const MonstersState = {
                         hitpoints: drawnMonster.hitpoints,
                         location: 'forest ' + (Math.round(Math.random()*5) + 1),
                         active: true,
-                        points: drawnMonster.points
+                        points: drawnMonster.points,
+                        room: room
                     });
                     await monster.save();
                 } else if (drawnMonster.type === 'Boss Monster') {
@@ -48,22 +50,24 @@ const MonstersState = {
                         hitpoints: drawnMonster.hitpoints,
                         location: 'forest ' + (Math.round(Math.random()*5) + 1),
                         active: true,
-                        points: drawnMonster.points
+                        points: drawnMonster.points,
+                        room: room
                     });
                     await monster.save();
                     await new Promise((resolve, reject) => setTimeout(resolve, 250));
-                    MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](MonstersState.monsterEffects[drawnMonster.name].input);
+                    MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](room, MonstersState.monsterEffects[drawnMonster.name].input);
                     await new Promise((resolve, reject) => setTimeout(resolve, 250));
                 } else if (drawnMonster.type === 'Monster Effect') {
                     let monster = new monstersModel({
                         name: drawnMonster.name,
                         type: drawnMonster.type,
                         description: drawnMonster.description,
-                        active: false
+                        active: false, 
+                        room: room
                     });
                     await monster.save();
                     await new Promise((resolve, reject) => setTimeout(resolve, 500));
-                    MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](MonstersState.monsterEffects[drawnMonster.name].input);
+                    MonstersState[MonstersState.monsterEffects[drawnMonster.name].method](room, MonstersState.monsterEffects[drawnMonster.name].input);
                     await new Promise((resolve, reject) => setTimeout(resolve, 500));
                 }
             } else {
@@ -71,17 +75,20 @@ const MonstersState = {
             }
         }
     },
-    clearMonsters: function() {
-        MonstersState.drawnMonsters.splice(0, MonstersState.drawnMonsters.length);
+    clearMonsters: function(room) {
+        if (MonstersState.drawnMonsters[room]) {
+            MonstersState.drawnMonsters[room].splice(0, MonstersState.drawnMonsters[room].length);
+        }
     },
-    initializeMonsters: function() {
+    initializeMonsters: function(room) {
         let goblin1 = new monstersModel({
             name: 'Goblin',
             type: 'Monster',
             hitpoints: 1,
             location: 'archer 1',
             active: true,
-            points: 1
+            points: 1,
+            room: room
         });
         let orc1 = new monstersModel({
             name: 'Orc',
@@ -89,7 +96,8 @@ const MonstersState = {
             hitpoints: 2,
             location: 'archer 2',
             active: true,
-            points: 2
+            points: 2,
+            room: room
         });
         let troll1 = new monstersModel({
             name: 'Troll',
@@ -97,7 +105,8 @@ const MonstersState = {
             hitpoints: 3,
             location: 'archer 3',
             active: true,
-            points: 3
+            points: 3,
+            room: room
         });
         let goblin2 = new monstersModel({
             name: 'Goblin',
@@ -105,7 +114,8 @@ const MonstersState = {
             hitpoints: 1,
             location: 'archer 4',
             active: true,
-            points: 1
+            points: 1,
+            room: room
         });
         let orc2 = new monstersModel({
             name: 'Orc',
@@ -113,7 +123,8 @@ const MonstersState = {
             hitpoints: 2,
             location: 'archer 5',
             active: true,
-            points: 2
+            points: 2,
+            room: room
         });
         let troll2 = new monstersModel({
             name: 'Troll',
@@ -121,7 +132,8 @@ const MonstersState = {
             hitpoints: 3,
             location: 'archer 6',
             active: true,
-            points: 3
+            points: 3,
+            room: room
         });
         monstersModel.insertMany([goblin1, orc1, troll1, goblin2, orc2, troll2], function (err, initMonsters) {
             if (err){ 
@@ -141,39 +153,39 @@ const MonstersState = {
     killMonster: async function(monsterId) {
         await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
     },
-    removeAllMonsters: function() {
-        monstersModel.deleteMany({}, function (err) {
+    removeAllMonsters: function(room) {
+        monstersModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
             // deleted at most one tank document
           });
     },
-    moveMonsters: async function() {
+    moveMonsters: async function(room) {
         let allMonsters;
-        if (arguments[0] === null) {
-            allMonsters = await monstersModel.find({active: true}).exec();
+        if (arguments[1] === null) {
+            allMonsters = await monstersModel.find({active: true, room: room}).exec();
         } else {
-            allMonsters = await monstersModel.find({active: true, location: {$regex: arguments[0]}}).exec();
+            allMonsters = await monstersModel.find({active: true, room: room, location: {$regex: arguments[1]}}).exec();
         }
         allMonsters.forEach(async function(monster) {
             if (Object.keys(MonstersState.outerMovementChart).includes(monster.location.slice(0, monster.location.length - 2))) {
-                let checkWallCollision = await defensesModel.findOne({name: 'Wall', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
+                let checkWallCollision = await defensesModel.findOne({name: 'Wall', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (monster.location.includes('swordsman') && checkWallCollision) {
-                    let hitMonster = await monstersModel.find({location: monster.location}).exec();
+                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Wall');
+                        defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Wall');
                     }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, 
                         {location: MonstersState.outerMovementChart[monster.location.slice(0, monster.location.length - 2)] + monster.location.slice(monster.location.length - 2)}).exec();
                 }
             } else {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location}).exec();
+                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
+                        defensesState.killDefense(room, monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
                     }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
@@ -181,8 +193,8 @@ const MonstersState = {
             }
         });
     },
-    checkWinGame: async function() {
-        let playedMonsters = await monstersModel.find({$or:[{type: 'Monster'},{type: 'Boss Monster'}]}).exec();
+    checkWinGame: async function(room) {
+        let playedMonsters = await monstersModel.find({room: room, $or:[{type: 'Monster'},{type: 'Boss Monster'}]}).exec();
         if (playedMonsters.filter(function(playedMonster) {
             return playedMonster.active === false;
         }).length === 31) {
@@ -191,9 +203,9 @@ const MonstersState = {
             return false;
         }
     },
-    discard: async function() {
-        if (arguments[0] === null) {
-            let allCards = await playerCardsModel.find({}).exec();
+    discard: async function(room) {
+        if (arguments[1] === null) {
+            let allCards = await playerCardsModel.find({room: room}).exec();
             let allDrawnCards = allCards.filter(card => card.position !== 'discard');
             let playerlist = [];
             for (let i = 0; i < allDrawnCards.length; i++) {
@@ -203,19 +215,19 @@ const MonstersState = {
                 }
             }
         } else {
-            await playerCardsModel.updateMany({name: {$regex: arguments[0]}}, {position: 'discard'}).exec();
+            await playerCardsModel.updateMany({room: room, name: {$regex: arguments[1]}}, {position: 'discard'}).exec();
         }
     },
-    moveClockwise: async function() {
-        let allMonsters = await monstersModel.find({active: true}).exec();
+    moveClockwise: async function(room) {
+        let allMonsters = await monstersModel.find({room: room, active: true}).exec();
         allMonsters.forEach(async function(monster) {
             if (monster.location.includes('castle')) {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location}).exec();
+                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Tower');
+                        defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Tower');
                     }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
@@ -225,17 +237,17 @@ const MonstersState = {
             }
         });
     },
-    moveCounterClockwise: async function() {
+    moveCounterClockwise: async function(room) {
         let counterClockwiseChart = {'1': '6', '2': '1', '3': '2', '4': '3', '5': '4', '6': '5'};
-        let allMonsters = await monstersModel.find({active: true}).exec();
+        let allMonsters = await monstersModel.find({active: true, room: room}).exec();
         allMonsters.forEach(async function(monster) {
             if (monster.location.includes('castle')) {
-                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true}).exec();
+                let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location}).exec();
+                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
                     if (String(hitMonster[0]._id) === String(monster._id)) {
                         MonstersState.hitMonster(hitMonster[0]._id);
-                        defensesState.killDefense(monster.location.slice(monster.location.length - 1), 'Tower');
+                        defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Tower');
                     }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1)]}).exec();
@@ -245,22 +257,22 @@ const MonstersState = {
             }
         });
     },
-    heal: async function() {
-        let allMonsters = await monstersModel.find({active: true}).exec();
+    heal: async function(room) {
+        let allMonsters = await monstersModel.find({active: true, room: room}).exec();
         allMonsters.forEach(async function(monster) {
             monstersModel.findByIdAndUpdate(monster._id, {$inc: {hitpoints: 1}}).exec();
         });
     },
-    giantBoulder: async function() {
+    giantBoulder: async function(room) {
         let number = Math.round(Math.random() * 5) + 1;
-        await monstersModel.updateMany({active: true, location: {$regex: number}}, {active: false}).exec();
-        let checkWallCollision1 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + number, active: true}).exec();
+        await monstersModel.updateMany({active: true, location: {$regex: number}, room: room}, {active: false}).exec();
+        let checkWallCollision1 = await defensesModel.findOne({name: 'Wall', location: 'castle ' + number, active: true, room: room}).exec();
         if (checkWallCollision1) {
-            defensesState.killDefense(number, 'Wall');
+            defensesState.killDefense(room, number, 'Wall');
         } else {
-            let checkTowerCollision1 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + number, active: true}).exec();
+            let checkTowerCollision1 = await defensesModel.findOne({name: 'Tower', location: 'castle ' + number, active: true, room: room}).exec();
             if (checkTowerCollision1) {
-                defensesState.killDefense(number, 'Tower');
+                defensesState.killDefense(room, number, 'Tower');
             } 
         }
     },

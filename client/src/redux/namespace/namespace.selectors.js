@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 const selectNS = state => state.namespace;
 
 // output selectors
-export const selectNameSpace = createSelector(
+export const selectNamespace = createSelector(
     [selectNS],
     namespace => namespace.namespace
 );

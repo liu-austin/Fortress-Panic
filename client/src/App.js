@@ -18,7 +18,6 @@ import { createStructuredSelector } from 'reselect';
 import { updatePlayerName } from './redux/players/player.action';
 import { setSelectedPlayer } from './redux/selectedplayer/selectedplayer.action';
 import { selectSelectedPlayer } from './redux/selectedplayer/selectedplayer.selectors';
-import { selectStartButtonPressed } from './redux/startbutton/startbutton.selectors';
 import { withRouter } from 'react-router-dom';
 import { selectCurrentPage, selectPreviousPage } from './redux/currentpage/currentpage.selectors';
 import { setCurrentPage } from './redux/currentpage/currentpage.action';
@@ -60,10 +59,6 @@ class App extends React.Component {
            } 
          } 
        });
-
-       if (!this.props.startButtonPressed) {
-        socket.emit('isStarted?');
-       }
   }
 
   componentWillUnmount() {
@@ -135,7 +130,6 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
   players: selectPlayers,
   selectedplayer: selectSelectedPlayer,
-  startButtonPressed: selectStartButtonPressed,
   currentpage: selectCurrentPage,
   previouspage: selectPreviousPage
 });

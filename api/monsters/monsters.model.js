@@ -28,6 +28,10 @@ const monstersSchema = new Schema({
     },
     points: {
         type: Number
+    },
+    room: {
+        type: String,
+        require: true
     }
 });
 

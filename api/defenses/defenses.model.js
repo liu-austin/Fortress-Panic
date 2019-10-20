@@ -13,6 +13,10 @@ const defensesSchema = new Schema({
     active: {
         type: Boolean,
         required: true
+    },
+    room: {
+        type: String,
+        require: true
     }
 });
 

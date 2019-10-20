@@ -5,6 +5,10 @@ const monsterDeckSchema = new Schema({
     index :{
         type: Number,
         required : true
+    },
+    room: {
+        type: String,
+        require: true
     }
 });
 
