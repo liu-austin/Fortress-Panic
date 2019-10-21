@@ -389,9 +389,10 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         socket.emit('startDrawPhase', obj);
       });
 
-      socket.on('startDisconnectDrawPhase', function(playerID) {
-        if (socket.id === playerID) {
-          socket.emit('startDrawPhase', [playerID, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
+      socket.on('startDisconnectDrawPhase', function(obj) {
+        if (socket.id === obj[1]) {
+          console.log(obj[0], obj[1], players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length);
+          socket.emit('startDrawPhase', [obj[0], obj[1], players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
         }
       });
 

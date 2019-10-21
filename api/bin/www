@@ -51,8 +51,18 @@ io.on("connection", (socket) => {
   };
 
   socket.on('leave', function(ns) {
+    if (players[socket.id].currentTurn) {
+      let playerIndex = Object.keys(players).filter(pl => players[pl].room === ns).indexOf(socket.id);
+      players[socket.id].room = socket.id;
+      let inRoomPlayers = Object.keys(players).filter(pl => players[pl].room === ns);
+      let nextPlayer = inRoomPlayers[playerIndex % inRoomPlayers.length];
+      setTimeout(function() {
+        socket.to(ns).emit('startDisconnectDrawPhase', [ns, nextPlayer]);
+      }, 1500);
+    } else {
+      players[socket.id].room = socket.id;
+    }
     socket.leave(ns);
-    players[socket.id].room = socket.id;
     let inRoomPlayers = {};
     for (let i in players) {
       if (players[i].room === ns) {
@@ -359,6 +369,9 @@ io.on("connection", (socket) => {
 
     } else {
       io.in(players[socket.id].room).emit('missingPlayed');
+      setTimeout(function() {
+        io.in(players[socket.id].room).emit('getDefenses', players[socket.id].room);
+      }, 2750);
     }
   
     setTimeout(function() {
@@ -412,7 +425,9 @@ io.on("connection", (socket) => {
       io.in(room).emit('disconnectUpdate', RoomPlayers);
       let inRoomPlayers = Object.keys(players).filter(pl => players[pl].room === room);
       let nextPlayer = inRoomPlayers[playerIndex % inRoomPlayers.length];
-      socket.to(room).emit('startDisconnectDrawPhase', nextPlayer);
+      setTimeout(function() {
+        socket.to(room).emit('startDisconnectDrawPhase', [room, nextPlayer]);
+      }, 1500);
     } else {
       console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];

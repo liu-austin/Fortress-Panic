@@ -11,7 +11,7 @@
 
     span {
         font-family: 'MedievalSharp', cursive;
-        color: gainsboro;
+        color: goldenrod;
         display: inline-block;
         margin: 10px 85px 5px;
         font-size: 30px;
@@ -32,6 +32,10 @@
         cursor: pointer;
         background-color: goldenrod;
         font-family: 'MedievalSharp', cursive;
+    }
+
+    button:hover {
+      background-color: gold;
     }
 }
 

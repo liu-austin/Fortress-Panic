@@ -170,11 +170,8 @@ const MonstersState = {
             if (Object.keys(MonstersState.outerMovementChart).includes(monster.location.slice(0, monster.location.length - 2))) {
                 let checkWallCollision = await defensesModel.findOne({name: 'Wall', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (monster.location.includes('swordsman') && checkWallCollision) {
-                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
-                    if (String(hitMonster[0]._id) === String(monster._id)) {
-                        MonstersState.hitMonster(hitMonster[0]._id);
+                        MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Wall');
-                    }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, 
                         {location: MonstersState.outerMovementChart[monster.location.slice(0, monster.location.length - 2)] + monster.location.slice(monster.location.length - 2)}).exec();
@@ -182,11 +179,8 @@ const MonstersState = {
             } else {
                 let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
-                    if (String(hitMonster[0]._id) === String(monster._id)) {
-                        MonstersState.hitMonster(hitMonster[0]._id);
+                        MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
-                    }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
@@ -224,11 +218,8 @@ const MonstersState = {
             if (monster.location.includes('castle')) {
                 let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
-                    if (String(hitMonster[0]._id) === String(monster._id)) {
-                        MonstersState.hitMonster(hitMonster[0]._id);
+                        MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Tower');
-                    }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
@@ -244,11 +235,8 @@ const MonstersState = {
             if (monster.location.includes('castle')) {
                 let checkTowerCollison = await defensesModel.findOne({name: 'Tower', location: 'castle ' + monster.location.slice(monster.location.length - 1), active: true, room: room}).exec();
                 if (checkTowerCollison) {
-                    let hitMonster = await monstersModel.find({location: monster.location, room: room}).exec();
-                    if (String(hitMonster[0]._id) === String(monster._id)) {
-                        MonstersState.hitMonster(hitMonster[0]._id);
+                        MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Tower');
-                    }
                 } else {
                     monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + counterClockwiseChart[monster.location.slice(monster.location.length - 1)]}).exec();
                 }
