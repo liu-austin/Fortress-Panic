@@ -30,14 +30,14 @@ const goblinKingCard = {name: 'Goblin King',
                     
 const orcWarlordCard = {name: 'Orc Warlord', 
                     type: 'Boss Monster',
-                    description: 'When this monster spawns, move all monsters 1.',
+                    description: 'All players discard 1 card.',
                     hitpoints: 3,
                     points: 4
                     };
 
 const ogreMageCard = {name: 'Ogre Mage', 
                     type: 'Boss Monster',
-                    description: 'All players discard 1 card.',
+                    description: 'When this monster spawns, move all monsters 1.',
                     hitpoints: 3,
                     points: 4
                     };

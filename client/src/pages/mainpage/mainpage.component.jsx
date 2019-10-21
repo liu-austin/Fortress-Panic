@@ -9,6 +9,10 @@ const MainPage = ({setCurrentPage}) => {
     const goToLobby = () => {
         setCurrentPage('/lobby');
     };
+
+    const goToRules = () => {
+        setCurrentPage('/rules');
+    };
     return (
         <div className='main-background'>
             <div className='main-container'>
@@ -16,11 +20,11 @@ const MainPage = ({setCurrentPage}) => {
                 <h1 className='overhead-title-main'>FORTRESS PANIC</h1>
                 </div>
                 <div className='subtitle-container'>
-                    <span className='subtitle'>A CO-OP MULTIPLAYER STRATEGY GAME</span>
+                    <span className='subtitle'>AN ONLINE CO-OP TOWER DEFENSE GAME</span>
                 </div>
                 <div className="main-content">
                     <button onClick={goToLobby}>ENTER GAME LOBBY</button>
-                    <button>GAME RULES</button>
+                    <button onClick={goToRules}>GAME RULES</button>
                     <button>ABOUT THIS GAME</button>
                 </div>
             </div>
@@ -35,7 +39,3 @@ const mapDispatchToProps = dispatch => {
   };
 
 export default connect(null, mapDispatchToProps)(MainPage);
-
-// <button><a href={'/lobby'}>ENTER GAME LOBBY</a></button>
-// <button><a href={'/rules'}>GAME RULES</a></button>
-// <button><a href={'/about'}>ABOUT THIS GAME</a></button>

@@ -1,0 +1,50 @@
+.rules-page-container {
+    background-image: url("../../assets/images/backgrounds/gameboard-background7.jpg");
+  /* Center and scale the image nicely */
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:51.3vw;
+    text-align: center;
+  }
+
+  .rules-page-content-container {
+      display: inline-block;
+      top: 125px;
+      width: 1400px;
+      height: 750px;
+      background-color: rgba(128,128,128,0.95);
+      border-radius: 20px;
+  }
+
+  .game-rules-link {
+      color: blue;
+  }
+
+  .rules-page-hud {
+    top: 45px;
+    text-align: left;
+    margin-left: 25px;
+    margin-right: 25px;
+    & span {
+        margin-left: 25px;
+        font-size: 24px;
+    }
+
+    & li {
+        margin-left: 50px;
+        list-style-type: circle;
+        margin-bottom: 10px;
+    }
+  }
+
+  .rules-page-title-container {
+      top: 35px;
+      width: 480px;
+      display: inline-block;
+  }
+
+  .rules-page-title {
+    font-size: 50px;
+    color: goldenrod;
+    font-family: 'MedievalSharp', cursive;
+}

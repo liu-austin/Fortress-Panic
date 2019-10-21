@@ -7,17 +7,11 @@ var app = require('../app');
 var http = require('http');
 const configDB = require('../config/properties');
 const socketIO = require('socket.io');
-const fetch = require('node-fetch');
 const playerCardsState = require('../player-cards/player-cards.state');
-const playerCardsModel = require('../player-cards/player-cards.dao');
 const playerDeckState = require('../player-deck/player-deck.state');
-const playerDeckModel = require('../player-deck/player-deck.dao');
-const monsterDeckState = require('../monster-deck/monster-deck.states');
-const monsterDeckModel = require('../monster-deck/monster-deck.dao');
 const MonstersState = require('../monsters/monsters.states');
 const monstersModel = require('../monsters/monsters.dao');
 const defensesState = require('../defenses/defenses.states');
-const defensesModel = require('../defenses/defenses.dao');
 
 /**
  * Get port from environment and store in Express.
@@ -340,8 +334,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on('spawnFinalBoss', function() {
-    io.in(players[socket.id].room).emit('incomingMessage', 'PREPARE FOR FINAL BOSS.');
     finalBoss[players[socket.id].room] = MonstersState.spawnFinalBoss(players[socket.id].room, bossNumber);
+    io.in(players[socket.id].room).emit('incomingMessage', 'PREPARE FOR FINAL BOSS.');
   });
 
   socket.on('startSpawnMonstersPhase', function(missing) {

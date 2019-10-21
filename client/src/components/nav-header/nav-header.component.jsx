@@ -463,10 +463,18 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         setCurrentPage('/lobby');
       };
 
+      const goToRules = () => {
+        if (currentpage === '/game') {
+          setNamespace(socket.id);
+          socket.emit('leave', namespace);
+        }
+        setCurrentPage('/rules');
+      };
+
     return (
         <div className="topnav sticky">
             <GameTitle/>
-            <a className='menu-item' href="#gamerules">GAME RULES</a>
+            <a onClick={goToRules} className='menu-item' href="#gamerules">GAME RULES</a>
             <a onClick={goToLobby} className='menu-item' href={'#lobby'}>LOBBY</a>
             <a className='menu-item' href="#about">ABOUT</a>
             <div className='sign-in-container'>

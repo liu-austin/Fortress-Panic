@@ -8,6 +8,7 @@ import LoginPage from './pages/loginpage/loginpage.component';
 import LoadingPage from './pages/loadingpage/loadingpage.component';
 import MainPage from './pages/mainpage/mainpage.component';
 import LobbyPage from './pages/lobbypage/lobbypage.component';
+import RulesPage from './pages/rulespage/rulespage.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
@@ -124,6 +125,16 @@ class App extends React.Component {
             null
           )
         }
+        {
+          this.props.currentpage === '/rules' ? 
+          (
+            <RulesPage/>
+          ) 
+          : 
+          (
+            null
+          )
+        }
       </div>
     );
   }
@@ -148,27 +159,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
-
-// <Route exact path='/login' render={() => this.props.players[socket.id] ? 
-//   (this.props.players[socket.id].logged ? 
-//     (<Redirect to='/game' />) 
-//     : 
-//     (<LoginPage />)) 
-//     : 
-//     (<LoginPage />)
-//   } />
-
-// <Switch>
-// <Route exact path='/' component={MainPage} />
-// <Route exact path='/game' component={GamePage} />
-// <Route path='/lobby' component={LobbyPage} />
-// <Route exact path='/login' render={() => this.props.players[socket.id] ? 
-// (this.props.players[socket.id].logged ? 
-//   (this.props.history.goBack()) 
-//   : 
-//   (<LoginPage />)) 
-//   : 
-//   (<LoginPage />)
-// } />
-// <Route exact path='/checkout' component={CheckOut} />
-// </Switch>
