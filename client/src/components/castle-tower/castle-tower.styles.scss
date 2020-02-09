@@ -1,9 +1,10 @@
 .castle-tower-container {
-    position: absolute;
-    left: 190px;
-    top: 150px;
+    position: relative;
+    left: 0vw;
+    top: 5vw;
 }
 
 .castle-tower {
+    height: 2.5vw;
     display: inline-block;
 }

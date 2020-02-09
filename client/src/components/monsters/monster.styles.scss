@@ -1,8 +1,8 @@
 .monster-container {
-    margin-top: -15px;
+    margin-top: -1.5vw;
     display: inline-block;
-    margin-left: -20px;
-    margin-right: -20px;
+    margin-left: -2vw;
+    margin-right: -2vw;
 }
 
 .monster {
@@ -15,19 +15,19 @@
 }
 
 .forest .monster-container {
-    transform: scale(0.4);
+    transform: scale(0.32);
 }
 
 .archer .monster-container {
-    transform: scale(0.5);
+    transform: scale(0.4);
 }
 
 .knight .monster-container {
-    transform: scale(0.65);
+    transform: scale(0.52);
 }
 
 .swordsman .monster-container {
-    transform: scale(0.95);
+    transform: scale(0.76);
 }
 
 .hit-points {

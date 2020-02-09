@@ -1,7 +1,8 @@
 .csstransforms .cn-wrapper.swordsman {
+	font-size: 1vw;
 	position: absolute;
-	top: 50.5%;
-	left: 50.2%;
+	top: -22.8vw;
+	left: -23vw;
 	z-index: 11;
 	margin-top: -13.32em;
 	margin-left: -13.5em;
@@ -26,13 +27,13 @@
 	content:".";
 	display:block;
 	font-size:2em;
-	width:4em;
-	height:4em;
+	width:10vw;
+	height:10vw;
 	position: absolute;
-	left: 50%;
-	margin-left: -2em;
-	top:47.5%;
-	margin-top: -2em;
+	left: 1vw;
+	margin-left: -1vw;
+	top:1vw;
+	margin-top: -1vw;
 	border-radius: 50%;
 	z-index:11;
 	color: transparent;
@@ -44,10 +45,10 @@
 	/* -webkit-transition: all .05s ease;
 	-moz-transition: all .05s ease;
 	transition: all .45s ease; */
-	-webkit-transform: scale(1.15);
-	-moz-transform: scale(1.15);
-	-ms-transform: scale(1.15);
-	transform: scale(1.15);
+	-webkit-transform: scale(0.92);
+	-moz-transform: scale(0.92);
+	-ms-transform: scale(0.92);
+	transform: scale(0.92);
 	pointer-events: auto;
 }
 
@@ -71,27 +72,27 @@
 
 .csstransforms .cn-wrapper.swordsman li:first-child a:hover,
 .csstransforms .cn-wrapper.swordsman li:nth-child(6) a:hover {
-	background: -webkit-radial-gradient(transparent 37%, #64b2cd 37%);
-	background: -moz-radial-gradient(transparent 37%, #64b2cd 37%);
-	background: radial-gradient(transparent 37%, #64b2cd 37%);
+	background: -webkit-radial-gradient(transparent 36%, #64b2cd  42%);
+	background: -moz-radial-gradient(transparent 36%, #64b2cd  42%);
+	background: radial-gradient(transparent 36%, #64b2cd  42%);
 	opacity: 0.75;
 	color: #fff;
 }
 
 .csstransforms .cn-wrapper.swordsman li:nth-child(2) a:hover,
 .csstransforms .cn-wrapper.swordsman li:nth-child(3) a:hover {
-	background: -webkit-radial-gradient(transparent 37%, #ed9a73 37%);
-	background: -moz-radial-gradient(transparent 37%, #ed9a73 37%);
-	background: radial-gradient(transparent 37%, #ed9a73 37%);
+	background: -webkit-radial-gradient(transparent 36%, #ed9a73  42%);
+	background: -moz-radial-gradient(transparent 36%, #ed9a73  42%);
+	background: radial-gradient(transparent 36%, #ed9a73  42%);
 	opacity: 0.75;
 	color: #fff;
 }
 
 .csstransforms .cn-wrapper.swordsman li:nth-child(4) a:hover,
 .csstransforms .cn-wrapper.swordsman li:nth-child(5) a:hover  {
-	background: -webkit-radial-gradient(transparent 37%, #449e6a 37%);
-	background: -moz-radial-gradient(transparent 37%, #449e6a 37%);
-	background: radial-gradient(transparent 37%, #449e6a 37%);
+	background: -webkit-radial-gradient(transparent 36%, #449e6a  42%);
+	background: -moz-radial-gradient(transparent 36%, #449e6a  42%);
+	background: radial-gradient(transparent 36%, #449e6a  42%);
 	opacity: 0.75;
 	color: #fff;
 }

@@ -1,8 +1,8 @@
 .hexagon-xl {
     color: #fff;
     margin: 73.2px 0;
-    width: 253.76px;
-    height: 146.4px;
+    width: 13vw;
+    height: 7.5vw;
     background-color: #ebebeb;
     position: relative;
     display: block
@@ -14,19 +14,19 @@
     width: 0;
     height: 0;
     position: absolute;
-    border-left: 126.88px solid transparent;
-    border-right: 126.88px solid transparent;
+    border-left: 6.5vw solid transparent;
+    border-right: 6.5vw solid transparent;
     left: 0
 }
 
 .hexagon-xl:before {
-    border-bottom: 73.2px solid #ebebeb;
-    top: -73.2px
+    border-bottom: 3.75vw solid #ebebeb;
+    top: -3.75vw
 }
 
 .hexagon-xl:after {
-    border-top: 73.2px solid #ebebeb;
-    bottom: -73.2px;
+    border-top: 3.75vw solid #ebebeb;
+    bottom: -3.75vw;
 }
 
 .hexagon-default {

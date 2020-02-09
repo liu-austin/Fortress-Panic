@@ -1,7 +1,8 @@
 .csstransforms .cn-wrapper.archer {
+	font-size: 1vw;
 	position: absolute;
-	top: 50.7%;
-	left: 50.2%;
+	top: -22.7vw;
+	left: -23vw;
 	z-index: 11;
 	margin-top: -13em;
 	margin-left: -13.5em;
@@ -44,10 +45,10 @@
 	/* -webkit-transition: all .05s ease;
 	-moz-transition: all .05s ease;
 	transition: all .75s ease; */
-	-webkit-transform: scale(2.08);
-	-moz-transform: scale(2.08);
-	-ms-transform: scale(2.08);
-	transform: scale(2.08);
+	-webkit-transform: scale(1.66);
+	-moz-transform: scale(1.66);
+	-ms-transform: scale(1.66);
+	transform: scale(1.66);
 	pointer-events: auto;
 }
 
@@ -70,27 +71,27 @@
 
 .csstransforms .cn-wrapper.archer li:first-child a:hover,
 .csstransforms .cn-wrapper.archer li:nth-child(6) a:hover {
-	background: -webkit-radial-gradient(transparent 55.3%, #64b2cd 55.3%);
-	background: -moz-radial-gradient(transparent 55.3%, #64b2cd 55.3%);
-	background: radial-gradient(transparent 55.3%, #64b2cd 55.3%);
+	background: -webkit-radial-gradient(transparent 55.8%, #64b2cd 55.8%);
+	background: -moz-radial-gradient(transparent 55.8%, #64b2cd 55.8%);
+	background: radial-gradient(transparent 55.8%, #64b2cd 55.8%);
 	opacity: 0.75;
 	color: #fff;
 }
 
 .csstransforms .cn-wrapper.archer li:nth-child(2) a:hover,
 .csstransforms .cn-wrapper.archer li:nth-child(3) a:hover {
-	background: -webkit-radial-gradient(transparent 55.3%, #ed9a73 55.3%);
-	background: -moz-radial-gradient(transparent 55.3%, #ed9a73 55.3%);
-	background: radial-gradient(transparent 55.3%, #ed9a73 55.3%);
+	background: -webkit-radial-gradient(transparent 55.8%, #ed9a73 55.8%);
+	background: -moz-radial-gradient(transparent 55.8%, #ed9a73 55.8%);
+	background: radial-gradient(transparent 55.8%, #ed9a73 55.8%);
 	opacity: 0.75;
 	color: #fff;
 }
 
 .csstransforms .cn-wrapper.archer li:nth-child(4) a:hover,
 .csstransforms .cn-wrapper.archer li:nth-child(5) a:hover {
-	background: -webkit-radial-gradient(transparent 55.3%, #449e6a 55.3%);
-	background: -moz-radial-gradient(transparent 55.3%, #449e6a 55.3%);
-	background: radial-gradient(transparent 55.3%, #449e6a 55.3%);
+	background: -webkit-radial-gradient(transparent 55.8%, #449e6a 55.8%);
+	background: -moz-radial-gradient(transparent 55.8%, #449e6a 55.8%);
+	background: radial-gradient(transparent 55.8%, #449e6a 55.8%);
 	opacity: 0.75;
 	color: #fff;
 }
