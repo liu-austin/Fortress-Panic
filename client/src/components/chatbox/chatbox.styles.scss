@@ -2,54 +2,65 @@
     position: absolute;
     background-color: #333;
     z-index: 1000;
-    height: 20%;
-    top: 78%;
-    width: 34%;
-    left: 63%;
-    border-radius: 10px;
+    height: 12vw;
+    top: 44vw;
+    width: 37vw;
+    left: 62vw;
+    border-radius: 1vw;
 }
 
 .chatlog-container {
     position: absolute;
-    top: 5%;
-    left: 2.5%;
+    top: 0.75vw;
+    left: 1vw;
     background-color: grey;
-    height: 75%;
-    width: 95%;
-    border-radius: 10px;
+    height: 9vw;
+    width: 35.1vw;
+    border-radius: 7.5px;
     overflow: scroll;
 
     p {
-        margin-left: 5px;
+        margin-left: 0.5vw;
         display: block;
-        font-size: 17px;
+        font-size: 1vw;
         color: black;
     }
 }
 
 .chat-message-container {
     position: absolute;
-    top: 85%;
-    left: 2.5%;
-    width: 100%;
+    top: 10vw;
+    left: 1vw;
+    width: 36vw;
+    height: 1vw;
 }
 
 .sticky {
     position: fixed;
 }
 
+.chat-label {
+    margin-top:0;
+    vertical-align: top;
+    font-size: 1vw;
+}
+
 .input-line {
-    margin-left: 2%;
-    width: 75%;
+    vertical-align: top;
+    height: 1.25vw;
+    margin-left: 0.5vw;
+    width: 27.5vw;
     display: inline;
     background-color: grey;
 }
 
 .chatButton {
-    margin-left: 2%;
-    width: 12%;
+    vertical-align: top;
+    margin-left: 0.5vw;
+    width: 4vw;
     display: inline;
     background-color: goldenrod;
-    border-radius: 7.5px;
+    border-radius: 1vw;
     font-family: 'MedievalSharp', cursive;
+    font-size: 1vw;
 }

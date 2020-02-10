@@ -1,22 +1,22 @@
 .topnav {
     background-color: #333;
     z-index: 10000;
-    height: 6.5%;
+    height: 4vw;
     top: 0;
     width: 100%;
   }
   
   .topnav a.menu-item {
-    height: 3%;
-    min-width: 120px;
-    left: 30%;
+    height: 4vw;
+    min-width: 10vw;
+    left: 30vw;
     float: left;
     color: #f2f2f2;
     text-align: center;
-    padding: 1% 1%;
-    padding-bottom: 2.3%;
+    padding: 1vw 1vw;
+    padding-bottom: 1vw;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 1vw;
     margin-top: 0px;
   }
   
@@ -30,15 +30,15 @@
   }
 
   .sign-in-container {
-    left: 50%;
-    height: 2%;
-    width: 10%;
+    left: 35vw;
+    height: 2vw;
+    width: 20vw;
     float: left;
     color: #f2f2f2;
     text-align: center;
-    margin-left: 2%;
-    padding: 1% 2%;
+    margin-left: 2vw;
+    padding: 1vw 2vw;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 1vw;
   }
 

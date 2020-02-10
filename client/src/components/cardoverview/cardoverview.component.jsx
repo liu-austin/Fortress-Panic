@@ -23,7 +23,7 @@ const CardOverview = ({ cardInfo, cardselected, cardunselected, selectCardInfo, 
 
     return (
         <div className="card-overview" key={cardInfo ? cardInfo.key : null} onClick={cardInfo ? clickCard : null}>
-            <span className='name'>{cardInfo ? cardInfo.name : null}</span>
+            <p className='card-name'>{cardInfo ? cardInfo.name : null}</p>
         </div>
     );
 };

@@ -486,7 +486,9 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
                     )
             }
             </div>
-            <TopNavButton/>
+            <div className='top-nav-button-container'>
+              <TopNavButton/>
+            </div>
       </div>
     );
 }

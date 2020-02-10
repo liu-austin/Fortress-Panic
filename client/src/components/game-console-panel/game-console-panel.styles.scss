@@ -2,22 +2,22 @@
     position: absolute;
     background-color: #333;
     z-index: 1000;
-    height: 10%;
-    top: 8%;
-    width: 34%;
-    left: 63%;
-    border-radius: 10px;
+    height: 6vw;
+    top: 4.5vw;
+    width: 37vw;
+    left: 62.25vw;
+    border-radius: 1vw;
 }
 
 .game-turn-phase-container {
     position: absolute;
-    top: 5%;
-    left: 2.5%;
+    top: .1vw;
+    left: 1vw;
     margin: 0 auto;
 }
 
 .game-turn-phase-table {
-    font-size: 17px;
+    font-size: 1vw;
 }
 
 .game-turn-phase-table th {
@@ -26,17 +26,18 @@
 
 .game-turn-phase-table td {
     text-align: left;
-    width: 28%;
+    width: 28vw;
 }
 
 .console-message-container {
     position: absolute;
-    top: 65%;
-    left: 2.5%;
+    top: 3.25vw;
+    left: 1vw;
 }
 
 .console-message {
     color: red;
+    font-size: 1vw;
 }
 
 .sticky {
@@ -45,8 +46,10 @@
 
 .end-phase-button {
     cursor: pointer;
-    width: 75%;
+    height: 1vw;
+    width: 10vw;
     font-family: 'MedievalSharp', cursive;
     background-color: goldenrod;
-    border-radius: 7.5px;
+    border-radius: 7.5vw;
+    font-size: 1vw;
 }

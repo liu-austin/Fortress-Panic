@@ -68,7 +68,7 @@ const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, 
                         <tr>
                             <th>PLAYER TURN</th>
                             <th>GAME PHASE</th>
-                            <th>END / SKIP PHASE</th>
+                            <th>END / SKIP TO NEXT PHASE</th>
                             <th>MONSTERS LEFT</th>
                         </tr>
                         <tr>

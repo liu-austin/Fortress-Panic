@@ -30,33 +30,32 @@ const TopNavButton = ({players, logOutPlayer, setCurrentUser, setCurrentPlayer, 
     const goToLogin = () => {
         setPreviousPage();
         setCurrentPage('/login');
-      };
+    };
 
     return (
         <div className='status-button-container'>
-    {
-        started ? 
-        (
-            players[socket.id] ? 
-            (players[socket.id].logged ? 
-                (<button className='status-button' onClick={handleLogOut}>LOG OUT</button>) 
-                : 
-                (<button className='status-button'><a className='shrinkText' onClick={noSignIns} href={'#'}>IN PROGRESS</a></button>)) 
-                : 
-                (<button className='status-button'><a className='shrinkText' onClick={noSignIns} href={'#'}>IN PROGRESS</a></button>)
-        ) 
-        : 
-        (
-            players[socket.id] ? 
-            (players[socket.id].logged ? 
-                (<button className='status-button' onClick={handleLogOut}>LOG OUT</button>) 
-                : 
-                (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)) 
-                : 
-                (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)
-        )
-
-    }
+        {
+            started ? 
+            (
+                players[socket.id] ? 
+                (players[socket.id].logged ? 
+                    (<button className='status-button' onClick={handleLogOut}>LOG OUT</button>) 
+                    : 
+                    (<button className='status-button'><a className='shrinkText' onClick={noSignIns} href={'#'}>IN PROGRESS</a></button>)) 
+                    : 
+                    (<button className='status-button'><a className='shrinkText' onClick={noSignIns} href={'#'}>IN PROGRESS</a></button>)
+            ) 
+            : 
+            (
+                players[socket.id] ? 
+                (players[socket.id].logged ? 
+                    (<button className='status-button' onClick={handleLogOut}>LOG OUT</button>) 
+                    : 
+                    (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)) 
+                    : 
+                    (<button className='status-button' onClick={goToLogin}>SIGN IN</button>)
+            )
+        }
     </div>
     );
 };

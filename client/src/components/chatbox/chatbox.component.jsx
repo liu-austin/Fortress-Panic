@@ -45,7 +45,7 @@ class Chatbox extends React.Component {
                 </div>
                 <div className='chat-message-container'>
                     <form onSubmit={this.handleSubmit}>
-                        <label>CHAT:</label>
+                        <label className='chat-label'>CHAT:</label>
                         <input className='input-line' type="text" autoComplete='off' value={this.state.msg} onChange={ev => this.setState({msg: ev.target.value})}/>
                         <button onClick={this.sendMessage} className='chatButton'>Send</button>
                     </form> 

@@ -1,19 +1,19 @@
 .status-button {
-    cursor: pointer;
-    font-size: 17px;
-    width: 150%;
-    border-radius: 10px;
-    margin-top: 16%;
-    background-color: goldenrod;
-    font-family: 'MedievalSharp', cursive;
-  }
+  cursor: pointer;
+  font-size: 1vw;
+  width: 8vw;
+  border-radius: 1vw;
+  margin-top: 1%;
+  background-color: goldenrod;
+  font-family: 'MedievalSharp', cursive;
+}
 
-  .status-button-container {
-    position: absolute;
-    top: 10%;
-    left: 85%;
-  }
+.status-button-container {
+  position: relative;
+  top: 0vw;
+  left: 32.5vw;
+}
 
-  .shrinkText {
-    font-size: 12px;
-  }
+.shrinkText {
+  font-size: 1vw;
+}

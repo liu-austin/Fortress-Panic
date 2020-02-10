@@ -1,21 +1,22 @@
 .card-overview {
     background-color: goldenrod;
-    border-radius: 5px;
+    border-radius: 10px;
     display: inline-block;
     text-align: center;
-    width: 73.3px;
+    width: 4.85vw;
     cursor: pointer;
-    margin-right: 13.3px;
+    margin-right: 0.2vw;
     margin-top: 0px;
-    height: 80px;
+    height: 5.5vw;
     word-wrap: break-word;
-    padding-left: 7px;
-    padding-right: 7px;
+    padding-left: 0.1vw;
+    padding-right: 0.1vw;
 
-    & span {
+    & p {
         font-family: 'MedievalSharp', cursive;
-        margin: 0 0 0 0;
-        font-size: 15px;
+        margin: 0.5vw 0 0 0;
+        font-size: 1vw;
+        line-height: 1vw;
     }
 }
 

@@ -48,12 +48,8 @@ const Card = ({ cardInfo, currentPlayer, players, currentPhase, unselectCard, di
     };
 
     return (
-        <div>
-        {
-            cardInfo ? 
-            (
             <div>
-                <div className="card">
+                <div className="Acard">
                     <p className='name' >{cardInfo.name}</p>
                     <div className='image-container'>
                         <img className='image' src={cardInfo.src} alt={cardInfo.name}/>
@@ -68,13 +64,6 @@ const Card = ({ cardInfo, currentPlayer, players, currentPhase, unselectCard, di
                     <button className='card-option' onClick={discardCard} >DISCARD</button>
                 </div>
             </div>
-            ) 
-            : 
-            (
-                null
-            )
-        }
-        </div>
     );
 };
 

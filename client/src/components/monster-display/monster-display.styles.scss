@@ -1,23 +1,23 @@
 .monster-display-container {
-    width: 230px;
-    border-radius: 7.5px;
+    width: 16vw;
+    border-radius: 1vw;
     background-color: maroon;
-    padding-bottom: 5px;
+    padding-bottom: 1vw;
 
     .monster-display-title {
       font-family: 'MedievalSharp', cursive;
         text-align: center;
-        font-size: 19px;
-        line-height: 30px;
+        font-size: 1.1vw;
+        line-height: 1.75vw;
     }
 
     .card-footer {
         left: 5%;
         width: 90%;
-        height: 80px;
+        height: 3vw;
         display: block;
-        font-size: 18px;
-        margin-bottom: 10px;
+        font-size: 1vw;
+        margin-bottom: 0.5vw;
         .text {
           left: 5%;
           width: 90%;
@@ -25,19 +25,19 @@
       }
 
     .monster-card {
-        border-radius: 7.5px;
+        border-radius: 1vw;
         left: 5%;
-        padding-bottom: 5px;
+        padding-bottom: 0.25vw;
         display: block;
         width: 90%;
         background-color: brown;
-        margin-bottom: 5px;
-        min-height: 55px;
+        margin-bottom: 0.25vw;
+        min-height: 3vw;
 
         .monster-name,
         .monster-type,
         .monster-effect {
-            font-size: 12px;
+            font-size: 0.75vw;
             left: 5%;
             width: 90%;
         }

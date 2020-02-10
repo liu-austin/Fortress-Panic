@@ -2,29 +2,29 @@
     position: absolute;
     background-color: #333;
     z-index: 1000;
-    height: 56%;
-    top: 20%;
-    width: 34%;
-    left: 63%;
+    height: 32.5vw;
+    top: 11vw;
+    width: 37vw;
+    left: 62.25vw;
     border-radius: 10px;
 }
 
 .player-hud {
     display: inline-block;
     vertical-align: top;
-    width: 80px;
-    height: 80px;
-    top: 7.5px;
+    width: 5.5vw;
+    height: 5.5vw;
+    top: 0.5vw;
     margin-bottom: 7.5px;
 }
 
 .hand-container {
-    width: 520px;
-    height: 80px;
-    left: 20px;
+    width: 30.5vw;
+    height: 5.5vw;
+    left: 0.5vw;
     display: inline-block;
     vertical-align: top;
-    top: 7.5px;
+    top: 0.5vw;
 }
 
 .hand-container > div {
@@ -32,15 +32,15 @@
 }
 
 .display-name {
-    top: 15px;
-    left: 15px;
-    font-size: 17px;
+    top: 1vw;
+    left: 1vw;
+    font-size: 1.1vw;
 }
 
 .display-points {
-    top: 10px;
-    left: 15px;
-    font-size: 17px;
+    top: 1vw;
+    left: 1vw;
+    font-size: 1.1vw;
 }
 
 .sticky {
