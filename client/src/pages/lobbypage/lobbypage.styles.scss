@@ -10,30 +10,29 @@
 
   .game-lobby-content-container {
       display: inline-block;
-      top: 175px;
-      width: 550px;
-      height: 665px;
+      top: 6.5vw;
+      width: 48vw;
+      height: 40vw;
       background-color: rgba(128,128,128,0.6);
-      border-radius: 20px;
+      border-radius: 1.25vw;
   }
 
   .game-room-hud {
-    top: 20px;
     text-align: center;
 
     & button {
         cursor: pointer;
-        width: 480px;
-        height: 60px;
-        border-radius: 20px;
+        width: 46vw;
+        height: 3vw;
+        border-radius: 3.5vw;
         text-decoration:none;
-        text-shadow:0px 1px 0px #ffee66;
-        box-shadow:inset 0px 1px 0px 0px #cf866c;
+        text-shadow:0px 0.1vw 0px #ffee66;
+        box-shadow:inset 0px 0.1vw 0px 0px #cf866c;
         background-color:goldenrod;
-        margin-bottom: 7.5px;
+        margin-bottom: 1vw;
         color: white;
         font-weight: bold;
-        font-size: 20px;
+        font-size: 2vw;
     }
 
     & button:hover {
@@ -43,45 +42,40 @@
   }
 
   .game-lobby-title-container {
-      top: 10px;
-      width: 480px;
+      margin-left: -2vw;
+      width: 54vw;
       display: inline-block;
   }
 
   .game-room-title {
-    font-size: 57px;
+    font-size: 3.5vw;
     color: gainsboro;
 }
 
 .custom-room-container {
     display: inline-block;
-    width: 400px;
-    top: 10px;
-    margin-top: 10px;
+    width: 45.5vw;
+    top: -1vw;
 }
 
 .game-room-label {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: 3vw;
+    margin-bottom: 1vw;
     color: white;
 }
 
 .custom-room-input {
-    margin-left: -40px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 28px;
-    width: 480px;
+    margin-bottom: 1vw;
+    font-size: 2vw;
+    width: 45vw;
 }
 
 .room-button {
-    margin-top: 5px;
     background-color: teal;
-    margin-left: -40px;
-    width: 480px;
-    height: 40px;
-    border-radius: 15px;
-    font-size: 28px;
+    width: 45vw;
+    height: 3.5vw;
+    border-radius: 2vw;
+    font-size: 2vw;
     color: white;
 }
 

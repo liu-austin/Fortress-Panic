@@ -476,7 +476,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             <GameTitle/>
             <a onClick={goToRules} className='menu-item' href="#gamerules">GAME RULES</a>
             <a onClick={goToLobby} className='menu-item' href={'#lobby'}>LOBBY</a>
-            <a className='menu-item' href="#about">ABOUT</a>
+            {/* <a className='menu-item' href="#about">ABOUT</a> */}
             <div className='sign-in-container'>
             {
                 players[socket.id] ? (

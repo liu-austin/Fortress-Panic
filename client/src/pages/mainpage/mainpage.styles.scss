@@ -10,30 +10,30 @@
 
   .main-container {
       display: inline-block;
-      top: 300px;
-      width: 500px;
-      height: 350px;
+      top: 14vw;
+      width: 35vw;
+      height: 24.0vw;
       background-color: rgba(128,128,128,0.6);
-      border-radius: 20px;
+      border-radius: 2vw;
   }
 
   .main-content {
-    top: 20px;
+    top: 1.25vw;
     text-align: center;
 
     & button {
         cursor: pointer;
-        width: 480px;
-        height: 60px;
-        border-radius: 20px;
+        width: 34vw;
+        height: 4vw;
+        border-radius: 2vw;
         text-decoration:none;
-        text-shadow:0px 1px 0px #ffee66;
-        box-shadow:inset 0px 1px 0px 0px #cf866c;
+        text-shadow:0vw 0.1vw 0vw #ffee66;
+        box-shadow:inset 0vw 0.1vw 0vw 0vw #cf866c;
         background-color:goldenrod;
-        margin-bottom: 7.5px;
+        margin-bottom: 0.5vw;
         color: white;
         font-weight: bold;
-        font-size: 20px;
+        font-size: 1.5vw;
 
         & a {
             display: inline-block;
@@ -41,8 +41,8 @@
             width: 100%;
             color: white;
             font-weight: bold;
-            font-size: 20px;
-            line-height: 50px;
+            font-size: 1.5vw;
+            line-height: 3vw;
         }
     }
 
@@ -53,29 +53,29 @@
   }
 
   .main-title-container {
-      top: 10px;
-      width: 480px;
+      top: 1vw;
+      width: 34vw;
       display: inline-block;
   }
 
   .overhead-title-main {
     font-family: 'MedievalSharp', cursive;
-    font-size: 57px;
+    font-size: 4vw;
     color: gainsboro;
-    padding: 5px 5px 0px;
+    padding: 0.25vw 0.25vw 0vw;
     background-color: #444444;
-    border: 4px solid #20655f;
-    border-radius: 20px;
+    border: 0.25vw solid #20655f;
+    border-radius: 1.75vw;
 }
 
 .subtitle-container {
     display: inline-block;
-    width: 400px;
-    top: 10px;
-    margin-top: 10px;
+    width: 37vw;
+    top: 0.5vw;
+    margin-top: 0.75vw;
 }
 
 .subtitle {
-    font-size: 28px;
+    font-size: 2vw;
     color: white;
 }

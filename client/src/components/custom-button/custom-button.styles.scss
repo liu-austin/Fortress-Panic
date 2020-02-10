@@ -1,11 +1,11 @@
 .custom-button {
-    min-width: 165px;
+    min-width: 10vw;
     width: auto;
-    height: 50px;
-    letter-spacing: 0.5px;
-    line-height: 50px;
-    padding: 0 35px 0 35px;
-    font-size: 15px;
+    height: 3vw;
+    letter-spacing: 0.05vw;
+    line-height: 3vw;
+    padding: 0 2vw 0 2vw;
+    font-size: 1vw;
     background-color: black;
     color: white;
     text-transform: uppercase;
@@ -19,13 +19,13 @@
     &:hover {
       background-color: white;
       color: black;
-      border: 1px solid black;
+      border: 1vw solid black;
     }
 
     &.google-sign-in {
         background: #DD4B39;
       &:before {
-        border-right: #BB3F30 1px solid;
+        border-right: #BB3F30 0.1vw solid;
         background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px no-repeat;
         background-position: center;
       }
@@ -39,13 +39,13 @@
       box-sizing: border-box;
       position: relative;
       /* width: 13em;  - apply for fixed size */
-      padding: 0 15px 0 46px;
+      padding: 0 1vw 0 3vw;
       border: none;
       text-align: left;
-      line-height: 50px;
+      line-height: 3vw;
       white-space: nowrap;
-      border-radius: 0.2em;
-      font-size: 15px;
+      border-radius: 0.1vw;
+      font-size: 1vw;
       color: #FFF;
 
       &:before {
@@ -54,21 +54,21 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 34px;
+        width: 2vw;
         height: 100%;
       }
       &:focus {
         outline: none;
       }
       &:active {
-        box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+        box-shadow: inset 0 0 0 2vw rgba(0,0,0,0.1);
       }
     }
 
     &.inverted {
       background-color: white;
       color: black;
-      border: 1px solid black;
+      border: 0.1vw solid black;
 
       &:hover {
         background-color: black;

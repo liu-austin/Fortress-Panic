@@ -9,11 +9,11 @@
 
   .rules-page-content-container {
       display: inline-block;
-      top: 125px;
-      width: 1400px;
-      height: 750px;
+      top: 7vw;
+      width: 97vw;
+      height: 50vw;
       background-color: rgba(128,128,128,0.95);
-      border-radius: 20px;
+      border-radius: 1.5vw;
   }
 
   .game-rules-link {
@@ -21,30 +21,30 @@
   }
 
   .rules-page-hud {
-    top: 45px;
+    top: 2.5vw;
     text-align: left;
-    margin-left: 25px;
-    margin-right: 25px;
+    margin-left: 1.5vw;
+    margin-right: 1.5vw;
     & span {
-        margin-left: 25px;
-        font-size: 24px;
+        margin-left: 1.5vw;
+        font-size: 1.5vw;
     }
 
     & li {
-        margin-left: 50px;
+        margin-left: 3vw;
         list-style-type: circle;
-        margin-bottom: 10px;
+        margin-bottom: 1vw;
     }
   }
 
   .rules-page-title-container {
-      top: 35px;
-      width: 480px;
+      top: 2vw;
+      width: 27vw;
       display: inline-block;
   }
 
   .rules-page-title {
-    font-size: 50px;
+    font-size: 3vw;
     color: goldenrod;
     font-family: 'MedievalSharp', cursive;
 }
