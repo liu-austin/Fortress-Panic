@@ -100,11 +100,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       let moveProgress = () => {
         addProgress();
       };
-      let loadGameBar = setInterval(moveProgress, 50);
+      let loadGameBar = setInterval(moveProgress, 80);
       setTimeout(function() {
         clearInterval(loadGameBar);
         setCurrentPage('/game');
-      }, 5000);
+      }, 8000);
       setProgress(0);
     });
 
@@ -173,8 +173,9 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       socket.on('getMonsters', function(room) {
         fetch(host + 'findMonsters/' +  room)
         .then(response => response.json())
-        .then(data => getMonsters(data));
-        socket.emit('startCheckWinGame');
+        .then(data => getMonsters(data))
+        .then(() => socket.emit('startCheckWinGame'));
+        // socket.emit('startCheckWinGame');
       });
 
       socket.on('newPlayer', function(playerInfo) {

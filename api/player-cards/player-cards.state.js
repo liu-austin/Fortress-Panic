@@ -11,7 +11,7 @@ const playerCardsState = {
     outerMovementChart: {forest: 'archer', archer: 'knight', knight:'swordsman', swordsman: 'castle'},
     drawnPlayerCards: {},
     clearPlayerCards: async function(room) {
-        await playerCardsModel.deleteMany({room: room}, function (err) {
+        return await playerCardsModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
           }).exec();
     },

@@ -4,7 +4,7 @@ const defensesModel = require('./defenses.dao');
 
 const defensesState = {
     lostGame: false,
-    initializeDefenses: function(room) {
+    initializeDefenses: async function(room) {
         let wall1 = new defensesModel({
             name: 'Wall',
             location: 'castle 1',
@@ -77,7 +77,7 @@ const defensesState = {
             active: true,
             room: room
         });
-        defensesModel.insertMany([wall1, wall2, wall3, wall4, wall5, wall6, tower1, tower2, tower3, tower4, tower5, tower6], function (err, initDefenses) {
+        return await defensesModel.insertMany([wall1, wall2, wall3, wall4, wall5, wall6, tower1, tower2, tower3, tower4, tower5, tower6], function (err, initDefenses) {
             if (err){ 
                 return console.error(err);
             } else {
@@ -93,12 +93,12 @@ const defensesState = {
             return true;
         }
     },
-    killDefense: function(room, locationNumber, type) {
-        defensesModel.findOneAndUpdate({name: type, location: 'castle ' + locationNumber, room: room}, {active: false}).exec();
-        defensesState.checkLoseGame();
+    killDefense: async function(room, locationNumber, type) {
+        await defensesModel.findOneAndUpdate({name: type, location: 'castle ' + locationNumber, room: room}, {active: false}).exec();
+        return await defensesState.checkLoseGame();
     },
-    removeDefenses: function(room) {
-        defensesModel.deleteMany({room: room}, function (err) {
+    removeDefenses: async function(room) {
+        return await defensesModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
             // deleted at most one tank document
           });

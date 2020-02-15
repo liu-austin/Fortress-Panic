@@ -254,19 +254,26 @@ io.on("connection", (socket) => {
   });
 
   socket.on('hitMonster', function(id) {
-    MonstersState.hitMonster(id);
-    setTimeout(function() {
+    MonstersState.hitMonster(id)
+    .then(() => {
       io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
-    }, 250);
-    socket.emit('getSelectedCard');
+      socket.emit('getSelectedCard');
+    });
+    // setTimeout(function() {
+    //   io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
+    // }, 250);
+    // socket.emit('getSelectedCard');
   });
 
   socket.on('killMonster', function(id) {
-    MonstersState.killMonster(id);
-    setTimeout(function() {
+    MonstersState.killMonster(id).then(() => {
       io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
-    }, 250);
-    socket.emit('getSelectedCard');
+      socket.emit('getSelectedCard');
+    });
+    // setTimeout(function() {
+    //   io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
+    // }, 250);
+    // socket.emit('getSelectedCard');
   });
 
   socket.on('addPoints', function(obj) {
@@ -408,7 +415,7 @@ io.on("connection", (socket) => {
     let RoomPlayers = {};
     if (players[socket.id].currentTurn) {
       let playerIndex = Object.keys(players).filter(pl => players[pl].room === room).indexOf(socket.id);
-      console.log("Client disconnected at id: " + socket.id);
+      // console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
       for (let i in players) {
         if (players[i].room === room) {
@@ -423,7 +430,7 @@ io.on("connection", (socket) => {
         socket.to(room).emit('startDisconnectDrawPhase', [room, nextPlayer]);
       }, 1500);
     } else {
-      console.log("Client disconnected at id: " + socket.id);
+      // console.log("Client disconnected at id: " + socket.id);
       delete players[socket.id];
       for (let i in players) {
         if (players[i].room === room) {
@@ -505,18 +512,21 @@ let monsterRegions = {
 
 const initializePhase = async (ns) => {
   started[ns][0] = false;
-  MonstersState.clearBoard(ns);
-  MonstersState.initializeBoard(ns);
-  playerDeckState.removePlayerCardIndices(ns);
-  playerCardsState.clearPlayerCards(ns);
-  playerDeckState.initializePlayerDeck(ns);
+  MonstersState.clearBoard(ns)
+  .then(() => MonstersState.initializeBoard(ns))
+  .then(() => playerDeckState.removePlayerCardIndices(ns))
+  .then(() => playerCardsState.clearPlayerCards(ns))
+  .then(() => playerDeckState.initializePlayerDeck(ns));
+  // MonstersState.initializeBoard(ns);
+  // playerDeckState.removePlayerCardIndices(ns);
+  // playerCardsState.clearPlayerCards(ns);
+  // playerDeckState.initializePlayerDeck(ns);
 };
 
 // GAME LOOP
 let player;
 const main = (namespace) => {
     // START GAME
-    console.log('MAIN HAS STARTED');
     player = Object.keys(players).filter(pl => players[pl].room === namespace)[0];
     return player;
 };

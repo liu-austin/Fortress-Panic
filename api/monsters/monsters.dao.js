@@ -1,4 +1,4 @@
-// jshint esversion:6
+// jshint esversion:8
 const mongoose = require('mongoose');
 const monstersSchema = require('./monsters.model');
 
@@ -13,8 +13,8 @@ monstersSchema.statics = {
     getByName: function(query, cb) {
         this.find(query, cb);
     },
-    update: function(query, updateData, cb) {
-        this.findOneAndUpdate(query, {$set: updateData}, {new: true}, cb);
+    update: async function(id, location) {
+        return await this.findByIdAndUpdate(id, {location: location.slice(0, location.length - 1) + ((location.slice(location.length - 1) % 6) + 1)}).exec();
     },
     delete: function(query, cb) {
         this.findOneAndDelete(query, cb);

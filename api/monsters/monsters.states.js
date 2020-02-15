@@ -11,15 +11,29 @@ const MonstersState = {
     outerMovementChart: {forest: 'archer', archer: 'knight', knight:'swordsman', swordsman: 'castle'},
     winGame: false,
     drawnMonsters: {},
-    clearBoard: function(room) {
-        monsterDeckState.removeMonsterIndices(room);
-        MonstersState.removeAllMonsters(room);
-        defensesState.removeDefenses(room);
+    clearBoard: async function(room) {
+        monsterDeckState.removeMonsterIndices(room)
+        .then(() => MonstersState.removeAllMonsters(room))
+        .then(() => defensesState.removeDefenses(room))
+        .then(() => {
+            return new Promise(resolve => {
+                resolve('Done');
+            });
+        });
+        // MonstersState.removeAllMonsters(room);
+        // defensesState.removeDefenses(room);
     },
-    initializeBoard: function(room) {
-        monsterDeckState.initializeMonsterDeck(room);
-        MonstersState.initializeMonsters(room);
-        defensesState.initializeDefenses(room);
+    initializeBoard: async function(room) {
+        monsterDeckState.initializeMonsterDeck(room)
+        .then(() => MonstersState.initializeMonsters(room))
+        .then(() => defensesState.initializeDefenses(room))
+        .then(() => {
+            return new Promise(resolve => {
+                resolve('Done');
+            });
+        });
+        // MonstersState.initializeMonsters(room);
+        // defensesState.initializeDefenses(room);
     },
     addMonster: async function(room, amount) {
         MonstersState.drawnMonsters[room] = MonstersState.drawnMonsters[room] || [];
@@ -80,7 +94,7 @@ const MonstersState = {
             MonstersState.drawnMonsters[room].splice(0, MonstersState.drawnMonsters[room].length);
         }
     },
-    initializeMonsters: function(room) {
+    initializeMonsters: async function(room) {
         let goblin1 = new monstersModel({
             name: 'Goblin',
             type: 'Monster',
@@ -135,7 +149,7 @@ const MonstersState = {
             points: 3,
             room: room
         });
-        monstersModel.insertMany([goblin1, orc1, troll1, goblin2, orc2, troll2], function (err, initMonsters) {
+        return await monstersModel.insertMany([goblin1, orc1, troll1, goblin2, orc2, troll2], function (err, initMonsters) {
             if (err){ 
                 return console.error(err);
             } else {
@@ -148,13 +162,13 @@ const MonstersState = {
         if (struckMonster.hitpoints <= 1) {
             await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
         }
-        await monstersModel.findByIdAndUpdate(monsterId, {$inc: {hitpoints: -1}}).exec();
+        return await monstersModel.findByIdAndUpdate(monsterId, {$inc: {hitpoints: -1}}).exec();
     },
     killMonster: async function(monsterId) {
-        await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
+        return await monstersModel.findByIdAndUpdate(monsterId, {active: false}).exec();
     },
-    removeAllMonsters: function(room) {
-        monstersModel.deleteMany({room: room}, function (err) {
+    removeAllMonsters: async function(room) {
+        return await monstersModel.deleteMany({room: room}, function (err) {
             if (err) return handleError(err);
             // deleted at most one tank document
           });
@@ -182,7 +196,8 @@ const MonstersState = {
                         MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
                 } else {
-                    monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
+                    monstersModel.update(monster._id, monster.location);
+                    // monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
             }
         });
