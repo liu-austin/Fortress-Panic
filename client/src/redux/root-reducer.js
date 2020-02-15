@@ -4,9 +4,9 @@ import { persistReducer } from 'redux-persist';
 // storage represents local storage, sessionStorage represents session storage
 import storage from 'redux-persist/lib/storage';
 import userReducer from './user/user.reducer';
-import cartReducer from './cart/cart.reducer';
-import directoryReducer from './directory/directory.reducer';
-import collectionReducer from './collection/collection.reducer';
+// import cartReducer from './cart/cart.reducer';
+// import directoryReducer from './directory/directory.reducer';
+// import collectionReducer from './collection/collection.reducer';
 import startButtonReducer from './startbutton/startbutton.reducer';
 import rotationReducer from './rotation/rotation.reducer';
 import gamePhaseReducer from './gamephase/gamephase.reducer';
@@ -35,9 +35,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     user: userReducer,
-    cart: cartReducer,
-    directory: directoryReducer,
-    collection: collectionReducer,
+    // cart: cartReducer,
+    // directory: directoryReducer,
+    // collection: collectionReducer,
     startbutton: startButtonReducer,
     rotation: rotationReducer,
     gamephase: gamePhaseReducer,
