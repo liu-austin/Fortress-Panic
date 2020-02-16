@@ -18,7 +18,7 @@ const PlayerCardsPanel = ({players, retrievePlayers}) => {
         updatePlayerName(obj[0], obj[1]);
     });
     return (
-        <div className='player-cards-panel-container sticky'>
+        <div className='player-cards-panel-container'>
         {
             Object.keys(players).length ? (
                 Object.keys(players).map(player => {

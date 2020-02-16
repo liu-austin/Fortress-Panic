@@ -33,7 +33,7 @@ class Chatbox extends React.Component {
   
     render() {
         return (
-            <div className='chatbox-container sticky'>
+            <div className='chatbox-container'>
                 <div className='chatlog-container'>
                 {
                     this.state.msgs.map(msg => {

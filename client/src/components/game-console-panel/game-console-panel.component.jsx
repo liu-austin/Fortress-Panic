@@ -61,7 +61,7 @@ const GameConsolePanel = ({ players, currentPhase, goToNextPhase, setNextPhase, 
     };
 
     return (
-        <div className='game-console-panel-container sticky'>
+        <div className='game-console-panel-container'>
             <div className='game-turn-phase-container'>
                 <table className='game-turn-phase-table'>
                     <tbody>

@@ -390,13 +390,13 @@ io.on("connection", (socket) => {
     socket.emit('startClientDrawPhase', [players[obj[0]].room, nextPlayerId, obj[1]]);
   });
 
-  socket.on('startCheckWinGame', function() {
-    socket.emit('checkWinGame');
-  });
+  // socket.on('startCheckWinGame', function() {
+  //   socket.emit('checkWinGame');
+  // });
 
-  socket.on('startCheckLoseGame', function() {
-    socket.emit('checkLoseGame');
-  });
+  // socket.on('startCheckLoseGame', function() {
+  //   socket.emit('checkLoseGame');
+  // });
 
   socket.on('startLoseGame', function(id) {
     socket.emit('loseGame', id);

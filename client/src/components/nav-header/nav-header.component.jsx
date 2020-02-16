@@ -133,21 +133,32 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       socket.on('getDefenses', function(room) {
         fetch(host + 'findDefenses/' + room)
         .then(response => response.json())
-        .then(alldefenses => alldefenses.filter(defense => defense.active))
-        .then(data => getDefenses(data));
-        socket.emit('startCheckLoseGame');
+        .then(alldefenses => {
+          let activedefenses = alldefenses.filter(defense => defense.active);
+          getDefenses(activedefenses);
+          if (activedefenses.length) {
+            if (activedefenses.filter(defense => defense.name === 'Tower').length < 1) {
+              let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+              socket.emit('startLoseGame', highScorePlayerId);
+            }
+          } else {
+            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+            socket.emit('startLoseGame', highScorePlayerId);
+          }
+        });
+        // socket.emit('startCheckLoseGame');
       });
 
-      socket.on('checkLoseGame', function() {
-        setTimeout(function() {
-          if (towersleft === 0) {
-            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
-            setTimeout(function() {
-              socket.emit('startLoseGame', highScorePlayerId);
-            }, 500);
-          }
-        }, 1000);
-      });
+      // socket.on('checkLoseGame', function() {
+      //   setTimeout(function() {
+      //     if (towersleft === 0) {
+      //       let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+      //       setTimeout(function() {
+      //         socket.emit('startLoseGame', highScorePlayerId);
+      //       }, 500);
+      //     }
+      //   }, 1000);
+      // });
 
       socket.on('checkSpawnFinalBoss', function() {
         if (monstersleft === 1) {
@@ -159,22 +170,30 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         displayNewMessage(msg);
       });
 
-      socket.on('checkWinGame', function() {
-        setTimeout(function() {
-          if (monstersleft === 0) {
-            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
-            setTimeout(function() {
-              socket.emit('startWinGame', highScorePlayerId);
-            }, 500);
-          }
-        }, 1000);
-      });
+      // socket.on('checkWinGame', function() {
+      //   setTimeout(function() {
+      //     if (monstersleft === 0) {
+      //       let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+      //       setTimeout(function() {
+      //         socket.emit('startWinGame', highScorePlayerId);
+      //       }, 500);
+      //     }
+      //   }, 1000);
+      // });
 
       socket.on('getMonsters', function(room) {
         fetch(host + 'findMonsters/' +  room)
         .then(response => response.json())
-        .then(data => getMonsters(data))
-        .then(() => socket.emit('startCheckWinGame'));
+        .then(data => {
+          getMonsters(data);
+          if (data.length) {
+            if (32 - data.filter(m => {return (!m.active && m.type !== 'Monster Effect');}).length < 1) {
+              let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+              socket.emit('startWinGame', highScorePlayerId);
+            }
+          }
+        });
+        // .then(() => socket.emit('startCheckWinGame'));
         // socket.emit('startCheckWinGame');
       });
 
