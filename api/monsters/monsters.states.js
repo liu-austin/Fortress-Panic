@@ -187,7 +187,7 @@ const MonstersState = {
                         MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1), 'Wall');
                 } else {
-                    monstersModel.findByIdAndUpdate(monster._id, 
+                    await monstersModel.findByIdAndUpdate(monster._id, 
                         {location: MonstersState.outerMovementChart[monster.location.slice(0, monster.location.length - 2)] + monster.location.slice(monster.location.length - 2)}).exec();
                 }
             } else {
@@ -196,7 +196,7 @@ const MonstersState = {
                         MonstersState.hitMonster(monster._id);
                         defensesState.killDefense(room, monster.location.slice(monster.location.length - 1, monster.location.length), 'Tower');
                 } else {
-                    monstersModel.update(monster._id, monster.location);
+                    await monstersModel.update(monster._id, monster.location);
                     // monstersModel.findByIdAndUpdate(monster._id, {location: monster.location.slice(0, monster.location.length - 1) + ((monster.location.slice(monster.location.length - 1) % 6) + 1)}).exec();
                 }
             }

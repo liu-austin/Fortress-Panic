@@ -330,6 +330,7 @@ io.on("connection", (socket) => {
   socket.on('moveMonsters', function(id) {
     setTimeout(function() {
       io.in(players[id].room).emit('getMonsters', players[socket.id].room);
+      io.in(players[id].room).emit('getDefenses', players[socket.id].room);
       if (finalBoss[players[id].room] === undefined) {
         socket.emit('checkSpawnFinalBoss');
       }

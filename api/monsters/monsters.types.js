@@ -23,7 +23,7 @@ const trollCard = {name: 'Troll',
 
 const goblinKingCard = {name: 'Goblin King', 
                     type: 'Boss Monster',
-                    description: 'When this monster spawns, spawn 3 more monsters.',
+                    description: 'When this monster spawns, spawn up to 3 monsters.',
                     hitpoints: 2,
                     points: 4
                     };
@@ -93,13 +93,13 @@ const discard1Card = {name: 'All Players Discard 1 Card',
 
 const draw3MonstersCard = {name: 'Draw 3 Monsters', 
                     type: 'Monster Effect',
-                    description: 'Spawn 3 monsters.',
+                    description: 'Spawn up to 3 monsters.',
                     hitpoints: 0
                     };
 
 const draw4MonstersCard = {name: 'Draw 4 Monsters', 
                     type: 'Monster Effect',
-                    description: 'Spawn 4 monsters.',
+                    description: 'Spawn up to 4 monsters.',
                     hitpoints: 0
                     };
 
