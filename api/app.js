@@ -15,13 +15,13 @@ const findPlayerCardsRouter = require('./routes/findPlayerCards');
 const findPlayerDeckRouter = require('./routes/findPlayerDeck');
 const db = require('./config/database');
 const app = express();
-const MonstersState = require('./monsters/monsters.states');
-const defensesState = require('./defenses/defenses.states');
-const playerCardsState = require('./player-cards/player-cards.state');
-const playerCardsModel = require('./player-cards/player-cards.dao');
-const playerDeckState = require('./player-deck/player-deck.state');
-const playerDeckModel = require('./player-deck/player-deck.dao');
-const properties = require('./config/properties');
+// const MonstersState = require('./monsters/monsters.states');
+// const defensesState = require('./defenses/defenses.states');
+// const playerCardsState = require('./player-cards/player-cards.state');
+// const playerCardsModel = require('./player-cards/player-cards.dao');
+// const playerDeckState = require('./player-deck/player-deck.state');
+// const playerDeckModel = require('./player-deck/player-deck.dao');
+// const properties = require('./config/properties');
 
 //configure bodyparser
 const bodyParserJSON = bodyParser.json();
