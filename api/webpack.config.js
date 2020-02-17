@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   // mode: 'development',
-  entry: path.resolve(__dirname, './client/src/index.js'),
+  entry: path.resolve(__dirname, '../client/src/index.js'),
   output: {
     path: path.resolve(__dirname, './client/dist'),
     filename: 'bundle.js',
@@ -25,9 +25,9 @@ module.exports = {
         loaders: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.svg$/,
-        loader: 'svg-inline-loader'
-      }
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ['file-loader'],
+      },
     ],
   },
   node: {

@@ -9,22 +9,22 @@
 
   .loading-text {
       position: inline-block;
-      top: 500px;
+      top: 15vw;
     //   transform: scale(2);
 
       & span {
         font-family: 'MedievalSharp', cursive;
           color: cyan;
-          font-size: 60px;
+          font-size: 5vw;
       }
   }
 
   .progress-bar {
     display: inline-block;
-    top: 300px;
-    height: 30px;
-    width: 350px;
-    border-radius: 50px;
+    top: 17vw;
+    height: 2vw;
+    width: 20vw;
+    border-radius: 3vw;
     border: 3px solid goldenrod;
     transform: scale(2);
   }
