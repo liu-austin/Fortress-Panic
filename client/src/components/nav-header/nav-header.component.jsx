@@ -83,8 +83,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('getScores');
     socket.removeAllListeners('loseGame');
     socket.removeAllListeners('winGame');
-    socket.removeAllListeners('checkLoseGame');
-    socket.removeAllListeners('checkWinGame');
+    // socket.removeAllListeners('checkLoseGame');
+    // socket.removeAllListeners('checkWinGame');
     socket.removeAllListeners('resetGame');
     socket.removeAllListeners('clientStartLoading');
     socket.removeAllListeners('startCheckingStarted');
@@ -402,7 +402,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
           }
         }
-        socket.emit('startCheckLoseGame'); 
+        // socket.emit('startCheckLoseGame'); 
       });
 
       socket.on('startClientDrawPhase', function(obj) {
@@ -496,7 +496,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             <GameTitle/>
             <a onClick={goToRules} className='menu-item' href="#gamerules">GAME RULES</a>
             <a onClick={goToLobby} className='menu-item' href={'#lobby'}>LOBBY</a>
-            {/* <a className='menu-item' href="#about">ABOUT</a> */}
+            <a className='menu-item' href="#about" onClick={() => alert('Welcome To Fortress Panic! A online recreation of the popular board game Castle Panic! with some streamlined additions. All art assets are modified to be under fair use or found through Creative Commons. This game is not monetized in any way. Created by Austin Liu.')}>ABOUT</a>
             <div className='sign-in-container'>
             {
                 players[socket.id] ? (
