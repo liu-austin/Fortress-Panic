@@ -15,7 +15,7 @@ class SignIn extends React.Component {
         }
     }
 
-    handleSubmit = async event => {
+    async handleSubmit(event) {
         event.preventDefault();
         const { email, password } = this.state;
         try {
@@ -28,7 +28,7 @@ class SignIn extends React.Component {
         socket.emit('playerLogin', socket.id);
     }
 
-    handleChange = (event) => {
+    handleChange(event) {
         const { value, name } = event.target;
         this.setState({ [name]: value });
     }

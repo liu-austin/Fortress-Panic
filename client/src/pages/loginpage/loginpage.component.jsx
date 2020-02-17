@@ -1,4 +1,4 @@
-// jshint esversion:6
+// jshint esversion:8
 import React from 'react';
 import './loginpage.styles.scss';
 import SignIn from '../../components/sign-in/sign-in.component';
@@ -10,7 +10,11 @@ class LoginPage extends React.Component {
     constructor(props) {
         super(props);
     }
-    mount = async function() {
+    // mount = async function() {
+    //     await new Promise((resolve, reject) => setTimeout(resolve, 1000));
+    //     this.props.setCurrentUser(null);
+    // }
+    async mount() {
         await new Promise((resolve, reject) => setTimeout(resolve, 1000));
         this.props.setCurrentUser(null);
     }

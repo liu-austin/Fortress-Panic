@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as ShamanIcon } from '../../assets/images/monster-icons/shaman.svg';
+import SVG from 'react-inlinesvg';
+import ShamanIcon from '../../assets/images/monster-icons/shaman.svg';
+// import { ReactComponent as ShamanIcon } from '../../assets/images/monster-icons/shaman.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -47,7 +49,7 @@ const Shaman = ({points, id, hitpoints, location, monsterregion, targetable, nic
         };
     return (
         <div className='monster-container'>
-            <ShamanIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={ShamanIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

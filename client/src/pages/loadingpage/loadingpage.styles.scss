@@ -1,5 +1,5 @@
 .loading-page-container {
-    background-image: url("../../assets/images/backgrounds/gameboard-background3.jpg");
+    background-image: url("/backgrounds/gameboard-background3.jpg");
   /* Center and scale the image nicely */
     background-repeat: no-repeat;
     background-size: cover;
@@ -10,7 +10,6 @@
   .loading-text {
       position: inline-block;
       top: 15vw;
-    //   transform: scale(2);
 
       & span {
         font-family: 'MedievalSharp', cursive;

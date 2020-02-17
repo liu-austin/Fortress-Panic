@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as GoblinIcon } from '../../assets/images/monster-icons/goblin.svg';
+import SVG from 'react-inlinesvg';
+import GoblinIcon from '../../assets/images/monster-icons/goblin.svg';
+// import { ReactComponent as GoblinIcon } from '../../assets/images/monster-icons/goblin.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -47,7 +49,7 @@ const Goblin = ({points, id, hitpoints, location, monsterregion, targetable, nic
         };
     return (
         <div className='monster-container'>
-            <GoblinIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={GoblinIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

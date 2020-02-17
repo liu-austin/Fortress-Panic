@@ -29,7 +29,10 @@ class App extends React.Component {
     super(props);
   }
 
-  unsubscribeFromAuth = null;
+  unsubscribeFromAuth() {
+
+  }
+  // unsubscribeFromAuth = null;
 
   componentDidMount() {
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {

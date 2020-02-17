@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as TrollIcon } from '../../assets/images/monster-icons/troll.svg';
+import SVG from 'react-inlinesvg';
+import TrollIcon from '../../assets/images/monster-icons/troll.svg';
+// import { ReactComponent as TrollIcon } from '../../assets/images/monster-icons/troll.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -47,7 +49,7 @@ const Troll = ({points, id, hitpoints, location, monsterregion, targetable, nice
         };
     return (
         <div className='monster-container'>
-            <TrollIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={TrollIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

@@ -8,7 +8,7 @@
 }
 
 body .game-container {
-    background-image: url("../../assets/images/backgrounds/gameboard-background1.jpg");
+    background-image: url("/backgrounds/gameboard-background1.jpg");
     background-repeat: no-repeat;
     height: 115.5vh;
     background-size: cover;
@@ -19,7 +19,6 @@ body .game-container {
 .gameboard-container {
     width: 56.5vw;
     top: -3vw;
-    // margin-top: -0.5vw;
     margin-bottom: 0%;
     left: -7.5vw;
     border: 10px rgba(255,255,255,.15) solid;

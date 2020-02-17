@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as OverlordIcon } from '../../assets/images/monster-icons/overlord.svg';
+import SVG from 'react-inlinesvg';
+import OverlordIcon from '../../assets/images/monster-icons/overlord.svg';
+// import { ReactComponent as OverlordIcon } from '../../assets/images/monster-icons/overlord.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -51,7 +53,7 @@ const Overlord = ({points, id, hitpoints, location, monsterregion, targetable, n
         };
     return (
         <div className='monster-container'>
-            <OverlordIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={OverlordIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

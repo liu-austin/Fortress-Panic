@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as DragonIcon } from '../../assets/images/monster-icons/dragon.svg';
+import SVG from 'react-inlinesvg';
+import DragonIcon from '../../assets/images/monster-icons/dragon.svg';
+// import { ReactComponent as DragonIcon } from '../../assets/images/monster-icons/dragon.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -51,7 +53,7 @@ const Dragon = ({points, id, hitpoints, location, monsterregion, targetable, nic
         };
     return (
         <div className='monster-container'>
-            <DragonIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+            <SVG src={DragonIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

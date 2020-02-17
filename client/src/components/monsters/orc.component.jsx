@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as OrcIcon } from '../../assets/images/monster-icons/orc.svg';
+import SVG from 'react-inlinesvg';
+import OrcIcon from '../../assets/images/monster-icons/orc.svg';
+// import { ReactComponent as OrcIcon } from '../../assets/images/monster-icons/orc.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -47,7 +49,7 @@ const Orc = ({points, id, hitpoints, location, monsterregion, targetable, nicesh
         };
     return (
         <div className='monster-container'>
-            <OrcIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={OrcIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>

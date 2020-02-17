@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^7.8.1",
+    "firebase": "^7.8.2",
     "node-sass": "^4.12.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-inlinesvg": "^1.2.0",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
@@ -16,11 +17,22 @@
     "redux-persist": "^5.10.0",
     "reselect": "^4.0.0",
     "socket.io-client": "^2.3.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "svg-inline-loader": "^0.8.0"
+  },
+  "devDependencies": {
+    "file-loader": "^5.0.2",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.3.2",
+    "style-loader": "^1.0.1",
+    "svg-inline-loader": "^0.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack -d --watch",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

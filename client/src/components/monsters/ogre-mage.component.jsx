@@ -2,7 +2,9 @@
 import React from 'react';
 import './monster.styles.scss';
 import { connect } from 'react-redux';
-import { ReactComponent as OgreMageIcon } from '../../assets/images/monster-icons/ogre-mage.svg';
+import SVG from 'react-inlinesvg';
+import OgreMageIcon from '../../assets/images/monster-icons/ogre-mage.svg';
+// import { ReactComponent as OgreMageIcon } from '../../assets/images/monster-icons/ogre-mage.svg';
 import { selectTargetable, selectNiceShot } from '../../redux/selectedcard/selectedcard.selectors';
 import { selectMonsterRegion } from '../../redux/monsters/monsters.selectors';
 import { setMonsterRegion } from '../../redux/monsters/monsters.action';
@@ -47,7 +49,7 @@ const OgreMage = ({points, id, hitpoints, location, monsterregion, targetable, n
         };
     return (
         <div className='monster-container'>
-            <OgreMageIcon className='monster' key={id ? id : null} onClick={handleClick}/>
+        <SVG src={OgreMageIcon} className='monster' key={id ? id : null} onClick={handleClick}/>
             <div className='hit-points'>
                 <p>{hitpoints ? hitpoints : null}</p>
             </div>
