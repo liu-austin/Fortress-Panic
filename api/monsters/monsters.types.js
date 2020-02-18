@@ -21,10 +21,31 @@ const trollCard = {name: 'Troll',
                     points: 3
                     };
 
+const giantCard = {name: 'Giant', 
+                    type: 'Monster',
+                    description: '',
+                    hitpoints: 5,
+                    points: 5
+                    };              
+
 const goblinKingCard = {name: 'Goblin King', 
                     type: 'Boss Monster',
                     description: 'When this monster spawns, spawn up to 3 monsters.',
                     hitpoints: 2,
+                    points: 4
+                    };
+
+const goblinTricksterCard = {name: 'Goblin Trickster', 
+                    type: 'Boss Monster',
+                    description: 'Randomly destroy a region.',
+                    hitpoints: 2,
+                    points: 3
+                    };
+
+const savageOrcCard = {name: 'Savage Orc', 
+                    type: 'Boss Monster',
+                    description: 'When this monster spawns, all monsters move clockwise.',
+                    hitpoints: 3,
                     points: 4
                     };
                     
@@ -144,8 +165,10 @@ trollCard,
 trollCard,
 trollCard,
 goblinKingCard,
+giantCard,
 shamanCard,
 orcWarlordCard,
+savageOrcCard,
 ogreMageCard,
 giantBoulderCard,
 giantBoulderCard,
@@ -164,7 +187,8 @@ plagueKnightsCard,
 plagueSwordsmenCard,
 discard1Card,
 draw3MonstersCard,
-draw4MonstersCard
+draw4MonstersCard,
+goblinTricksterCard
 ];
 
 module.exports = MonstersList;

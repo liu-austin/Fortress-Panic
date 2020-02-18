@@ -13,11 +13,14 @@ import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
 import Overlord from '../../monsters/overlord.component';
 import Dragon from '../../monsters/dragon.component';
+import Giant from '../../monsters/giant.component';
+import SavageOrc from '../../monsters/savage-orc.component';
 import { connect } from 'react-redux';
 import { selectDefensesInfo } from '../../../redux/defenses/defenses.selectors';
 import { toggleRebuild } from '../../../redux/selectedcard/selectedcard.action';
 import { selectRebuild } from '../../../redux/selectedcard/selectedcard.selectors';
 import { socket } from '../../../assets/socketIO/socketIO.utils';
+import GoblinTrickster from '../../monsters/goblin-trickster.component';
 
 const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
     const emitterSetup = (number) => {
@@ -60,6 +63,12 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Dragon') {
                                                 return <Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Giant') {
+                                                return <Giant id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Savage Orc') {
+                                                return <SavageOrc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Goblin Trickster') {
+                                                return <GoblinTrickster id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
@@ -115,6 +124,12 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <div className='in-castle'><Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Dragon') {
                                                 return <div className='in-castle'><Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                            } else if (m.name === 'Giant') {
+                                                return <Giant id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Savage Orc') {
+                                                return <SavageOrc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Goblin Trickster') {
+                                                return <GoblinTrickster id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 

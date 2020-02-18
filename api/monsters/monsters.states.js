@@ -333,6 +333,8 @@ const MonstersState = {
     'Ogre Mage': {method: 'moveMonsters', input: null}, 
     'Shaman': {method: 'heal', input: null},
     'Orc Warlord': {method: 'discard', input: null},
+    'Savage Orc': {method: 'moveClockwise', input: null},
+    'Goblin Trickster': {method: 'giantBoulder', input: null},
     'Blue Monsters Move 1': {method: 'moveMonsters', input: /5|6/},
     'Green Monsters Move 1': {method: 'moveMonsters', input: /3|4/},
     'Red Monsters Move 1': {method: 'moveMonsters', input: /1|2/},

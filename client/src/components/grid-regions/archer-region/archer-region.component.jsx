@@ -11,6 +11,9 @@ import Shaman from '../../monsters/shaman.component';
 import OgreMage from '../../monsters/ogre-mage.component';
 import Overlord from '../../monsters/overlord.component';
 import Dragon from '../../monsters/dragon.component';
+import Giant from '../../monsters/giant.component';
+import SavageOrc from '../../monsters/savage-orc.component';
+import GoblinTrickster from '../../monsters/goblin-trickster.component';
 
 const ArcherRegion = ({monsters}) => {
     return (
@@ -44,6 +47,12 @@ const ArcherRegion = ({monsters}) => {
                                                 return <Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Dragon') {
                                                 return <Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Giant') {
+                                                return <Giant id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Savage Orc') {
+                                                return <SavageOrc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Goblin Trickster') {
+                                                return <GoblinTrickster id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
