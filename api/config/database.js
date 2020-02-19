@@ -14,9 +14,15 @@ var disconnected = chalk.bold.red;
 var termination = chalk.bold.magenta;
 
 //export this function and imported by server.js
-module.exports =function(){
 
-    mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+
+
+module.exports =function(){
+    mongoose.connect(dbURL, { useUnifiedTopology: true, useNewUrlParser: true })
+    .catch(err => console.log(err));
+    // const connection = mongoose.connection;
+    // connection.once('open', () => console.log("MongoDB connected successfully"));
+    // mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
     mongoose.connection.on('connected', function(){
         console.log(connected("Mongoose default connection is open to ", dbURL));
@@ -30,10 +36,10 @@ module.exports =function(){
         console.log(disconnected("Mongoose default connection is disconnected"));
     });
 
-    process.on('SIGINT', function(){
-        mongoose.connection.close(function(){
-            console.log(termination("Mongoose default connection is disconnected due to application termination"));
-            process.exit(0)
-        });
-    });
+    // process.on('SIGINT', function(){
+    //     mongoose.connection.close(function(){
+    //         console.log(termination("Mongoose default connection is disconnected due to application termination"));
+    //         process.exit(0)
+    //     });
+    // });
 }

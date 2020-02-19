@@ -100,7 +100,7 @@ io.on("connection", (socket) => {
       socket.to(obj[1]).emit('getCurrentPhase', socket.id);
         // update all other players of the new player
       socket.to(players[socket.id].room).emit('newPlayer', players[socket.id]);
-    }, 3000);
+    }, 7500);
 
   });
 

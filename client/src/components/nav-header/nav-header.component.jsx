@@ -84,8 +84,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
     socket.removeAllListeners('getScores');
     socket.removeAllListeners('loseGame');
     socket.removeAllListeners('winGame');
-    // socket.removeAllListeners('checkLoseGame');
-    // socket.removeAllListeners('checkWinGame');
     socket.removeAllListeners('resetGame');
     socket.removeAllListeners('clientStartLoading');
     socket.removeAllListeners('startCheckingStarted');
@@ -101,11 +99,11 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       let moveProgress = () => {
         addProgress();
       };
-      let loadGameBar = setInterval(moveProgress, 80);
+      let loadGameBar = setInterval(moveProgress, 100);
       setTimeout(function() {
         clearInterval(loadGameBar);
         setCurrentPage('/game');
-      }, 8000);
+      }, 10000);
       setProgress(0);
     });
 
@@ -143,23 +141,13 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
               socket.emit('startLoseGame', highScorePlayerId);
             }
           } else {
-            let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
-            socket.emit('startLoseGame', highScorePlayerId);
+            if (started) {
+              let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
+              socket.emit('startLoseGame', highScorePlayerId);
+            }
           }
         });
-        // socket.emit('startCheckLoseGame');
       });
-
-      // socket.on('checkLoseGame', function() {
-      //   setTimeout(function() {
-      //     if (towersleft === 0) {
-      //       let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
-      //       setTimeout(function() {
-      //         socket.emit('startLoseGame', highScorePlayerId);
-      //       }, 500);
-      //     }
-      //   }, 1000);
-      // });
 
       socket.on('checkSpawnFinalBoss', function() {
         if (monstersleft === 1) {
@@ -170,17 +158,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
       socket.on('incomingMessage', function(msg) {
         displayNewMessage(msg);
       });
-
-      // socket.on('checkWinGame', function() {
-      //   setTimeout(function() {
-      //     if (monstersleft === 0) {
-      //       let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
-      //       setTimeout(function() {
-      //         socket.emit('startWinGame', highScorePlayerId);
-      //       }, 500);
-      //     }
-      //   }, 1000);
-      // });
 
       socket.on('getMonsters', function(room) {
         fetch(host + 'findMonsters/' +  room)
@@ -194,8 +171,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             }
           }
         });
-        // .then(() => socket.emit('startCheckWinGame'));
-        // socket.emit('startCheckWinGame');
       });
 
       socket.on('newPlayer', function(playerInfo) {
@@ -403,7 +378,6 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
             socket.emit('returnCurrentPlayerId', [socket.id, players[Object.keys(players)[(Object.keys(players).indexOf(socket.id) + 1) % Object.keys(players).length]].playerCards.length]);
           }
         }
-        // socket.emit('startCheckLoseGame'); 
       });
 
       socket.on('startClientDrawPhase', function(obj) {

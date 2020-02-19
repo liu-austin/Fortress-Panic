@@ -1,10 +1,11 @@
 // jshint esversion:8
 // const createError = require('http-errors');
+const monstersModel = require('./monsters/monsters.dao');
 const express = require('express');
 const path = require('path');
 // const cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cors = require("cors");
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -39,7 +40,7 @@ app.use(bodyParserURLEncoded);
 // app.set('view engine', 'jade');
 
 app.use(cors());
-app.use(logger('dev'));
+// app.use(logger('dev'));
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
@@ -60,9 +61,7 @@ app.use('/findPlayerDeck', findPlayerDeckRouter);
 //    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
 //  next();
 // });
-app.get('/testing', (req, res) => {
-    res.status(200).send('Hello from app');
-})
+
 // error handler
 // app.use(function(err, req, res, next) {
 //   // set locals, only providing error in development
