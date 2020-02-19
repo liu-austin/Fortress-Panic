@@ -2,7 +2,7 @@
 import socketIOClient from 'socket.io-client';
 
 const state = {
-    endpoint: 'http://al-fortress-panic.herokuapp.com/'
+    endpoint: 'https://al-fortress-panic.herokuapp.com/'
     // endpoint: 'http://localhost:9000/'
 };
 
