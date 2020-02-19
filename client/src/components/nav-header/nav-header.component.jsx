@@ -40,7 +40,8 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
   updatePlayerScore, showEndGameHud, setHighScorePlayer, setWin, monstersleft, towersleft, resetGame, setCurrentPage, setProgress, addProgress, namespace, currentpage,
   startbuttonpressed, setNamespace, resetStartButton}) => {
 
-  const host = 'http://localhost:9000/';
+    const host = 'https://al-fortress-panic.herokuapp.com/';
+  // const host = 'http://localhost:9000/';
 
     socket.removeAllListeners('startClientDrawPhase');
     socket.removeAllListeners('startDisconnectDrawPhase');
