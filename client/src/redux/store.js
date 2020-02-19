@@ -9,7 +9,7 @@ const middlewares = [];
 // If in development environment use logger middleware,
 // but not in production environment
 if (process.env.NODE_ENV === 'development') {
-    middlewares.push(logger);
+    // middlewares.push(logger);
 }
 
 

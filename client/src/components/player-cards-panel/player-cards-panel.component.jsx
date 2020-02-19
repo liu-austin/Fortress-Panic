@@ -21,9 +21,9 @@ const PlayerCardsPanel = ({players, retrievePlayers}) => {
         <div className='player-cards-panel-container'>
         {
             Object.keys(players).length ? (
-                Object.keys(players).map(player => {
+                Object.keys(players).map((player, i) => {
                     return (
-                        <div>
+                        <div key={i}>
                         {
                                 <div className='player-display'>
                                     <div className='player-hud'>
@@ -36,9 +36,9 @@ const PlayerCardsPanel = ({players, retrievePlayers}) => {
                                     <div className='hand-container'>
                                     {
                                         players[player].playerCards ? 
-                                            (players[player].playerCards.map(card => {
+                                            (players[player].playerCards.map((card, j) => {
                                             return (
-                                                <CardOverview cardInfo={card}/>
+                                                <CardOverview key={j} cardInfo={card}/>
                                             );
                                             })) 
                                         : 

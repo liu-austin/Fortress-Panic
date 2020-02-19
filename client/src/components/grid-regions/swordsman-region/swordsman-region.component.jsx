@@ -44,31 +44,31 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                 {
                                     monsters ? 
                                     (
-                                        monsters.filter(monster => monster.location === 'swordsman ' + num).map(m => {
+                                        monsters.filter(monster => monster.location === 'swordsman ' + num).map((m, i) => {
                                             if (m.name === 'Goblin') {
-                                                return <Goblin id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Goblin id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Orc') {
-                                                return <Orc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Orc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Troll') {
-                                                return <Troll id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Troll id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin King') {
-                                                return <GoblinKing id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <GoblinKing id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Orc Warlord') {
-                                                return <OrcWarlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <OrcWarlord id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Shaman') {
-                                                return <Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Shaman id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Ogre Mage') {
-                                                return <OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <OgreMage id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Overlord') {
-                                                return <Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Overlord id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Dragon') {
-                                                return <Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Dragon id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Giant') {
-                                                return <Giant id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Giant id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Savage Orc') {
-                                                return <SavageOrc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin Trickster') {
-                                                return <GoblinTrickster id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
@@ -82,7 +82,7 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                     (
                                         defenses.filter(defense => {
                                             return (defense.name === 'Wall' && defense.location === 'castle ' + num);
-                                        }).map(wall => <CastleWall/>)
+                                        }).map((wall, i) => <CastleWall key={i}/>)
                                     ) 
                                     : 
                                     (
@@ -95,7 +95,7 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                     (
                                         defenses.filter(defense => {
                                             return (defense.name === 'Tower' && defense.location === 'castle ' + num);
-                                        }).map(wall => <CastleTower/>)
+                                        }).map((wall, i) => <CastleTower key={i}/>)
                                     ) 
                                     : 
                                     (
@@ -105,31 +105,31 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                 {
                                     monsters ? 
                                     (
-                                        monsters.filter(monster => monster.location === 'castle ' + num).map(m => {
+                                        monsters.filter(monster => monster.location === 'castle ' + num).map((m, i) => {
                                             if (m.name === 'Goblin') {
-                                                return <div className='in-castle'><Goblin id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Goblin id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Orc') {
-                                                return <div className='in-castle'><Orc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Orc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Troll') {
-                                                return <div className='in-castle'><Troll id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Troll id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Goblin King') {
-                                                return <div className='in-castle'><GoblinKing id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><GoblinKing id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Orc Warlord') {
-                                                return <div className='in-castle'><OrcWarlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><OrcWarlord id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Shaman') {
-                                                return <div className='in-castle'><Shaman id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Shaman id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Ogre Mage') {
-                                                return <div className='in-castle'><OgreMage id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><OgreMage id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Overlord') {
-                                                return <div className='in-castle'><Overlord id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Overlord id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Dragon') {
-                                                return <div className='in-castle'><Dragon id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
+                                                return <div className='in-castle'><Dragon id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Giant') {
-                                                return <Giant id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <Giant id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Savage Orc') {
-                                                return <SavageOrc id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin Trickster') {
-                                                return <GoblinTrickster id={m._id} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 

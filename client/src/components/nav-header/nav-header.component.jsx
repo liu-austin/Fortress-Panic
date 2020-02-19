@@ -187,7 +187,7 @@ const NavHeader = ({players, updatePlayerName, retrievePlayers, addPlayer, remov
         .then(data => {
           getMonsters(data);
           if (data.length) {
-            if (35 - data.filter(m => {return (!m.active && m.type !== 'Monster Effect');}).length < 1) {
+            if (37 - data.filter(m => {return (!m.active && m.type !== 'Monster Effect');}).length < 1) {
               let highScorePlayerId = Object.keys(players).sort((a,b) => players[b].points - players[a].points)[0];
               socket.emit('startWinGame', highScorePlayerId);
             }

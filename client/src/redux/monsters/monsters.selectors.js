@@ -16,7 +16,7 @@ export const selectActiveMonsters = createSelector(
 
 export const selectMonstersLeft = createSelector(
     [selectAllMonsters],
-    monsters => monsters ? (35 - monsters.filter(m => {return (!m.active && m.type !== 'Monster Effect');}).length) : null
+    monsters => monsters ? (37 - monsters.filter(m => {return (!m.active && m.type !== 'Monster Effect');}).length) : null
 );
 
 export const selectMonsterRegion = createSelector(

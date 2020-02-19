@@ -52,9 +52,9 @@ class LobbyPage extends React.Component {
                     </div>
                     <div className="game-room-hud">
                     {
-                        [1,2,3,4,5,6].map(num => {
+                        [1,2,3,4,5,6].map((num, i) => {
                             return (
-                                <button onClick={this.goToGameRoom(num)}>{`GAME ROOM ${num}`}</button>
+                                <button key={i} onClick={this.goToGameRoom(num)}>{`GAME ROOM ${num}`}</button>
                             );
                         })
                     }

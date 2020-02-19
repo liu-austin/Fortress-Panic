@@ -4,7 +4,7 @@ import './castle-wall.styles.scss';
 const Castlewall = () => {
     return (
         <div className='castle-wall-container'>
-            <img className='castle-wall' src={require('../../assets/images/fortress/fortress-wall.png')} alt='fortress-wall'/>
+            <img className='castle-wall' src={'./fortress-wall.png'} alt='fortress-wall'/>
         </div>
     );
 };

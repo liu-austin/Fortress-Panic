@@ -1,4 +1,4 @@
-// jshint esversion:6
+// jshint esversion:8
 import React from 'react';
 import './sign-in.styles.scss';
 import FormInput from '../form-input/form-input.component';
@@ -12,7 +12,9 @@ class SignIn extends React.Component {
         this.state = {
             email: '',
             password: ''
-        }
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async handleSubmit(event) {
