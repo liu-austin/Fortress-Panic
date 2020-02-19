@@ -131,15 +131,15 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                             } else if (m.name === 'Dragon') {
                                                 return <div className='in-castle'><Dragon id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Giant') {
-                                                return <Giant id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <div className='in-castle'><Giant id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Savage Orc') {
-                                                return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <div className='in-castle'><SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Goblin Trickster') {
-                                                return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <div className='in-castle'><GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Armored Orc') {
-                                                return <ArmoredOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <div className='in-castle'><ArmoredOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             } else if (m.name === 'Wyvern') {
-                                                return <Wyvern id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                                return <div className='in-castle'><Wyvern id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/></div>
                                             }
                                         })
                                     ) 

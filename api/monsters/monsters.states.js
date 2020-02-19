@@ -173,12 +173,14 @@ const MonstersState = {
             // deleted at most one tank document
           });
     },
-    moveTo: async function(name) {
-        let monstersWithName = await monstersModel.find({active: true, room: room, name}).exec();
-        monstersWithName.forEach(async function(monster) {
-            await monstersModel.findByIdAndUpdate(monster._id, 
-                {location: 'knight' + monster.location.slice(monster.location.length - 2)}).exec();
-        });
+    moveTo: async function(room) {
+        if (arguments[1] !== null) {
+            let monstersWithName = await monstersModel.find({active: true, room, name: arguments[1]}).exec();
+            monstersWithName.forEach(async function(monster) {
+                await monstersModel.findByIdAndUpdate(monster._id, 
+                    {location: 'knight' + monster.location.slice(monster.location.length - 2)}).exec();
+            });
+        }
     },
     moveMonsters: async function(room) {
         let allMonsters;
