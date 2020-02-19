@@ -29,7 +29,7 @@ const RulesPage = () => {
                         <span>Fortress Panic uses the same game system as the base game however it has several player/ monster card changes, which include:<br></br> 
                         <ul>
                             <li>A final boss monster spawns when all other monsters have been slain, which is either a Dragon or Overlord monster.</li>
-                            <li>Additional monsters include Savage Orc, Giant, and Goblin Trickster.</li>
+                            <li>Additional monsters include Armored Orc, Savage Orc, Giant, Wyvern, and Goblin Trickster.</li>
                             <li>The Orc Warlord's effect is changed to cause each player to discard 1 card when it enters to differentiate from Ogre Mage's effect.</li>
                             <li>The Shaman's effect now buffs every active monster's hitpoints by 1.</li>
                             <li>Castle Guard player cards, which act like hit cards that target inside the castle, replace the fortification cards.</li>

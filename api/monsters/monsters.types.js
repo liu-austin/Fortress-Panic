@@ -21,6 +21,20 @@ const trollCard = {name: 'Troll',
                     points: 3
                     };
 
+const armoredOrcCard = {name: 'Armored Orc', 
+                    type: 'Monster',
+                    description: 'All hit attacks (not including destroying effects) have 50% of damaging this monster.',
+                    hitpoints: 2,
+                    points: 3
+                    };   
+
+const wyvernCard = {name: 'Wyvern', 
+                    type: 'Boss Monster',
+                    description: 'This monster spawns in the knight region.',
+                    hitpoints: 3,
+                    points: 4
+                    };   
+
 const giantCard = {name: 'Giant', 
                     type: 'Monster',
                     description: '',
@@ -164,6 +178,9 @@ trollCard,
 trollCard,
 trollCard,
 trollCard,
+armoredOrcCard,
+armoredOrcCard,
+wyvernCard,
 goblinKingCard,
 giantCard,
 giantCard,

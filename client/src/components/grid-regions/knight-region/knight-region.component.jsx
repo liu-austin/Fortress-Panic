@@ -14,6 +14,8 @@ import Dragon from '../../monsters/dragon.component';
 import Giant from '../../monsters/giant.component';
 import SavageOrc from '../../monsters/savage-orc.component';
 import GoblinTrickster from '../../monsters/goblin-trickster.component';
+import ArmoredOrc from '../../monsters/armored-orc.component';
+import Wyvern from '../../monsters/wyvern.component';
 
 const KnightRegion = ({monsters}) => {
     return (
@@ -53,6 +55,10 @@ const KnightRegion = ({monsters}) => {
                                                 return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin Trickster') {
                                                 return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Armored Orc') {
+                                                return <ArmoredOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Wyvern') {
+                                                return <Wyvern id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 

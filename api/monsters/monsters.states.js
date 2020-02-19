@@ -173,6 +173,13 @@ const MonstersState = {
             // deleted at most one tank document
           });
     },
+    moveTo: async function(name) {
+        let monstersWithName = await monstersModel.find({active: true, room: room, name}).exec();
+        monstersWithName.forEach(async function(monster) {
+            await monstersModel.findByIdAndUpdate(monster._id, 
+                {location: 'knight' + monster.location.slice(monster.location.length - 2)}).exec();
+        });
+    },
     moveMonsters: async function(room) {
         let allMonsters;
         if (arguments[1] === null) {
@@ -334,6 +341,7 @@ const MonstersState = {
     'Shaman': {method: 'heal', input: null},
     'Orc Warlord': {method: 'discard', input: null},
     'Savage Orc': {method: 'moveClockwise', input: null},
+    'Wyvern': {method: 'moveTo', input: 'Wyvern'},
     'Goblin Trickster': {method: 'giantBoulder', input: null},
     'Blue Monsters Move 1': {method: 'moveMonsters', input: /5|6/},
     'Green Monsters Move 1': {method: 'moveMonsters', input: /3|4/},

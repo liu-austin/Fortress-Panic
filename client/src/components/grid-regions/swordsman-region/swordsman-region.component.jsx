@@ -15,6 +15,8 @@ import Overlord from '../../monsters/overlord.component';
 import Dragon from '../../monsters/dragon.component';
 import Giant from '../../monsters/giant.component';
 import SavageOrc from '../../monsters/savage-orc.component';
+import ArmoredOrc from '../../monsters/armored-orc.component';
+import Wyvern from '../../monsters/wyvern.component';
 import { connect } from 'react-redux';
 import { selectDefensesInfo } from '../../../redux/defenses/defenses.selectors';
 import { toggleRebuild } from '../../../redux/selectedcard/selectedcard.action';
@@ -69,6 +71,10 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin Trickster') {
                                                 return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Armored Orc') {
+                                                return <ArmoredOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Wyvern') {
+                                                return <Wyvern id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
@@ -130,6 +136,10 @@ const SwordsmanRegion = ({defenses, monsters, rebuild, toggleRebuild}) => {
                                                 return <SavageOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             } else if (m.name === 'Goblin Trickster') {
                                                 return <GoblinTrickster id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Armored Orc') {
+                                                return <ArmoredOrc id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
+                                            } else if (m.name === 'Wyvern') {
+                                                return <Wyvern id={m._id} key={i} hitpoints={m.hitpoints} location={m.location} points={m.points}/>
                                             }
                                         })
                                     ) 
