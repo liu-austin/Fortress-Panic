@@ -42,7 +42,8 @@ const ArmoredOrc = ({points, id, hitpoints, location, monsterregion, targetable,
                         toggleTargetable();
                         setMonsterRegion([]);
                     } else {
-                        socket.emit('hitMonster', 99999);
+                        socket.emit('hitArmor', id);
+                        toggleTargetable();
                     }
                     unselectCard();
                 } else if (targetable) {

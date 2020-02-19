@@ -253,6 +253,11 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on('hitArmor', function(id) {
+      io.in(players[socket.id].room).emit('getMonsters', players[socket.id].room);
+      socket.emit('getSelectedCard');
+  });
+
   socket.on('hitMonster', function(id) {
     MonstersState.hitMonster(id)
     .then(() => {
