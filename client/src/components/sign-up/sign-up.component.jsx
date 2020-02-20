@@ -60,7 +60,7 @@ class SignUp extends React.Component {
                     <FormInput label="Password" name='password' handleChange={this.handleChange} type='password' value={password} required/>
                     <FormInput label="Confirm Password" name='confirmPassword' handleChange={this.handleChange} type='password' value={confirmPassword} required/>
                     <div className='buttons'>
-                        <CustomButton type='submit'> Sign Up </CustomButton>
+                        <CustomButton type='submit' isInverted> Sign Up </CustomButton>
                     </div>   
                 </form>
             </div>
