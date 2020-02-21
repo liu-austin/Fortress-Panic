@@ -4,7 +4,7 @@
 
 An online adaptation of the popular board game **Castle Panic!**, a fully cooperative game where 1-6 players play as castle protectors attempting to defend the 6 castle towers from monsters trying to destroy the castle. The current version implements the basic version of the game with some additional monsters/ streamlined changes.
 
-### Find Fortress Panic here: [http://fortress-panic.s3-website-us-west-1.amazonaws.com/](http://fortress-panic.s3-website-us-west-1.amazonaws.com/)!
+### Find Fortress Panic here: [http://fortress-panic.s3-website-us-west-1.amazonaws.com/](d1axndhfbi0h3m.cloudfront.net/)!
 
 <img width="1294" alt="lobby" src="./api/public/image2.png">
 
