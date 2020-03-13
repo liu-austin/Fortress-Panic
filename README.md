@@ -26,6 +26,7 @@ An online adaptation of the popular board game **Castle Panic!**, a fully cooper
 - Scss
 - Webpack
 - Babel
+- Docker
 
 ## How to run locally
 1) Clone this repository.
